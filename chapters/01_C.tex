@@ -261,3 +261,19 @@ c[64] = 'Z' // NO bounds checking at compile/run (may raise protection fault)
 char *p = c;
 *(p+1) = 'Z'; p[3] = 'B'; char b = *p; // = 'a'
 \end{lstlisting}
+
+\textbf{Strings}
+\begin{items}
+  \item = array of \code{char}s terminated by \code{NULL}:
+  \begin{lstlisting}[style=customc]
+char A[] = { 'T', 'e', 's', 't', '\0' };
+char A[] = "Test";
+  \end{lstlisting}
+  \item declaration via pointer: \\*
+    \code{const char *p = "Test";}
+  \item common string functions (\code{string.h}): \\*
+    length: \code{size_t strnlen(const char *s, size_t maxlen)} \\*
+    compare: \\* \phantom{x} \code{int strncmp(const char *s1, const char *s2, size_t n);} \\*
+    copy: \code{int strncpy(char *dest, const char *src size_t n);} \\*
+    tokenize: \code{char *strtok(char *str, const char *delim);} \\* \phantom{x} (e.g. split line into words)
+\end{items}
