@@ -20,3 +20,25 @@
 % ENV -- FRAGEN
 \newenvironment{fragen}
 {\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=Prüfungsfragen,arc=0mm]}{\end{tcolorbox}}
+
+% BETTER C CODE HIGHLIGHTING
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  %frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstset{escapechar=@,style=customc}
+
+% LST INPUT PATH
+\newcommand*\lstinputpath[1]{\lstset{inputpath=#1}}
+
+\lstinputpath{assets/code/}
