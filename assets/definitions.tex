@@ -14,7 +14,7 @@
 \graphicspath{{assets/images/}}
 
 % CODE
-\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily]|#1|}
+\newcommand{\code}[1]{\lstinline[language=c,basicstyle=\ttfamily]|#1|}
 \lstset{basicstyle=\ttfamily}
 
 % ENV -- FRAGEN
@@ -36,7 +36,21 @@
   stringstyle=\color{orange},
 }
 
+
+\lstdefinestyle{custombash}{
+	language=bash,
+	breaklines=true,
+	xleftmargin=\parindent,
+	showstringspaces=false,
+	basicstyle=\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{gray},
+	stringstyle=\color{orange},
+}
+
 \lstset{escapechar=@,style=customc}
+\lstset{columns=spaceflexible}
 
 % LST INPUT PATH
 \newcommand*\lstinputpath[1]{\lstset{inputpath=#1}}
