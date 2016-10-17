@@ -277,3 +277,140 @@ char A[] = "Test";
     copy: \code{int strncpy(char *dest, const char *src size_t n);} \\*
     tokenize: \code{char *strtok(char *str, const char *delim);} \\* \phantom{x} (e.g. split line into words)
 \end{items}
+
+\textbf{Arithmetic/bitwise operators}
+\begin{items}
+  \item \underline{arithmetic operators}: \\*
+    \code{a+b}, \code{a++}, \code{++a}, \code{a+=b}, \code{a-b}, \code{a--}, \code{--a}, \code{a-=b}, \code{a*b}, \code{a*=b}, \code{a/b}, \code{a/=b}, \code{a\%b}, \code{a\%=b}
+  \item \underline{logical operators}: \\*
+    \code{a&b}, \code{a\|b}, \code{a>>b}, \code{a<<b}, \code{a^b}, \code{\~a}
+  \item difference pre-/post-increment:
+  \begin{lstlisting}[style=customc]
+int a = 5;
+if(a++ == 5) printf("Yes"); // Yes
+a = 5;
+if(++a == 5) printf("Yes"); // nothing
+  \end{lstlisting}
+  \item operators in order of precedence: \\*
+    \code{(), [], ->, .} \\*
+    \code{!, ++, --, +y, -y, *z, &=, (type), sizeof} \\*
+    \code{*, /, \%} \\*
+    \code{+, -} \\*
+    \code{<<, >>} \\*
+    \code{<, <=, >, >=} \\*
+    \code{==, !=} \\*
+    \code{&} \\*
+    \code{^} \\*
+    \code{\|} \\*
+    \code{&&} \\*
+    \code{\|\|} \\*
+    \code{?, :} \\*
+    \code{=, +=, -=, *=, /=, \%=, &=, ~=, |=, <<=, >>=} \\*
+    \code{,}
+\end{items}
+
+\textbf{Structures}
+\begin{items}
+  \item brackets only needed for multiple statements
+  \item \code{if/else}, \code{for}, \code{while}, \code{do-while}, \code{switch}
+  \item may use \code{break}/\code{continue}
+  \item switch: need break statement, otherwise will fall through
+\end{items}
+\begin{lstlisting}[style=customc]
+if(a==b) printf("Equal") else printf("Different");
+for(i=10; i>=10; i--) printf("%d", i+1);
+int i=10; while(i--) printf("foo");
+int i=0; do printf("bar"); while(i++ != 0);
+
+char a = read();
+switch(a) {
+  case '1':
+    handle_1();
+    break;
+  default:
+    handle_other();
+    break;
+}
+\end{lstlisting}
+
+\textbf{Type casting}
+\begin{items}
+  \item \underline{explicit casting}: precision loss possible \\*
+    \code{int i = 5; float f = (float) i;}
+  \item \underline{implicit casting}: if no precision is lost \\*
+    \code{char c = 5; int i = c;}
+  \item \underline{pointer casting}: changes address calculation \\*
+    \code{int i = 5; char *p = (char *) &i; *(p+1) = 5;}
+  \item \underline{type hierarchy}: "`wider"'/"`shorter"' types \\*
+    \code{unsigned int} wider than \code{signed int} \\*
+    operators cast parameters to widest type \\*
+    Attention: assignment cast after operator cast
+\end{items}
+
+\textbf{C Preprocessor}
+\begin{items}
+  \item modifies \emph{source code} before compilation
+  \item based on preprocessor \emph{directives} (usually starting with \code{#})
+  \item \code{#include <stdio.h>}, \code{#include "mystdio.h"}: \\*
+    copies contents of file to current file
+  \item only works with strings in source file
+  \item completely ignores C semantics
+\end{items}
+
+\textbf{Preprocessor -- search paths}
+\begin{items}
+  \item \code{#include <file>}: system include, searches in: \\*
+    \code{/usr/local/include} \\*
+    \code{libdir/gcc/[target]/[version]/include} \\*
+    \code{/usr/[target]/include} \\*
+    \code{/usr/include} \\*
+    (target: arch-specific (e.g. i686-linux-gnu), \\*
+    \phantom{x} version: gcc version (e.g. 4.2.4))
+  \item \code{#include "file"}: local include, searches in: \\*
+    directory containing current file \\*
+    then paths specified by \code{-i <dir>} \\*
+    then in system include paths
+\end{items}
+
+\textbf{Preprocessor -- definitions}
+\begin{items}
+  \item defines introduce replacement strings (can have arguments, based on string replacement)
+  \item can help code structuring, often leading to source code cluttering
+\end{items}
+\begin{lstlisting}[style=customc]
+#define PI 3.14159265
+#define TRUE (1)
+#define max(a,b) ((a > b) ? (a) (b))
+#define panic(str) do { printf(str); for (;;) } while(0);
+
+#ifdef __unix__
+# include <unistd.h>
+#elif defined _WIN32
+# include <windows.h>
+#endif
+\end{lstlisting}
+
+\textbf{Preprocessor -- predefined macros}
+\begin{items}
+  \item \underline{system-specific}: \\*
+    \code{__unix__}, \code{_WIN32}, \code{__STDC_VERSION__}
+  \item \underline{useful}: \\*
+    \code{__LINE__}, \code{__FILE__}, \code{__DATE__}
+\end{items}
+
+\textbf{Libraries}
+\begin{items}
+  \item = collection of functions contained in object files, glued together in dynamic/static library
+  \item ex.: Math header contains declarations, but not all definitions \\*
+    \( \leadsto \) need to link math library: \code{gcc math.c -o math -lm}
+\end{items}
+\begin{lstlisting}[style=customc]
+#include <math.h>
+#include <stdio.h>
+
+int main() {
+  float f = 0.555f;
+  printf("%f", sqrt(f*4));
+  return 0;
+}
+\end{lstlisting}
