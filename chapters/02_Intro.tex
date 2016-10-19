@@ -19,3 +19,70 @@
 		prevents errors and improper computer use
 	\item \( \leadsto \) \textbf{no universially accepted definition}
 \end{items}
+
+\textbf{Hardware Overview}
+\begin{items}
+	\item CPU(s)/devices/memory (conceptually) connected to common bus
+	\item CPU(s)/devices competing for memory cycles/bus
+	\item all entities run concurrently
+	\begin{figure}[H]\centering\label{BusSystem}\includegraphics[width=0.33\textwidth]{BusSystem}\end{figure}
+	\item today: multiple busses
+	\begin{figure}[H]\centering\label{BusSystemToday}\includegraphics[width=0.33\textwidth]{BusSystemToday}\end{figure}
+\end{items}
+
+\textbf{Central Processing Unit (CPU) -- Operation}
+\begin{items}
+	\item fetches instructions from memory, executes them (instruction format/-set depends on CPU)
+	\item CPU internal registers store (meta-)data during execution (general purpose registers, floating point registers, instruction pointer (IP), stack pointer (SP), program status word (PSW),...)
+	\item \underline{execution modes}: \\*
+		\textbf{user mode} (x86: \emph{Ring 3}/\emph{CPL 3}): \\*
+			\phantom{x} only non-privileged instructions may be executed \\*
+			\phantom{x} cannot manage hardware \( \to \) \textbf{protection} \\*
+		\textbf{kernel mode} (x86: \emph{Ring 0}/\emph{CPL 0}): \\*
+			\phantom{x} all instructions allowed \\*
+			\phantom{x} can manage hw with \textbf{privileged instructions}
+		\begin{figure}[H]\centering\label{OperationModes}\includegraphics[width=0.2\textwidth]{OperationModes}\end{figure}
+\end{items}
+
+\textbf{Random Access Memory (RAM)}
+\begin{items}
+	\item keeps currently executed instructions + data
+	\item today: CPUs have built-in \emph{memory controller}
+	\item root complex connected directly via \\*
+		"`wire"' to caches \\*
+		pins to RAM \\*
+		pins to PCI-E switches
+\end{items}
+
+\textbf{Caching}
+\begin{items}
+	\item RAM delivers instructions/data slower than CPU can execute
+	\item memory references typicalle follow \emph{locality principle}: \\*
+		\textbf{spatial locality}: future refs often near previous accesses \\*
+			\phantom{x} (e.g. next byte in array) \\*
+		\textbf{temporal locality}: future refs often at previously accessed ref \\*
+			\phantom{x} (e.g. loop counter)
+	\item \emph{caching} helps mitigating this memory wall: \\*
+		copy used information temporarily from slower to faster storage \\*
+		check faster storage first before going down \textbf{memory hierarchy} \\*
+		if not, data is copied to cache and used from there
+	\item \underline{Access latency}: \\*
+		register: \( \sim \)1 CPU cycle \\*
+		L1 cache (per core): \( \sim \)4 CPU cycles \\*
+		L2 cache (per core pair): \( \sim \)12 CPU cycles \\*
+		L3 cache/LLC (per uncore): \( \sim \)28 CPU cycles (\( \sim \)25 GiB/s) \\*
+		DDR3-12800U RAM: \( \sim \)28 CPU cycles + \( \sim \) 50ns (\( \sim \)12 GiB/s)
+\end{items}
+
+\textbf{Caching -- Cache Organisation}
+\begin{items}
+	\item caches managed in hardware
+	\item divided into \emph{cache lines} (usually 64 bytes each, unit at which data is exchanged between hierarchy levels)
+	\item often separation of data/instructions in faster caches (e.g. L1, see \emph{harward architecture})
+	\item \textbf{cache hit}: accessed data already in cache (e.g. L2 cache hit)
+	\item \textbf{cache miss}: accessed data has to be fetched from lower level
+	\item cache miss types: \\*
+		\emph{compulsory miss}: first ref miss, data never been accessed \\*
+		\emph{capacity miss}: cache not large enough for process working set \\*
+		\emph{conflict miss}: cache has still space, but collisions due to \\* \phantom{x} placement strategy
+\end{items}
