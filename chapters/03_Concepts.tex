@@ -186,3 +186,75 @@
 	\item \textbf{Text}: Program code
 	\begin{figure}[H]\centering\label{AddressSpaceLayout}\includegraphics[width=0.2\textwidth]{AddressSpaceLayout}\end{figure}
 \end{items}
+
+\textbf{OS Concepts -- Threads}
+\begin{items}
+	\item each progress: \( \geq 1 \) threads (representing execution states)
+	\item IP stores currently executed instruction (address in \code{text} section)
+	\item SP register stores address of stack top \\* (\( > 1 \) threads \( \to \) multiple stacks!)
+	\item PSW contains flags about execution history \\* (e.g. last calculation was 0 \( \to \) used in following jump instruction)
+	\item more general purpose registers, floating point registers,...
+\end{items}
+\begin{figure}[H]\centering\label{Threads}\includegraphics[width=0.2\textwidth]{Threads}\end{figure}
+
+\textbf{OS Concepts -- Policies vs. Mechanisms}
+\begin{items}
+	\item separation useful when designing OS
+	\item \underline{Mechanism}: implementation of what is done \\* (e.g. commands to put a HDD into standby mode)
+	\item \underline{Policy}: rules which decide when what is done and how much \\* (e.g. how often, how many resources are used,...)
+	\item \( \to \) \emph{mechanismes can be reused even when policy changes}
+\end{items}
+
+\textbf{OS Concepts -- Scheduling}
+\begin{items}
+	\item multiple processes/threads available \( \leadsto \) OS needs to switch between them (for multitasking)
+	\item \emph{scheduler} decides which job to run next (policy)
+	\item \emph{dispatcher} performs task-switching (mechanism)
+	\item schedulers try to \\*
+		- provide fairness \\*
+		- while meeting goals \\*
+		- and adhering to priorities
+\end{items}
+\begin{figure}[H]\centering\label{Scheduling}\includegraphics[width=0.33\textwidth]{Scheduling}\end{figure}
+
+\newpage
+
+\textbf{OS Concepts -- Files}
+\begin{items}
+	\item OS hides peculiarities of disks,...
+	\item programmer uses device-independent \emph{files}/\emph{directories} for persistent storage
+	\item \underline{Files}: associate \emph{file name} and \emph{offset} with bytes
+	\item \underline{Directories}: associate \emph{directory names} with directory names or file names
+	\item \underline{File System}: ordered block collection \\*
+		- main task: translate (dir name + file name + offset) to block \\*
+		- programmer uses file system operations to operate on files \\* \phantom{-} (\code{open}, \code{read}, \code{seek})
+	\item processes can communicate directly through special \emph{named pipe} file (used with same operations as any other file)
+\end{items}
+
+\textbf{OS Concepts -- Directory Tree}
+\begin{items}
+	\item directories form \emph{directory tree}/\emph{file hierarchy} \\*
+		\( \to \) structure data
+	\item \emph{root directory}: topmost directory in tree
+	\item files specified by providing \emph{path name} to file
+\end{items}
+
+\textbf{OS Concepts -- Mounting}
+\begin{items}
+	\item *nix: common to orchestrate multiple file systems in single file hierarchy
+	\item file systems can be \emph{mounted} on directory
+	\item Win: manage multiple directory hierarchies with drive letters
+		\\*
+		(e.g. \code{C:\\Users})
+\end{items}
+
+\textbf{OS Concepts -- Storage Management}
+\begin{items}
+	\item OS provides uniform view of information storage to file systems \\*
+		- \emph{drivers} hide specific hardware devices \\* \phantom{-} \( \to \) hides device peculiarities \\*
+		- general interface abstracts physical properties to logical units \\* \phantom{-} \( \to \) block
+	\item OS increases I/O performance: \\*
+		- \textbf{Buffering}: Store data temporarily while transferred \\*
+		- \textbf{Caching}: Store data parts in faster storage \\*
+		- \textbf{Spooling}: Overlap one job's output with other job's input
+\end{items}
