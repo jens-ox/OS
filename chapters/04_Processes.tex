@@ -1,0 +1,105 @@
+\section{Processes}
+
+\textbf{The Process Abstraction}
+\begin{items}
+	\item computers do "`several things at the same time"' (just looks this way though quick process switching (\textbf{Multiprogramming}))
+	\item \( \leadsto \) \textbf{process} abstraction models this concurrency: \\*
+		- container contains information about program execution \\*
+		- conceptually, every progress has own "`virtual CPU"' \\*
+		- execution context is changed on process switch \\*
+		- dispatcher switches context when switching processes \\*
+		- \textbf{context switch}: dispatcher saves current registers/memory \\* \phantom{-} mappings, restores those of next process
+\end{items}
+
+\textbf{Process-Cooking Analogon}
+\begin{items}
+	\item Program/Process like Recipe/Cooking
+	\item \underline{Recipe}: lists ingredients, gives algorithm what to do when \\*
+		\( \leadsto \) program describes memory layout/CPU instructions
+	\item \underline{Cooking}: activity of using the recipe \\*
+		\( \leadsto \) process is activity of executing a program
+	\item multiple similar recipes for same dish \\*
+		\( \leadsto \) multiple programs may solve same problem
+	\item recipe can be cooked in different kitchens at the same time \\*
+		\( \leadsto \) program can be run on different CPUs at the same time \\* \phantom{\( \leadsto \)} (as different processes)
+	\item multiple people can cook one recipe \\*
+		\( \leadsto \) one process can have several worker threads
+\end{items}
+
+\textbf{Concurrency vs. Parallelism}
+\begin{items}
+	\item OS uses currency + parallelism to implement multiprogramming
+	\begin{enumeration}
+		\item \textbf{Concurrency}: multiple processes, one CPU \\* \( \leadsto \) not at the same time
+		\item \textbf{Paralellism}: multiple processes, multiple CPU \\* \( \leadsto \) at the same time
+	\end{enumeration}
+\end{items}
+
+\textbf{Virtual Memory Abstraction -- Address Spaces}
+\begin{items}
+	\item every process has own \emph{virtual addresess} (vaddr)
+	\item MMU relocates each load/store to \emph{physical memory} (pmem)
+	\item processes never see physical memory, can't access it directly
+	\item \textcolor{black!60!green}{\code{+}} MMU can enforce protection (mappings in kernel mode)
+	\item \textcolor{black!60!green}{\code{+}} programs can see more memory than available \\*
+		\phantom{x} 80:20 rule: 80\% of process memory idle, 20\% active \\*
+		\phantom{x} can keep working set in RAM, rest on disk
+	\item \textcolor{red}{\code{-}} need special MMU hardware
+\end{items}
+
+\textbf{Address Space (Process View)}
+\begin{items}
+	\item code/data/state need to be organized within process \\*
+		\( \leadsto \) \textbf{address space layout}
+	\item Data types:
+	\begin{enumeration}
+		\item \emph{fixed size} data items
+		\item data naturally \emph{free'd in reverse allocation order}
+		\item data \emph{allocated/free'd "`randomly"'}
+	\end{enumeration}
+	\item compiler/architecture determine how large int is and what instructions are used in text section (\code{code})
+	\item \textbf{Loader} determines based on exe file how executed program is placed in memory
+\end{items}
+
+\textbf{Segments -- Fixed-Size Data + Code}
+\begin{items}
+	\item some data in programs never changes or will be written but never grows/shrinks \\*
+		\( \leadsto \) memory can be statically allocated on process creation
+	\item \textbf{BSS segment} (\emph{block started by symbol}): \\*
+		- statically allocated variables/non-initialized variables \\*
+		- executable file typically contains starting address + size of BSS \\*
+		- entire segment initially 0
+	\item \textbf{Data segment}: \\*
+		- fixed-size, initlized data elements (e.g. global variables)
+	\item \textbf{read-only data segment}: \\*
+		- constant numbers, strings
+	\item All three sometinmes summarized as one segment
+	\item compiler and OS decide ultimately where to place which data/how many segments exist
+\end{items}
+
+\textbf{Segments -- Stack}
+\begin{items}
+	\item some data naturally free'd in reverse allocation order \\*
+		\( \leadsto \) very easy memory management (stack grows upwards)
+	\item fixed segment starting point
+	\item store top of latest allocation in \textbf{stack pointer} (SP) \\*
+		(initialized to starting point)
+	\item \emph{allocate} \code{a} byte data structure: \code{SP += a; return(SP - a)}
+	\item \emph{free} \code{a} byte data structure: \code{SP -= a}
+\end{items}
+
+\textbf{Segments -- Heap (Dynamic Memory Allocation)}
+\begin{items}
+	\item some data "`randomly"' allocated/free'd
+	\item two-tier memory allocation:
+	\begin{enumeration}
+		\item allocate large memory chunk (\textbf{heap segment}) from OS \\*
+			- base address + \textbf{break pointer} (BRK) \\*
+			- process can get more/give back memory from/to OS \\*
+		\item dynamically partition chunk into smaller allocations \\*
+			- \code{malloc}/\code{free} can be used in random oder \\*
+			- purely user-space, no need to contact kernel
+	\end{enumeration}
+\end{items}
+
+\begin{figure}[H]\centering\label{AddressSpaceLayoutComplex}\includegraphics[width=0.2\textwidth]{AddressSpaceLayoutComplex}\end{figure}
