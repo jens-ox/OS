@@ -7,8 +7,23 @@
 \newcommand{\mi}{\mathrm{i}}
 
 % MORE SQUEEZED LISTS
-\newenvironment{items}{\begin{itemize}[label={}]\setlength\itemsep{-0.2em}\setlength{\itemindent}{-.8em}}{\end{itemize}}
-\newenvironment{enumeration}{\begin{enumerate}\setlength\itemsep{-0.2em}\setlength{\itemindent}{-.8em}}{\end{enumerate}}
+\newenvironment{items} 
+  {
+    \begin{itemize}[label={},leftmargin=1em,itemsep=-0.2em,itemindent=-1em]
+    \setlength\itemsep{-0.2em}
+  }
+  {
+    \end{itemize}
+  }
+
+\newenvironment{enumeration}
+  {
+    \begin{enumerate}[itemsep=-0.2em,leftmargin=1em]
+    \setlength\itemsep{-0.2em}
+  }
+  {
+    \end{enumerate}
+  }
 
 % GRAPHICS
 \graphicspath{{assets/images/}}
