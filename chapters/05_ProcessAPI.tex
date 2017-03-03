@@ -62,3 +62,30 @@
     \item jump back to caller (IP)
   \end{enumeration}
 \end{items}
+
+\textbf{Passing parameters to the system}
+\begin{items}
+  \item parameters are passed through \textbf{system calls}
+  \item call number + specific parameters must be passed
+  \item parameters can be transferred through \\*
+    - \underline{CPU registers} (\textasciitilde 6) \\*
+    - \underline{Main Memory} (heap/stack -- more parameters, data types)
+  \item ABI specifies how to pass parameters
+  \item \underline{return code} needs to be returned to application \\*
+    - \textbf{negative}: error code \\*
+    - \textbf{positive + 0}: success \\*
+    - usually returned via A+D registers
+\end{items}
+
+\textbf{System call handler}
+\begin{items}
+  \item implements the actual serivce called through a syscall:
+  \begin{enumeration}
+    \item saves tainted registers
+    \item reads passed parameters
+    \item sanitizes/checks parameters
+    \item checks if caller has enough permissions to perform the requested action
+    \item performs requested action in behalf of the caller
+    \item returns to caller with success/error code
+  \end{enumeration}
+\end{items}
