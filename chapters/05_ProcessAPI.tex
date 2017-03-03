@@ -23,6 +23,8 @@
   \item \underline{base pointer} (BP): used to organize stack frames
 \end{items}
 
+\begin{figure}[H]\centering\label{Stack}\includegraphics[width=0.2\textwidth]{Stack}\end{figure}
+
 \ \\
 \textbf{Execution Model -- jump/branch/call commands (x86)}
 \begin{items}
@@ -88,4 +90,86 @@
     \item performs requested action in behalf of the caller
     \item returns to caller with success/error code
   \end{enumeration}
+\end{items}
+
+\textbf{Process API -- creation}
+\begin{items}
+  \item process creation events:
+  \begin{enumeration}
+    \item system initialization
+    \item process creation syscall
+    \item user requests process creation
+    \item batch job-initiation
+  \end{enumeration}
+  \item events map to two mechanisms:
+  \begin{enumeration}
+    \item Kernel spawns initial user space process on boot (Linux: \code{init})
+    \item User space processes can spawn other processes (within their quota)
+  \end{enumeration}
+\end{items}
+
+\textbf{Process API -- creation (POSIX)}
+\begin{items}
+  \item \code{PID}: identifies process
+  \item \code{pid = fork()}: duplicates current process: \\*
+    returns \code{0} to new child \\*
+    returns new \code{PID} to parent \\*
+    \( \leadsto \) child and parent independent after \code{fork}
+  \item \code{exec(name)}: replaces own memory based on executable file \\*
+    \code{name} specifies binary executable file
+  \item \code{exit(status)}: terminates process, returns \code{status}
+  \item \code{pid = waitpid(pid, \&status)}: wait for child termination \\*
+    - \code{pid}: process to wait for \\*
+    - \code{status}: points to data structure that returns information about the process \\* \phantom{- \code{status}:} (e.g., exit status) \\*
+    - passed \code{pid} is returned on success, \code{-1} otherwise
+  \item \underline{process tree}: processes create child processes, which create child processes, \dots \\*
+    - parent and child execute concurrently \\*
+    - parent waits for child to terminate (collecting the exit state)
+\end{items}
+
+\textbf{Daemons}
+\begin{items}
+  \item = program designed to run in the background
+  \item detached from parent process after creation, reattached to process tree root (\code{init})
+\end{items}
+
+\textbf{Process States}
+\begin{items}
+  \item \underline{blocking}: process does nothing but wait \\*
+    - usually happens on syscalls (OS doesn't run process until event happens)
+\end{items}
+
+\begin{figure}[H]\centering\label{ProcessState}\includegraphics[width=0.4\textwidth]{ProcessState}\end{figure}
+
+\textbf{Process Termination}
+\begin{items}
+  \item different termination events: 
+  \begin{enumeration}
+    \item normal exit (voluntary) \\*
+      - \code{return 0} at end of \code{main} \\*
+      - \code{exit(0)}
+    \item error exit (voluntary) \\*
+      - \code{return x} (\code{x} \( \neq 0 \)) at end of \code{main} \\*
+      - \code{exit(x)} (\code{x} \( \neq 0 \)) \\*
+      - \code{abort()}
+    \item fatal error (involuntary) \\*
+      - OS kills process after exception \\*
+      - process exceeds allowed ressources
+    \item killed by another process (involuntary) \\*
+      - another process sends kill signal (only as parent process or administrator)
+  \end{enumeration}
+\end{items}
+
+\textbf{Exit Status}
+\begin{items}
+  \item voluntary exit: process returns exit status (integer)
+  \item ressources not completely free'd after process terminates \\*
+    \( \leadsto \) \textbf{Zombie} or \textbf{process stub} (contains exit status until collected via \code{waitpid})
+  \item \underline{Orphans}: Processes without parents \\*
+    - usually adopted by \code{init} \\*
+    - some systems kill all children when parent is killed
+  \item exit status on involuntary exit: \\*
+    - Bits \code{0-6}: signal number that killed process (\code{0} on normal exit) \\*
+    - Bit \code{7}: set if process was killed by signal \\*
+    - Bits \code{8-15}: \code{0} if killed by signal (exit status on normal exit)
 \end{items}

@@ -9,8 +9,7 @@
 % MORE SQUEEZED LISTS
 \newenvironment{items} 
   {
-    \begin{itemize}[label={},leftmargin=1em,itemsep=-0.2em,itemindent=-1em]
-    \setlength\itemsep{-0.2em}
+    \begin{itemize}[label={},leftmargin=1em,itemsep=-0.8em,itemindent=-1em]
   }
   {
     \end{itemize}
@@ -18,8 +17,7 @@
 
 \newenvironment{enumeration}
   {
-    \begin{enumerate}[itemsep=-0.2em,leftmargin=1em]
-    \setlength\itemsep{-0.2em}
+    \begin{enumerate}[itemsep=-0.8em,leftmargin=1em]
   }
   {
     \end{enumerate}
@@ -32,13 +30,14 @@
 \newcommand{\code}[1]{\lstinline[language=c,basicstyle=\ttfamily]|#1|}
 \lstset{basicstyle=\ttfamily}
 
-% ENV -- FRAGEN
-\newenvironment{fragen}
-{\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=Prüfungsfragen,arc=0mm]}{\end{tcolorbox}}
-
 % ENV -- SUMMARY
 \newenvironment{summary}
-{\begin{tcolorbox}[colback=red!20!white,colframe=red!75!black,title=Summary,arc=0mm]}{\end{tcolorbox}}
+  {
+    \begin{tcolorbox}[colback=red!20!white,colframe=red!75!black,title=Summary,arc=0mm]
+  }
+  {
+    \end{tcolorbox}
+  }
 
 % BETTER C CODE HIGHLIGHTING
 \lstdefinestyle{customc}{
