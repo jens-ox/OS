@@ -96,7 +96,7 @@
 	\item \underline{Workflow}:
 	\begin{enumeration}
 		\item CPU issues commands, moves data to devices
-		\item Device controller informs APIC that operation is finished
+		\item Device controller informs APIC (Advanced Programmable Interrupt Controller) that operation is finished
 		\item APIC signals CPU
 		\item CPU receives device/interrupt number from APIC, executes handler
 	\end{enumeration}
@@ -135,9 +135,9 @@
 \begin{summary}
 	\begin{items}
 		\setlength\itemsep{0em}
-		\item The OS is an abstraction layer between applications and hardware (multiplexes hardware, hides hardware details, provides protextion between processes/users)
+		\item The OS is an abstraction layer between applications and hardware (multiplexes hardware, hides hardware details, provides protection between processes/users)
 		\item The CPU provides a separation of User and Kernel mode (which are required for an OS to provide protection between applications)
-		\item CPU can execute commands faster than memore can deliver instructions/data -- memory hierarchy mitigates this memory wall, needs to be carefully managed by OS to minimize slowdowns
+		\item CPU can execute commands faster than memory can deliver instructions/data -- memory hierarchy mitigates this memory wall, needs to be carefully managed by OS to minimize slowdowns
 		\item device drivers control hardware devices through PMIO/MMIO
 		\item Devices can signal the CPU (and through the CPU notify the OS) through interrupts
 	\end{items}
