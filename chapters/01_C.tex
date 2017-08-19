@@ -1,6 +1,6 @@
 \section{Intro to C}
 
-\textbf{Hello World}
+\paragraph{Hello World}
 \lstinputlisting[style=customc]{hello.c}
 \begin{items}
   \item \code{#include}: preprocessor inserts \code{stdio.h} contents
@@ -13,14 +13,14 @@
   \item \code{return}: leave function, return value
 \end{items}
 
-\textbf{Compiling}
+\paragraph{Compiling}
 \begin{lstlisting}[style=custombash]
   $ gcc hello.c -o hello
   $ ./hello
   Hello World!
 \end{lstlisting}
 
-\textbf{Basic Data Types}
+\paragraph{Basic Data Types}
 \begin{items}
   \item \code{char c = 5; char c = 'a';} \\*
     one byte, usually for characters (1970: ASCII is fine)
@@ -32,7 +32,7 @@
     8 bytes double precision floating point number
 \end{items}
 
-\textbf{Basic Data Types -- logic}
+\paragraph{Basic Data Types -- logic}
 \begin{items}
   \item \code{int i = 5 / 2; // i = 2} \\*
     integer logic, no rounding
@@ -42,7 +42,7 @@
     \code{char} interpreted as character by console
 \end{items}
 
-\textbf{Basic Data Types -- signed/unsigned}
+\paragraph{Basic Data Types -- signed/unsigned}
 \begin{items}
   \item \code{signed int i = -5 // i = -5} (two's complement)
   \item \code{unsigned int i = -5 // i = 4294967291}
