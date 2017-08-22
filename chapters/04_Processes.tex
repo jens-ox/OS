@@ -1,6 +1,6 @@
 \section{Processes}
 
-\textbf{The Process Abstraction}
+\paragraph{The Process Abstraction}
 \begin{items}
 	\item computers do "`several things at the same time"' (just looks this way though quick process switching (\textbf{Multiprogramming}))
 	\item \( \leadsto \) \textbf{process} abstraction models this concurrency: \\*
@@ -11,12 +11,12 @@
 		- \textbf{context switch}: dispatcher saves current registers/memory \\* \phantom{-} mappings, restores those of next process
 \end{items}
 
-\textbf{Process-Cooking Analogon}
+\paragraph{Process-Cooking Analogon}
 \begin{items}
 	\item Program/Process like Recipe/Cooking
-	\item \underline{Recipe}: lists ingredients, gives algorithm what to do when \\*
+	\item \textbf{Recipe}: lists ingredients, gives algorithm what to do when \\*
 		\( \leadsto \) program describes memory layout/CPU instructions
-	\item \underline{Cooking}: activity of using the recipe \\*
+	\item \textbf{Cooking}: activity of using the recipe \\*
 		\( \leadsto \) process is activity of executing a program
 	\item multiple similar recipes for same dish \\*
 		\( \leadsto \) multiple programs may solve same problem
@@ -26,7 +26,7 @@
 		\( \leadsto \) one process can have several worker threads
 \end{items}
 
-\textbf{Concurrency vs. Parallelism}
+\paragraph{Concurrency vs. Parallelism}
 \begin{items}
 	\item OS uses currency + parallelism to implement multiprogramming
 	\begin{enumeration}
@@ -35,7 +35,7 @@
 	\end{enumeration}
 \end{items}
 
-\textbf{Virtual Memory Abstraction -- Address Spaces}
+\paragraph{Virtual Memory Abstraction --- Address Spaces}
 \begin{items}
 	\item every process has own \emph{virtual addresess} (vaddr)
 	\item MMU relocates each load/store to \emph{physical memory} (pmem)
@@ -47,7 +47,7 @@
 	\item \textcolor{red}{\code{-}} need special MMU hardware
 \end{items}
 
-\textbf{Address Space (Process View)}
+\paragraph{Address Space (Process View)}
 \begin{items}
 	\item code/data/state need to be organized within process \\*
 		\( \leadsto \) \textbf{address space layout}
@@ -61,7 +61,7 @@
 	\item \textbf{Loader} determines based on exe file how executed program is placed in memory
 \end{items}
 
-\textbf{Segments -- Fixed-Size Data + Code}
+\paragraph{Segments --- Fixed-Size Data + Code}
 \begin{items}
 	\item some data in programs never changes or will be written but never grows/shrinks \\*
 		\( \leadsto \) memory can be statically allocated on process creation
@@ -77,7 +77,7 @@
 	\item compiler and OS decide ultimately where to place which data/how many segments exist
 \end{items}
 
-\textbf{Segments -- Stack}
+\paragraph{Segments --- Stack}
 \begin{items}
 	\item some data naturally free'd in reverse allocation order \\*
 		\( \leadsto \) very easy memory management (stack grows upwards)
@@ -88,7 +88,7 @@
 	\item \emph{free} \code{a} byte data structure: \code{SP -= a}
 \end{items}
 
-\textbf{Segments -- Heap (Dynamic Memory Allocation)}
+\paragraph{Segments --- Heap (Dynamic Memory Allocation)}
 \begin{items}
 	\item some data "`randomly"' allocated/free'd
 	\item two-tier memory allocation:

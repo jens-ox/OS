@@ -1,6 +1,6 @@
 \section{OS Concepts}
 
-\textbf{OS Invokation}
+\paragraph{OS Invokation}
 \begin{items}
 	\item OS Kernel does \textbf{not} always run in background!
 	\item Occasions invoking kernel, switching to kernel mode:
@@ -11,35 +11,35 @@
 	\end{enumeration}
 \end{items}
 
-\textbf{System calls -- motivation}
+\paragraph{System Calls --- Motivation}
 \begin{items}
-	\item \underline{Problem}: protect processes from one another
-	\item \underline{Idea}: Restrict processes by running them in user-mode
-	\item \underline{\( \leadsto \) Problem}: now processes cannot manage hardware,... \\*
+	\item \textbf{Problem}: protect processes from one another
+	\item \textbf{Idea}: Restrict processes by running them in user-mode
+	\item \textbf{\( \leadsto \) Problem}: now processes cannot manage hardware,... \\*
 		who can switch between processes? \\*
 		who decides if process may open certain file?
-	\item \underline{\( \leadsto \) Idea}: OS provides \textbf{services} to apps \\*
+	\item \textbf{\( \leadsto \) Idea}: OS provides \textbf{services} to apps \\*
 		app calls system if service is needed (\textbf{syscall}) \\*
 		OS checks if app is allowed to perform action \\*
 		if app may perform action and hasn't exceeded quota, \\* \phantom{x} OS performs action in behalf of app in kernel mode
 \end{items}
 
-\textbf{System Calls -- Examples}
+\paragraph{System Calls --- Examples}
 \begin{items}
 	\item \code{fd = open(file, how,...)} -- open file for read/write/both
 	\item documented e.g. in \code{man 2 write}
 	\item overview in \code{man 2 syscalls}
 \end{items}
 
-\textbf{System Calls vs. APIs}
+\paragraph{System Calls vs. APIs}
 \begin{items}
-	\item \underline{syscalls}: interface between apps and OS services, limited number of well-defined entry points to kernel
-	\item \underline{APIs}: often used by programmers to make syscalls \\*
+	\item \textbf{syscalls}: interface between apps and OS services, limited number of well-defined entry points to kernel
+	\item \textbf{APIs}: often used by programmers to make syscalls \\*
 		e.g. \code{printf} library call uses \code{write} syscall
 	\item common APIs: Win32, POSIX, C API
 \end{items}
 
-\textbf{System Calls -- implementation}
+\paragraph{System Calls --- Implementation}
 \begin{items}
 	\item \emph{trap instruction}: single syscall interface (entry point) to kernel \\*
 		switches CPU to kernel mode, enters kernel in same, predefined \\* \phantom{x} way for all syscalls \\*
@@ -51,7 +51,7 @@
 		\( \leadsto \) never reuse old numbers in future kernel versions
 \end{items}
 
-\textbf{Interrupts}
+\paragraph{Interrupts}
 \begin{items}
 	\item devices use interrupts to signal predefined conditions to OS \\*
 		reminder: device has "`interrupt line"' to CPU \\*
@@ -73,9 +73,7 @@
 	\item interrupt service routine must first save interrupted processe's state (instruction pointer, stack pointer, status word)
 \end{items}
 
-\newpage
-
-\textbf{Exceptions}
+\paragraph{Exceptions}
 \begin{items}
 	\item sometimes unusual condition makes it impossible for CPU to continue processing
 	\item \( \leadsto \) \textbf{Exception} generated within CPU:
@@ -88,7 +86,7 @@
 	\item Difference to Interrupts: interrupts can happen in any context, exceptions always occur asynchronous and in process context
 \end{items}
 
-\textbf{OS Concepts -- Physical Memory}
+\paragraph{OS Concepts --- Physical Memory}
 \begin{items}
 	\item up to early 60s: \\* 
 		- programs loaded and run directly in \emph{physical memory}
@@ -100,17 +98,17 @@
 		- different jobs could obeserve/modify eachother
 \end{items}
 
-\textbf{OS Concepts -- Address Spaces}
+\paragraph{OS Concepts --- Address Spaces}
 \begin{items}
 	\item bad programs/people need to be isolated
-	\item \underline{Idea}: give every job the illusion of having all memory to itself
+	\item \textbf{Idea}: give every job the illusion of having all memory to itself
 		\\*
 		every job has own \emph{address space}, can't name addresses of others
 		\\*
 		jobs always and only use virtual addresses
 \end{items}
 
-\textbf{Virtual Memory -- indirect addressing}
+\paragraph{Virtual Memory --- indirect addressing}
 \begin{items}
 	\item Today: every CPU has built-in \textbf{memory management unit} (\emph{MMU})
 	\item MMU translates virtual addresses to physical addresses at every store/load operation
@@ -122,7 +120,7 @@
 		\textbf{Physical address}: address of real memory
 \end{items}
 
-\textbf{Virtual Memory -- memory protection}
+\paragraph{Virtual Memory --- memory protection}
 \begin{items}
 	\item MMU allows kernel-only virtual addresses
 		\\*
@@ -137,7 +135,7 @@
 		- makes code injection attacks harder
 \end{items}
 
-\textbf{Virtual Memory -- page faults}
+\paragraph{Virtual Memory --- page faults}
 \begin{items}
 	\item not all addresses need to be mapped at all times
 		\\*
@@ -149,7 +147,7 @@
 	\item page faults also issued by MMU on illegal memory accesses
 \end{items}
 
-\textbf{OS Concepts -- Processes}
+\paragraph{OS Concepts --- Processes}
 \begin{items}
 	\item = program in execution ("`instance"' of program)
 	\item each process is associated with a \textbf{process control block} (\emph{PCB})
@@ -168,9 +166,7 @@
 		- \( \leadsto \) protection between processes
 \end{items}
 
-\newpage
-
-\textbf{OS Concepts -- address space layout}
+\paragraph{OS Concepts --- address space layout}
 \begin{items}
 	\item address spaces typically laid-out in different \textbf{sections}
 		\\*
@@ -187,7 +183,7 @@
 	\begin{figure}[H]\centering\label{AddressSpaceLayout}\includegraphics[width=0.2\textwidth]{AddressSpaceLayout}\end{figure}
 \end{items}
 
-\textbf{OS Concepts -- Threads}
+\paragraph{OS Concepts --- Threads}
 \begin{items}
 	\item each progress: \( \geq 1 \) threads (representing execution states)
 	\item IP stores currently executed instruction (address in \code{text} section)
@@ -197,15 +193,15 @@
 \end{items}
 \begin{figure}[H]\centering\label{Threads}\includegraphics[width=0.2\textwidth]{Threads}\end{figure}
 
-\textbf{OS Concepts -- Policies vs. Mechanisms}
+\paragraph{OS Concepts --- Policies vs. Mechanisms}
 \begin{items}
 	\item separation useful when designing OS
-	\item \underline{Mechanism}: implementation of what is done \\* (e.g. commands to put a HDD into standby mode)
-	\item \underline{Policy}: rules which decide when what is done and how much \\* (e.g. how often, how many resources are used,...)
+	\item \textbf{Mechanism}: implementation of what is done \\* (e.g. commands to put a HDD into standby mode)
+	\item \textbf{Policy}: rules which decide when what is done and how much \\* (e.g. how often, how many resources are used,...)
 	\item \( \to \) \emph{mechanismes can be reused even when policy changes}
 \end{items}
 
-\textbf{OS Concepts -- Scheduling}
+\paragraph{OS Concepts --- Scheduling}
 \begin{items}
 	\item multiple processes/threads available \( \leadsto \) OS needs to switch between them (for multitasking)
 	\item \emph{scheduler} decides which job to run next (policy)
@@ -217,21 +213,19 @@
 \end{items}
 \begin{figure}[H]\centering\label{Scheduling}\includegraphics[width=0.33\textwidth]{Scheduling}\end{figure}
 
-\newpage
-
-\textbf{OS Concepts -- Files}
+\paragraph{OS Concepts --- Files}
 \begin{items}
 	\item OS hides peculiarities of disks,...
 	\item programmer uses device-independent \emph{files}/\emph{directories} for persistent storage
-	\item \underline{Files}: associate \emph{file name} and \emph{offset} with bytes
-	\item \underline{Directories}: associate \emph{directory names} with directory names or file names
-	\item \underline{File System}: ordered block collection \\*
+	\item \textbf{Files}: associate \emph{file name} and \emph{offset} with bytes
+	\item \textbf{Directories}: associate \emph{directory names} with directory names or file names
+	\item \textbf{File System}: ordered block collection \\*
 		- main task: translate (dir name + file name + offset) to block \\*
 		- programmer uses file system operations to operate on files \\* \phantom{-} (\code{open}, \code{read}, \code{seek})
 	\item processes can communicate directly through special \emph{named pipe} file (used with same operations as any other file)
 \end{items}
 
-\textbf{OS Concepts -- Directory Tree}
+\paragraph{OS Concepts --- Directory Tree}
 \begin{items}
 	\item directories form \emph{directory tree}/\emph{file hierarchy} \\*
 		\( \to \) structure data
@@ -239,7 +233,7 @@
 	\item files specified by providing \emph{path name} to file
 \end{items}
 
-\textbf{OS Concepts -- Mounting}
+\paragraph{OS Concepts --- Mounting}
 \begin{items}
 	\item Unix: common to orchestrate multiple file systems in single file hierarchy
 	\item file systems can be \emph{mounted} on directory
@@ -248,7 +242,7 @@
 		(e.g. \code{C:\\Users})
 \end{items}
 
-\textbf{OS Concepts -- Storage Management}
+\paragraph{OS Concepts --- Storage Management}
 \begin{items}
 	\item OS provides uniform view of information storage to file systems \\*
 		- \emph{drivers} hide specific hardware devices \\* \phantom{-} \( \to \) hides device peculiarities \\*

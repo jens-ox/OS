@@ -32,7 +32,7 @@
     8 bytes double precision floating point number
 \end{items}
 
-\paragraph{Basic Data Types -- logic}
+\paragraph{Basic Data Types --- logic}
 \begin{items}
   \item \code{int i = 5 / 2; // i = 2} \\*
     integer logic, no rounding
@@ -42,19 +42,19 @@
     \code{char} interpreted as character by console
 \end{items}
 
-\paragraph{Basic Data Types -- signed/unsigned}
+\paragraph{Basic Data Types --- signed/unsigned}
 \begin{items}
   \item \code{signed int i = -5 // i = -5} (two's complement)
   \item \code{unsigned int i = -5 // i = 4294967291}
 \end{items}
 
-\textbf{Basic Data Types -- short/long}
+\paragraph{Basic Data Types --- short/long}
 \begin{items}
   \item \code{short int i = 1024 // -32768...32767}
   \item \code{long int i = 1024 // -2147483648...2147483647}
 \end{items}
 
-\textbf{Basic Data Types -- more size stuff}
+\paragraph{Basic Data Types --- more size stuff}
 \begin{items}
   \item \code{sizeof int; sizeof long int; // 4; 4;} (x86 32-Bit)
   \item use data types from \code{inttypes.h} to be sure about sizes:
@@ -64,7 +64,7 @@ int8_t i; uint32_t j;
   \end{lstlisting}
 \end{items}
 
-\textbf{Basic Data Types -- const/volatile}
+\paragraph{Basic Data Types --- const/volatile}
 \begin{items}
   \item \code{const int c = 5;} \\*
     \code{i} is constant, changing it will raise compiler error
@@ -72,9 +72,7 @@ int8_t i; uint32_t j;
     \code{i} is volatile, may be modified elsewhere (by different program in shared memory, important for CPU caches, register, assumptions thereof)
 \end{items}
 
-\newpage
-
-\textbf{Variables -- local vs. global}
+\paragraph{Variables --- local vs. global}
 \begin{lstlisting}[style=customc]
 int m; // global variable
 
@@ -93,7 +91,7 @@ int myroutine(int j) {
     placed on stack or in registers
 \end{items}
 
-\textbf{Variables -- local vs. static}
+\paragraph{Variables --- local vs. static}
 \begin{lstlisting}[style=customc]
 int myroutine(int j) {
   static int i = 5;
@@ -111,7 +109,7 @@ k = myroutine(1); // k = 7
     lifetime: like global variables
 \end{items}
 
-\textbf{Printing}
+\paragraph{Printing}
 \begin{lstlisting}[style=customc]
 int i = 5; float f = 2.5;
 printf("The numbers are i=%d, f=%f", i, f);
@@ -128,7 +126,7 @@ printf("The numbers are i=%d, f=%f", i, f);
     \code{\\0} \code{null}, end of string
 \end{items}
 
-\textbf{Compound data types}
+\paragraph{Compound data types}
 \begin{items}
   \item \code{struct}ure: collection of named variables (different types)
   \item \code{union}: \emph{single} variable that can have multiple types
@@ -154,9 +152,7 @@ lf.l = 5;
 lf.f = 6.192;
 \end{lstlisting}
 
-\newpage
-
-\textbf{Functions}
+\paragraph{Functions}
 \begin{items}
   \item encapsulate functionality (\emph{reuse})
   \item code structuring (\emph{reduce complexity})
@@ -172,7 +168,7 @@ int sum(int a, int b) { // definition
 }
 \end{lstlisting}
 
-\textbf{Header files}
+\paragraph{Header files}
 \begin{items}
   \item header file for frequently used declarations
   \item use \code{extern} to declare global variables defined elsewhere
@@ -201,7 +197,7 @@ void main() {
   \end{lstlisting}
 \end{items}
 
-\textbf{Data Segments and Variables}
+\paragraph{Data Segments and Variables}
 \begin{items}
   \item \underline{Stack}: local variables
   \item \underline{Heap}: variables crated at runtime via \code{malloc()}/\code{free()}
@@ -209,13 +205,13 @@ void main() {
   \item \underline{Code}: functions
 \end{items}
 
-\textbf{Function overloading}
+\paragraph{Function overloading}
 \begin{items}
   \item \emph{no function overloading in C!}
   \item use arrays ore pointers
 \end{items}
 
-\textbf{Pointers}
+\paragraph{Pointers}
 \begin{lstlisting}[style=customc]
 int a = 5;
 int *p = &a // points to int, initalized to point to a
@@ -227,7 +223,7 @@ int *r = p+1; // pointing to next element p is pointing to
 int e = *(p+2) // dereference (p+2) = d = 7
 \end{lstlisting}
 
-\textbf{Pointers -- linked list}
+\paragraph{Pointers --- linked list}
 \begin{items}
   \item linked-list implementation via next-pointer
 \end{items}
@@ -245,9 +241,7 @@ second.item = 456;
 first.next = &second;
 \end{lstlisting}
 
-\newpage
-
-\textbf{Arrays}
+\paragraph{Arrays}
 \begin{items}
   \item = fixed number of variables \emph{continuously laid out in memory}
 \end{items}
@@ -262,7 +256,7 @@ char *p = c;
 *(p+1) = 'Z'; p[3] = 'B'; char b = *p; // = 'a'
 \end{lstlisting}
 
-\textbf{Strings}
+\paragraph{Strings}
 \begin{items}
   \item = array of \code{char}s terminated by \code{NULL}:
   \begin{lstlisting}[style=customc]
@@ -278,7 +272,7 @@ char A[] = "Test";
     tokenize: \code{char *strtok(char *str, const char *delim);} \\* \phantom{x} (e.g. split line into words)
 \end{items}
 
-\textbf{Arithmetic/bitwise operators}
+\paragraph{Arithmetic/bitwise operators}
 \begin{items}
   \item \underline{arithmetic operators}: \\*
     \code{a+b}, \code{a++}, \code{++a}, \code{a+=b}, \code{a-b}, \code{a--}, \code{--a}, \code{a-=b}, \code{a*b}, \code{a*=b}, \code{a/b}, \code{a/=b}, \code{a\%b}, \code{a\%=b}
@@ -309,7 +303,7 @@ if(++a == 5) printf("Yes"); // nothing
     \code{,}
 \end{items}
 
-\textbf{Structures}
+\paragraph{Structures}
 \begin{items}
   \item brackets only needed for multiple statements
   \item \code{if/else}, \code{for}, \code{while}, \code{do-while}, \code{switch}
@@ -333,7 +327,7 @@ switch(a) {
 }
 \end{lstlisting}
 
-\textbf{Type casting}
+\paragraph{Type casting}
 \begin{items}
   \item \underline{explicit casting}: precision loss possible \\*
     \code{int i = 5; float f = (float) i;}
@@ -347,7 +341,7 @@ switch(a) {
     Attention: assignment cast after operator cast
 \end{items}
 
-\textbf{C Preprocessor}
+\paragraph{C Preprocessor}
 \begin{items}
   \item modifies \emph{source code} before compilation
   \item based on preprocessor \emph{directives} (usually starting with \code{#})
@@ -357,7 +351,7 @@ switch(a) {
   \item completely ignores C semantics
 \end{items}
 
-\textbf{Preprocessor -- search paths}
+\paragraph{Preprocessor --- search paths}
 \begin{items}
   \item \code{#include <file>}: system include, searches in: \\*
     \code{/usr/local/include} \\*
@@ -372,7 +366,7 @@ switch(a) {
     then in system include paths
 \end{items}
 
-\textbf{Preprocessor -- definitions}
+\paragraph{Preprocessor --- definitions}
 \begin{items}
   \item defines introduce replacement strings (can have arguments, based on string replacement)
   \item can help code structuring, often leading to source code cluttering
@@ -390,7 +384,7 @@ switch(a) {
 #endif
 \end{lstlisting}
 
-\textbf{Preprocessor -- predefined macros}
+\paragraph{Preprocessor --- predefined macros}
 \begin{items}
   \item \underline{system-specific}: \\*
     \code{__unix__}, \code{_WIN32}, \code{__STDC_VERSION__}
@@ -398,7 +392,7 @@ switch(a) {
     \code{__LINE__}, \code{__FILE__}, \code{__DATE__}
 \end{items}
 
-\textbf{Libraries}
+\paragraph{Libraries}
 \begin{items}
   \item = collection of functions contained in object files, glued together in dynamic/static library
   \item ex.: Math header contains declarations, but not all definitions \\*

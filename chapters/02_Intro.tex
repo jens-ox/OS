@@ -1,26 +1,26 @@
 \section{Introduction to Operating Systems}
 
-\textbf{What's an OS?}
+\paragraph{What's an OS?}
 \begin{items}
-	\item \underline{abstraction}: provides abstraction for applications \\*
+	\item \textbf{abstraction}: provides abstraction for applications \\*
 		manages and hides hardware details \\*
 		uses low-level interfaces (not available to applications) \\*
 		multiplexes hardware to multiple programs (\emph{virtualisation}) \\*
 		makes hardware use efficient for applications
-	\item \underline{protection}: \\*
+	\item \textbf{protection}: \\*
 		from processes using up all resources (\emph{accounting}, \emph{allocation}) \\*
 		from processes writing into other processes memory
-	\item \underline{resource managing}: \\*
+	\item \textbf{resource managing}: \\*
 		manages + multiplexes hardware resources \\*
 		decides between conflicting requests for resource use \\*
 		strives for efficient + fair resource use
-	\item \underline{control}: \\*
+	\item \textbf{control}: \\*
 		controls program execution \\*
 		prevents errors and improper computer use
 	\item \( \leadsto \) \textbf{no universially accepted definition}
 \end{items}
 
-\textbf{Hardware Overview}
+\paragraph{Hardware Overview}
 \begin{items}
 	\item CPU(s)/devices/memory (conceptually) connected to common bus
 	\item CPU(s)/devices competing for memory cycles/bus
@@ -30,11 +30,11 @@
 	\begin{figure}[H]\centering\label{BusSystemToday}\includegraphics[width=0.33\textwidth]{BusSystemToday}\end{figure}
 \end{items}
 
-\textbf{Central Processing Unit (CPU) -- Operation}
+\paragraph{Central Processing Unit (CPU) --- Operation}
 \begin{items}
 	\item fetches instructions from memory, executes them (instruction format/-set depends on CPU)
 	\item CPU internal registers store (meta-)data during execution (general purpose registers, floating point registers, instruction pointer (IP), stack pointer (SP), program status word (PSW),...)
-	\item \underline{execution modes}: \\*
+	\item \textbf{execution modes}: \\*
 		\textbf{user mode} (x86: \emph{Ring 3}/\emph{CPL 3}): \\*
 			\phantom{x} only non-privileged instructions may be executed \\*
 			\phantom{x} cannot manage hardware \( \to \) \textbf{protection} \\*
@@ -44,7 +44,7 @@
 		\begin{figure}[H]\centering\label{OperationModes}\includegraphics[width=0.2\textwidth]{OperationModes}\end{figure}
 \end{items}
 
-\textbf{Random Access Memory (RAM)}
+\paragraph{Random Access Memory (RAM)}
 \begin{items}
 	\item keeps currently executed instructions + data
 	\item today: CPUs have built-in \emph{memory controller}
@@ -54,7 +54,7 @@
 		pins to PCI-E switches
 \end{items}
 
-\textbf{Caching}
+\paragraph{Caching}
 \begin{items}
 	\item RAM delivers instructions/data slower than CPU can execute
 	\item memory references typicalle follow \emph{locality principle}: \\*
@@ -66,7 +66,7 @@
 		copy used information temporarily from slower to faster storage \\*
 		check faster storage first before going down \textbf{memory hierarchy} \\*
 		if not, data is copied to cache and used from there
-	\item \underline{Access latency}: \\*
+	\item \textbf{Access latency}: \\*
 		register: \( \sim \)1 CPU cycle \\*
 		L1 cache (per core): \( \sim \)4 CPU cycles \\*
 		L2 cache (per core pair): \( \sim \)12 CPU cycles \\*
@@ -74,7 +74,7 @@
 		DDR3-12800U RAM: \( \sim \)28 CPU cycles + \( \sim \) 50ns (\( \sim \)12 GiB/s)
 \end{items}
 
-\textbf{Caching -- Cache Organisation}
+\paragraph{Caching --- Cache Organisation}
 \begin{items}
 	\item caches managed in hardware
 	\item divided into \emph{cache lines} (usually 64 bytes each, unit at which data is exchanged between hierarchy levels)
@@ -87,13 +87,13 @@
 		\emph{conflict miss}: cache has still space, but collisions due to \\* \phantom{x} placement strategy
 \end{items}
 
-\textbf{Interplay of CPU and Devices}
+\paragraph{Interplay of CPU and Devices}
 \begin{items}
 	\item I/O devices and CPU execute concurrently
 	\item Each device controller \\*
 		- is in charge of particular device \\*
 		- has local buffer
-	\item \underline{Workflow}:
+	\item \textbf{Workflow}:
 	\begin{enumeration}
 		\item CPU issues commands, moves data to devices
 		\item Device controller informs APIC (\emph{Advanced Programmable Interrupt Controller}) that operation is finished
@@ -105,7 +105,7 @@
 
 \newpage 
 
-\textbf{Device control}
+\paragraph{Device control}
 \begin{items}
 	\item Devices controlled through their \textbf{device controller}, accepts commands from OS via \textbf{device driver}
 	\item devices controlled through device registers and device memory: \\*
@@ -125,7 +125,7 @@
 	\item some devices use hybrid approaches using both
 \end{items}
 
-\textbf{Device control -- Nvidia general purpose GPU}
+\paragraph{Device control --- Nvidia general purpose GPU}
 \begin{items}
 	\item memory-mapped ring-buffer and \code{put}/\code{get}-device
 	\item mapping can be exposed to application \( \leadsto \) application can submit commands in user-mode
