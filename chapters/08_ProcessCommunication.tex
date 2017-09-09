@@ -1,0 +1,231 @@
+\section{Inter Process Communication}
+
+\paragraph{Overview}
+\begin{items}
+  \item \textbf{Reassons} for cooperating processes: \\*
+    - \emph{information sharing}: share file/data-structure in memory \\*
+    - \emph{computation speed-up}: break large tasks in subtasks \( \leadsto \) parallel execution \\*
+    - \emph{modularity}: divide system into collborating modules with clean interfaces
+  \item \textbf{IPC}: allows data exchange \\*
+    - \emph{message passing}: explicity send/receive information using syscalls \\*
+    - \emph{shared memory}: physical memory region used by multiple processes/threads
+\end{items}
+
+\paragraph{IPC --- message passing}
+\begin{items}
+  \item = mechanism for processes to communicate and synchronize
+  \item message passing facilities generally provide \code{send} and \code{receive}
+  \item \textbf{Implementations}: \\*
+    - hardware bus \\*
+    - shared memory \\*
+    - kernel memory \\*
+    - network interface card (NIC)
+  \item \textbf{Direct messages}: processes explicitly named when exchanging messages
+  \item \textbf{Indirect messages}: sending to/receiving from \emph{mailboxes} \\*
+    - first communicating process creates mailbox, last destroys \\*
+    - processes can only communicate through shared mailbox
+\end{items}
+
+\paragraph{Indirect messages -- synchronization}
+\begin{items}
+  \item \textbf{Blocking} (synchronous): \\*
+    - \emph{blocking send}: sender blocks until message is received \\*
+    - \emph{blocking receive}: receiver blocks until message is available
+  \item \textbf{Non-blocking} (asynchronous): \\*
+    - \emph{non-blocking send}: sender sends message, then continues \\*
+    - \emph{non-blocking receive}: receiver receives valid message or \code{null}
+\end{items}
+
+\paragraph{Messaging --- Buffering}
+\begin{items}
+  \item messages are \emph{queued} using different capacities while being in-flight
+  \item \textbf{zero capacity}: no queuíng \\*
+    - \emph{rendezvous}: sender must wait for receiver \\*
+    - message is transferred as soon as receiver becomes available \( \to \) no latency/jitter
+  \item \textbf{bounded capacity}: finite number + length of messages \\*
+    - sender can send before receiver waits for messages \\*
+    - sender must wait if link is full
+  \item \textbf{unbounded capacity}: \\*
+    - sender never waits \\*
+    - memory may overflow \( \to \) potentially large latency/jitter between \code{send} and \code{receive}
+\end{items}
+
+\paragraph{Messaging --- POSIX message queues}
+\begin{items}
+  \item \textbf{create} or open existing message queue: \\*
+    \code{mqd_t mq_open (const char *name, int oflag);} \\*
+    - \code{name} ist path in file system \\*
+    - access permission controlled through file system access permission
+  \item \textbf{send} message to message queue: \\*
+    \code{int mq_send (mqd_t md, const char *msg, size_t len, unsigned priority);}
+  \item \textbf{receive} message with highest priority in message queue: \\*
+    \code{int mq_receive (mqd_t md, char *msg, size_t len, unsigned *priority);}
+  \item \textbf{register} callback handler on message queue (to avoid polling): \\*
+    \code{int mq_notify (mqd_t md, const struct sigevent *sevp);}
+  \item \textbf{remove} message queue: \\*
+    \code{int mq_unlink (const char *name);}
+\end{items}
+
+\paragraph{Shared Memory}
+\begin{items}
+  \item \textbf{Principle}: communicate through region of shared memory \\*
+    - every write to shared region is visible to all other processes \\*
+    - hardware guarantees that always most recent write is read
+  \item \textbf{Implementation}: message passing via shared memory is application-specific
+  \item \textbf{Problems}: using shared memory in a safe way is tricky \\*
+    - \emph{cache coherency protocol}: makes usage with many processes/CPUs hard \\*
+    - \emph{race conditions}: makes usage with multiple writers hard
+\end{items}
+
+\paragraph{Shared Memory --- POSIX shared memory}
+\begin{items}
+  \item \textbf{create} or open existing POSIX shared memory object: \\*
+    \code{int shm_open (const char *name, int oflag, mod_t mode);}
+  \item \textbf{set} size of shared memory region: \\*
+    \code{ftruncate (smd, size_t len);}
+  \item \textbf{map} shared memory object to address space: \\*
+    \code{void* mmap (void* addr, size_t len, [...], smd, [...]);}
+  \item \textbf{unmap} shared memory object from address space: \\*
+    \code{int munmap (void* addr, size_t len);}
+  \item \textbf{destroy} shared memory object: \\*
+    \code{int shm_unlink (const char *name);}
+\end{items}
+
+\paragraph{Shared Memory --- sequential memory consistency}
+\begin{items}
+  \item = \emph{the result of execution as if all operations were executed in some sequential order, and the operations of each processor occurred in the order specified by the program.}
+  \item \textbf{Model}: \\*
+    - all memory operations occur one at a time in \emph{program order} \\*
+    - ensures write atomicity
+  \item \textbf{Reality}: compiler and CPU re-order instructions to \emph{execution order} \\*
+    \( \to \) without SC many processes on many CPU behave worse than preemptive threads on 1 CPU
+\end{items}
+
+\paragraph{Shared Memory --- memory consistency model}
+\begin{items}
+  \item \textbf{Problem}: \\*
+    - CPUs generally not sequentially consistent \\*
+    - compilers do not generate code in program order
+\end{items}
+
+\paragraph{Syncronization --- race conditions}
+\begin{items}
+  \item \textbf{Assume}: sequential memory consistency \( \to \) no atomic memory transactions!
+  \item \textbf{Critical Sections}: protect instructions inside critical section from concurrent execution
+\end{items}
+
+\paragraph{Critical Sections --- desired properties}
+\begin{items}
+  \item \textbf{mutual exclusion}: at most one thread can be in the CS at any time
+  \item \textbf{progress}: no thread running outside of CS may block another thread from getting in
+  \item \textbf{bounded waiting}: once a thread starts trying to enter CS, there is a bound on number of times other threads get in
+\end{items}
+
+\paragraph{Critical Sections --- disabling interrupts}
+\begin{items}
+  \item kernel only switches on interrupts (usually on \emph{timer interrupt}) \\*
+    \( \to \) have per-thread \emph{do not interrupt} (DNI)-bit
+  \item \textbf{single-core system}: \\*
+    - enter CS: set DNI bit \\*
+    - leave CS: clear DNI bit
+  \item \textbf{Advantages}: \\*
+    - easy + convenient in kernel
+  \item \textbf{Disadvantages}: \\*
+    - \emph{only works on signle-core systems}: disabling interrupts on one CPU doesn't affect other CPUs \\*
+    - \emph{only feasible in kernel}: don't want to give user power to turn off interrupts!
+\end{items}
+
+\paragraph{Critical Sections --- lock variables}
+\begin{items}
+  \item define global \code{lock} variable \\*
+    - only enter CS if \code{lock} is \code{0}, set to \code{1} on enter \\*
+    - wait for lock to become \code{0} otherwise (\emph{busy waiting})
+  \item \textbf{Problem}: doesn't solve CS problem! Reading/Setting lock not atomic!
+\end{items}
+
+\paragraph{Critical Sections --- spinlocks}
+\begin{items}
+  \item to make lock variable approach work, lock variable must be tested and set at same time atomically:
+  \item \textbf{x86}: \code{xchg} can atomically exchange memory content with register \\*
+    - exchanges register content with memory content \\*
+    - returns previous memory content of lock \\*
+    \( \leadsto \) implementation of critical section as \emph{spinlock}:
+  \begin{lstlisting}[language=c]
+void enter_critical_section (volatile bool *lock) {
+  while (xchg(lock, 1) == 1); // lock = 1 and return old value
+                                 // repeat until old value != 1
+}
+
+void leave_critical_section (volatile bool *lock) {
+  *lock = 0;
+}
+  \end{lstlisting}
+  \item \textbf{Advantages}: \\*
+    - \emph{mutual exclusion}: only one thread can enter CS \\*
+    - \emph{progress}: only thread within CS hinders others of getting in
+  \item \textbf{Disadvantages}: \\*
+    - \emph{bounded waiting}: no upper bound
+\end{items}
+
+\paragraph{Spinlocks --- Limitations}
+\begin{items}
+  \item \textbf{Congestion}: \\*
+    - if most times there is no thread in CS when another tries to enter, then spinlocks are \\* \phantom{-} \phantom{\( \cdot \)} very easy + efficient \\*
+    - if CS is large or many threads try to enter, spinlocks might not be good choice as all \\* \phantom{-} \phantom{\( \cdot \)} threads actively wait spinning
+  \item \textbf{Multicore}: memory address is written at every atomic swap operation \\*
+    \( \to \) memory is expensively kept coherent 
+  \item \textbf{Static Priorities} (e.g., \emph{priority inversion}): if low-priority threads hold lock it will never be able to release it, because it will never be scheduled
+\end{items}
+
+\paragraph{Spinlocks --- sleep while wait}
+\begin{items}
+  \item \textbf{Problem}: busy part of busy waiting \\*
+    - wastes resources, \\*
+    - stresses cache coherence protocol, \\*
+    - can cause priority inversion problem
+  \item \textbf{Idea}: \\*
+    - threads sleep on locks if occupied \\*
+    - wake up threads one at a time when lock becomes free
+\end{items}
+
+\paragraph{Spinlocks --- semaphore}
+\begin{items}
+  \item two new syscalls operating on \code{int} variables: \\*
+    - \code{wait (&s)}: if \code{s > 0}: \code{s--} and continue, otherwise let caller sleep \\*
+    - \code{singal (&s)}: if no thread is waiting: \code{s++}, otherwise wake one up
+  \item initialize \code{s} to maximum number of threads that may enter CS \\*
+    - \code{wait} = \code{enter_critical_section()} \\*
+    - \code{signal} = \code{leave_critical_section()}
+  \item \textbf{mutex} (semaphore): semaphore initialized to 1 (only admits one thread at a time into CS)
+  \item \textbf{counting semaphore}: semaphore allowing more than one thread into CS at a time
+\end{items}
+
+\paragraph{Semaphore --- implementation}
+\begin{items}
+  \item \code{wait} and \code{signal} calls need to be carefully synchronized (otherwise \emph{race condition} between checking and decrementing \code{s})
+  \item \textbf{signal loss} can occur when waiting and waking threads up at same time
+  \item \( \leadsto \) each semaphore has \textbf{wake-up queue}: \\*
+    - \emph{weak semaphores}: wake up random waiting thread on \code{signal} \\*
+    - \emph{strong semaphores}: wake up thread strictly in order which they started \code{wait}ing
+  \item \textbf{Advantages}: \\*
+    - \emph{mutual exclusion}: only one thread can enter CS for mutexes \\*
+    - \emph{progress}: only thread within CS hinders others to get in \\*
+    - \emph{bounded waiting}: strong semaphores guarantee bounded waiting
+  \item \textbf{Disadvantages}: \\*
+    - every enter and exit of CS is syscall \( \to \) slow
+\end{items}
+
+\paragraph{Fast User Space mutex}
+\begin{items}
+  \item \textbf{spinlock}: \\*
+    + quick when wait-time is short \\*
+    - waste resources when wait-time is long
+  \item \textbf{semaphore}: \\*
+    + efficient when wait-time is long \\*
+    - syscall overhead at every operation
+  \item \textbf{futex}: \\*
+    - userspace + kernel component \\*
+    - try to get into CS with userspace spinlock \\*
+    \phantom{-} \( \cdot \) CS busy \( \to \) use syscall to put thread to sleep \\*
+    \phantom{-} \( \cdot \) otherwise \( \to \) enter CS with now locked spinlock completely in userspace
+\end{items}
