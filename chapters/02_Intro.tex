@@ -74,7 +74,7 @@
 		DDR3-12800U RAM: \( \sim \)28 CPU cycles + \( \sim \) 50ns (\( \sim \)12 GiB/s)
 \end{items}
 
-\paragraph{Caching --- Cache Organisation}
+\paragraph{Caching --- Cache Organization}
 \begin{items}
 	\item caches managed in hardware
 	\item divided into \emph{cache lines} (usually 64 bytes each, unit at which data is exchanged between hierarchy levels)
@@ -132,7 +132,6 @@
 
 \begin{summary}
 	\begin{items}
-		\setlength\itemsep{0em}
 		\item The OS is an abstraction layer between applications and hardware (multiplexes hardware, hides hardware details, provides protection between processes/users)
 		\item The CPU provides a separation of User and Kernel mode (which are required for an OS to provide protection between applications)
 		\item CPU can execute commands faster than memory can deliver instructions/data -- memory hierarchy mitigates this memory wall, needs to be carefully managed by OS to minimize slowdowns
