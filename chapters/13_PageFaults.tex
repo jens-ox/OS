@@ -1,0 +1,77 @@
+\section{Page Faults}
+
+\paragraph{Page Faults --- handling}
+\begin{items}
+  \item \textbf{Cause}: access to page currently not present in main memory \\*
+    $ \to $ exception, invoking OS
+  \item \textbf{Process}: \\*
+    $ - $ OS checks access validity (requiring additional info) \\*
+    $ - $ get empty frame \\*
+    $ - $ load contents of requested page from disk into frame \\*
+    $ - $ adapt page table \\*
+    $ - $ set present bit of respective entry \\*
+    $ - $ restart instruction causing page fault
+\end{items}
+
+\paragraph{Page Faults --- latency}
+\begin{items}
+  \item \textbf{fault rate} $ 0 \leq p \leq 1 $ \\*
+    $ - $ $ p = 0 $: no page faults \\*
+    $ - $ $ p = 1 $: every reference leads to page fault
+  \item \textbf{effective access time} (EAT): \\*
+    $ \text{EAT} = (1-p)*\text{memory access} + p*(\text{PF overhead} + \text{PF service time} + \text{restart overhead}) $
+\end{items}
+
+\paragraph{Page Faults --- performance impact}
+\begin{items}
+  \item \textbf{memory access time}: 200ns
+  \item \textbf{average page fault service time}: 8ms
+  \item $ \leadsto $ 1:1000 access-page-fault-rate $ \to $ $ \text{EAT} = 8.2\mu s $ $ \Rightarrow $ \emph{slowdown by factor 40}!
+\end{items}
+
+\paragraph{Page Faults --- challenges}
+\begin{items}
+  \item \textbf{what to eject?} \\*
+    $ - $ how to allocate frames among processes? \\*
+    $ - $ which particular process's pages to keep in memory? \\*
+    $ - $ see \emph{page frame allocation}
+  \item \textbf{what to fetch?} \\*
+    $ - $ what if block size $ \neq $ page size? \\*
+    $ - $ just one page needed? prefetch more?
+  \item \textbf{process resumption?} \\*
+    $ - $ need to save state + resume \\*
+    $ - $ process might have been in middle of instruction
+\end{items}
+
+\paragraph{Page Faults --- what to fetch?}
+\begin{items}
+  \item bring in page causing fault
+  \item \textbf{pre-fetch} sourrounding pages? \\*
+    $ - $ reading two disk blocks is approximately as fast as reading one \\*
+    $ - $ as long as there is no track/head switch, seek (disk) time dominates \\*
+    $ - $ application exhibits spatial locality = big win
+  \item \textbf{pre-zero} pages? \\*
+    $ - $ don't want to leak information between processes \\*
+    $ - $ need 0-filled pages for stack, heap, .bss, \dots \\*
+    $ - $ \emph{zero on demand}? \\*
+    $ - $ keep pool of 0-pages filled in background when CPU is idle?
+\end{items}
+
+\paragraph{Page Faults --- process resumption?}
+\begin{items}
+  \item hardware provides info about page fault \\*
+    (intel: \code{\%cr2} contains faulting virtual address)
+  \item \textbf{context}: OS needs to figure out fault context: \\*
+    $ - $ read or write? \\*
+    $ - $ instruction fetch? \\*
+    $ - $ user access to kernel memory?
+  \item \textbf{idempotent instructions}: easy: \\*
+    $ - $ re-do load/store instructions \\*
+    $ - $ re-execute instructions accessing only one address
+  \item \textbf{complex instructions}: must be re-started \\*
+    $ - $ some CISC instructions are hard to restart (e.g., block move of overlapping areas) \\*
+    $ - $ \emph{solutions}: \\*
+      \phantom{$ - $} $ \cdot $ touch relevant pages before operation starts \\*
+      \phantom{$ - $} $ \cdot $ keep modified data in registers $ \to $ page faults can't take place \\*
+      \phantom{$ - $} $ \cdot $ design ISA such that complex operations can execute partially $ \to $ consistent page fault state
+\end{items}
