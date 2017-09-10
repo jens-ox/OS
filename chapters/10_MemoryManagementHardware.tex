@@ -1,0 +1,193 @@
+\section{Memory Management Hardware}
+
+\paragraph{Main Memory}
+\begin{items}
+  \item main memory + registers = only storage that CPU can access directly
+  \item before run: program must be \\*
+    - brought into memory from background storage \\*
+    - placed within a process' address space
+  \item \textbf{Earlier}: computers had no memory abstraction \\*
+    \( \to \) programs accessed physical memory directly
+  \item multiple processes can be run concurrently even without memory abstraction (using swapping, relocation)
+\end{items}
+
+\paragraph{Swapping}
+\begin{items}
+  \item \textbf{Principle}: \\*
+    - \emph{roll-out}: save program's state on background storage \\*
+    - \emph{roll-in}: replace program state with another program's state
+  \item \textbf{Advantages}: \\*
+    - only needs hardware support to protect kernel, not to protect processes from one another
+  \item \textbf{Disadvantages}: \\*
+    - \emph{very slow}: major part of swap time is transfer time \\*
+    - \emph{no parallelism}: only one process runs at a time, owns entire physical address space
+\end{items}
+
+\paragraph{Overlays}
+\begin{items}
+  \item \textbf{Problem}: what if process needs more memory than available? \\*
+    \( \to \) need to partition program manually
+\end{items}
+
+\paragraph{Static Relocation}
+\begin{items}
+  \item = OS adds fixed offset to every address in a program when loading + creating process
+  \item same address space for every process \\*
+    \( \to \) \emph{no protection}: every program sees + can access every address!
+\end{items}
+
+\paragraph{Shared Physical Memory --- Goals}
+\begin{items}
+  \item \textbf{Protection}: \\*
+    - bug in one process must not corrupt memory in another \\*
+    - do not allow processes to observe other processes' memory
+  \item \textbf{Transparency}: \\*
+    - process should not require particular physical memory addresses \\*
+    - processes should not be able to use large amounts of contiguous memory
+  \item \textbf{Resource Exhaustion}: \\*
+    - allow that sum of sizes of all processes is greater than physical memory
+\end{items}
+
+\paragraph{Memory Management Unit}
+\begin{items}
+  \item need hardware support to achieve safe + secure protection
+  \item \textbf{Goal}: hardware maps virtual to physical address
+  \item \textbf{Usage}: user program deals with virtual addresses, never sees real addresses
+\end{items}
+\begin{figure}[H]\centering\label{MMU}\includegraphics[width=0.33\textwidth]{MMU}\end{figure}
+
+\paragraph{MMU --- base and limit registers}
+\begin{items}
+  \item \textbf{Idea}: provide protection + dynamic relocation in MMU \\*
+    \( \to \) introduce special \emph{base} and \emph{limit} registers (e.g., Cray-1)
+  \item \textbf{Usage}: on every load/store the MMU \\*
+    - checks if virtual address \( \geq \) \code{base} \\*
+    - checks if virtual address \( < \) \code{base} + \code{limit} \\*
+    - use virtual address as physical address in memory
+  \item \textbf{Protection}: OS needs to be protected from processes \\*
+    - main memory split in two partitions (low = OS, high = user processes) \\*
+    - OS can access all process partitions (e.g., to copy syscall parameters) \\*
+    - MMU denies processes access to OS memory
+  \item \textbf{Advantages}: \\*
+    - straight forward to implement MMU \\*
+    - very quick at run-time
+  \item \textbf{Disadvantages}: \\*
+    - how to grow process' address space? \\*
+    - how to share code/data?
+\end{items}
+\begin{figure}[H]\centering\label{MMUBaseLimit}\includegraphics[width=0.33\textwidth]{MMUBaseLimit}\end{figure}
+
+\paragraph{MMU --- segmentation}
+\begin{items}
+  \item \textbf{Solution} to base + limit: use multiple base + limit register pairs \emph{per process} \\*
+  \( \to \) private + public segments
+  \item \textbf{Advantages}: \\*
+    - data/code sharing between processes possible without compromising confidentiality \\*
+    - process does not need large contiguous physical memory area \( \to \) easy placement \\*
+    - process does not need to be entirely in memory \( \to \) memory overcommittement ok
+  \item \textbf{Disadvantages}: \\*
+    - segments need to be kept contiguous in physical memory \\*
+    - \emph{fragmentation} of physical memory
+\end{items}
+
+\paragraph{Segmentation --- architecture}
+\begin{items}
+  \item virtual address = [segment \#, offset]
+  \item each process has \emph{segment table}, maps virtual address to physical address in memory \\*
+    - \emph{base}: starting physical address where segment resides in memory \\*
+    - \emph{limit}: length of segment \\*
+    - \emph{protection}: access restriction (read/write) for safe sharing
+  \item MMU has two registers that identify current address space \\*
+    - \emph{segment-table base register} (STBR): points to segment table location of current process \\*
+    - \emph{segment-table length register} (STLR): indicates number of segments used by process
+\end{items}
+\begin{figure}[H]\centering\label{Segmentation}\includegraphics[width=0.33\textwidth]{Segmentation}\end{figure}
+
+\paragraph{External Fragmentation}
+\begin{items}
+  \item \textbf{Fragmentation} = inability to use free memory
+  \item \textbf{External Fragmentation} = sum of free memory satisfies requested amount of memory, but is not contiguous
+  \item \textbf{Compaction}: reduce external fragmentation \\*
+    - close gaps by moving allocated memory in one direction \\*
+    - only possible if relocation is dynamic, can be done at execution time \\*
+    - \emph{problem}: expensive! Need to halt process while moving data and updating tables \\*
+      \phantom{-} \( \to \) caches need to be reloaded, which should be avoided
+\end{items}
+
+\paragraph{MMU --- paging}
+\begin{items}
+  \item \textbf{Principle}: divide physical memory into fixed-size blocks (\emph{page frames}) \\*
+    - size = \( 2^n \) Bytes (typically 4KiB, 2MiB, 4MiB) \\*
+  \item \textbf{Virtual Memory}: divided into same-sized blocks (\emph{pages})
+  \item \textbf{Page Table}: managed by OS, stores mappings between \emph{virtual page numbers} (vpn) and \emph{page frame numbers} (pfn) for each AS
+  \item OS tracks all free frames, modifies page tables as needed
+  \item \textbf{Present Bit} (in page table): indicates that virtual page is currently mapped to physical memory
+  \item if process issues instruction to access unmapped virtual address, MMU calls OS to bring in the data (\emph{page fault})
+\end{items}
+
+\paragraph{MMU --- address translation scheme}
+\begin{items}
+  \item \textbf{Virtual address}: divided into \\*
+    - \emph{virtual page number}: page table index containing base address of each page in physical memory \\*
+    - \emph{page offset}: concatenated with base address results in physical address
+\end{items}
+
+\paragraph{MMU --- hierarchical page table}
+\begin{items}
+  \item \textbf{Problem}: need to keep complete page table in memory for every address space
+  \item \textbf{Idea}: not needing complete table, most virtual addresses unused by process \\*
+    \( \to \) subdivide virutal address further into multiple page indices \( p_n \) forming \emph{hierarchical page table}
+\end{items}
+
+\paragraph{Hierarchical Page Table --- x86-64}
+\begin{items}
+  \item \textbf{long mode}: 4-level hierarchical page table
+  \item \textbf{page directory base register} (control register 3, \code{\%CR3}) stores starting physical address of \emph{first level page table}
+  \item \textbf{address-space hierarchy}: following page-table hierarchy for every address space: \\*
+    - page map level 4 (PML4) \\*
+    - page directory pointers table (PDPT) \\*
+    - page directory (PD) \\*
+    - page table entry (PTE)
+  \item \textbf{per level}: table can either point to \emph{directory} in next hierarchy level or to \emph{entry} containing actual mapping data
+\end{items}
+\begin{figure}[H]\centering\label{PageTable}\includegraphics[width=0.33\textwidth]{PageTable}\end{figure}
+
+\paragraph{Page Table Entry --- content}
+\begin{items}
+  \item \textbf{valid bit} (\emph{present bit}): whether page is currently available in memory or needs to be brought in by OS via \emph{page fault}
+  \item \textbf{page frame number}: if page is present: physical address where page is currently located
+  \item \textbf{write bit}: whether or not page may be written to (may cause \emph{page fault})
+  \item \textbf{caching}: whether or not page should be cached at all (and with which policy)
+  \item \textbf{accessed bit}: set by MMU if page was touched since bit was last cleared by OS
+  \item \textbf{dirty bit}: set by MMU if page was modified since bit was last cleared by OS
+\end{items}
+
+\paragraph{Paging --- OS involvement}
+\begin{items}
+  \item OS performs all operations that require semantic knowledge
+  \item \textbf{page allocation} (bringing data into memory): OS needs to find free frame for new pages and set up mapping in page table of affected address space
+  \item \textbf{page replacement}: when all page frames are used, OS needs to evict pages from memory
+  \item \textbf{context switching}: OS sets MMU's base register (\code{\%CR3} on x86) to point to page hierarchy of next process's address space
+\end{items}
+
+\paragraph{MMU --- internal fragmentation}
+\begin{items}
+  \item \textbf{paging}: eliminates external fragmentation
+  \item \textbf{problem}: internal fragmentation \\*
+    - memory can only be allocated in page frame sizes \\*
+    - allocated virtual memory area will generally not end at page boundary \\*
+    \( \leadsto \) unused rest of last allocated page is lost!
+\end{items}
+
+\paragraph{MMU --- page size tradeoffs}
+\begin{items}
+  \item \textbf{fragmentation}: \\*
+    - \emph{larger pages} \( \to \) more memory wasted (internal fragmentation) per allocation \\*
+    - \emph{smaller pages} \( \to \) only half a page wasted per allocation on average
+  \item \textbf{table size}: \\*
+    - \emph{larger pages} \( \to \) fewer bits needed for \code{pfn} (more bits in offset), fewer PTEs \\*
+    - \emph{smaller pages} $ \to $ more + larger PTEs
+  \item \textbf{I/O}: \\*
+    - \emph{larger pages} $ \to $ more data needs to be loaded from dist to make page valid \\*
+    - \emph{smaller pages} $ \to $ need to trap OS more often when loading large program
+\end{items}

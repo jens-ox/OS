@@ -2,12 +2,12 @@
 
 \paragraph{Overview}
 \begin{items}
-  \item \textbf{Reassons} for cooperating processes: \\*
+  \item \textbf{Reasons} for cooperating processes: \\*
     - \emph{information sharing}: share file/data-structure in memory \\*
     - \emph{computation speed-up}: break large tasks in subtasks \( \leadsto \) parallel execution \\*
-    - \emph{modularity}: divide system into collborating modules with clean interfaces
+    - \emph{modularity}: divide system into collaborating modules with clean interfaces
   \item \textbf{IPC}: allows data exchange \\*
-    - \emph{message passing}: explicity send/receive information using syscalls \\*
+    - \emph{message passing}: explicitly send/receive information using syscalls \\*
     - \emph{shared memory}: physical memory region used by multiple processes/threads
 \end{items}
 
@@ -39,7 +39,7 @@
 \paragraph{Messaging --- Buffering}
 \begin{items}
   \item messages are \emph{queued} using different capacities while being in-flight
-  \item \textbf{zero capacity}: no queuíng \\*
+  \item \textbf{zero capacity}: no queuing \\*
     - \emph{rendezvous}: sender must wait for receiver \\*
     - message is transferred as soon as receiver becomes available \( \to \) no latency/jitter
   \item \textbf{bounded capacity}: finite number + length of messages \\*
@@ -108,7 +108,7 @@
     - compilers do not generate code in program order
 \end{items}
 
-\paragraph{Syncronization --- race conditions}
+\paragraph{Synchronization --- race conditions}
 \begin{items}
   \item \textbf{Assume}: sequential memory consistency \( \to \) no atomic memory transactions!
   \item \textbf{Critical Sections}: protect instructions inside critical section from concurrent execution
@@ -131,7 +131,7 @@
   \item \textbf{Advantages}: \\*
     - easy + convenient in kernel
   \item \textbf{Disadvantages}: \\*
-    - \emph{only works on signle-core systems}: disabling interrupts on one CPU doesn't affect other CPUs \\*
+    - \emph{only works on single-core systems}: disabling interrupts on one CPU doesn't affect other CPUs \\*
     - \emph{only feasible in kernel}: don't want to give user power to turn off interrupts!
 \end{items}
 
@@ -192,7 +192,7 @@ void leave_critical_section (volatile bool *lock) {
 \begin{items}
   \item two new syscalls operating on \code{int} variables: \\*
     - \code{wait (&s)}: if \code{s > 0}: \code{s--} and continue, otherwise let caller sleep \\*
-    - \code{singal (&s)}: if no thread is waiting: \code{s++}, otherwise wake one up
+    - \code{signal (&s)}: if no thread is waiting: \code{s++}, otherwise wake one up
   \item initialize \code{s} to maximum number of threads that may enter CS \\*
     - \code{wait} = \code{enter_critical_section()} \\*
     - \code{signal} = \code{leave_critical_section()}
