@@ -78,7 +78,7 @@
   \item \textbf{batch scheduling}: \\*
     - \emph{throughput}: number of processes that complete per time unit \\*
     - \emph{turnaround time}: time from job submission to job completion \\*
-    - \emph{CPU utilization}: keep CPU as busy as prossible
+    - \emph{CPU utilization}: keep CPU as busy as possible
   \item \textbf{interactive scheduling}: \\*
     - \emph{waiting time}: reduce time a process waits in waiting queue \\*
     - \emph{response time}: time from request to first response
@@ -115,7 +115,7 @@
     - \( \tau_{n+1} = \alpha t_n + (1-\alpha)\tau_n \) \\* \phantom{-} (\( t_n \): actual length of \( n \)-th CPU burst, \( \tau_{n+1} \): predicted length of next CPU burst, \( 0 \leq \alpha \leq 1 \))
 \end{items}
 
-\paragraph{Process Behaviour --- CPU bursts}
+\paragraph{Process Behavior --- CPU bursts}
 \begin{items}
   \item CPU bursts exists because processes wait for I/O
   \item \textbf{CPU-bound processes}: spends more time doing computations \\*
@@ -172,7 +172,7 @@
     - low priority for CPU jobs (rather run them longer)
   \item \textbf{Idea}: different queues with different priorities and time slice lengths \\*
     - schedule queues with (static) priority scheduling \\*
-    - double time slice lnegth in each next-lower priority \\*
+    - double time slice length in each next-lower priority \\*
     - process to higher priority when they don't use up quantum repetitively \\*
     - process to lower priority when they use up quantum repetitively
 \end{items}
@@ -193,3 +193,16 @@
   \item \textbf{Scheduling}: scheduler draws random number \( N \), process with \( N \)-th ticket is executed
   \item processes can transfer tickets to other processes if they wait for them
 \end{items}
+
+\begin{summary}
+  \begin{items}
+    \item \textbf{phases}: processes have phases of communication and waiting for I/O \\*
+      $ \to $ appropriate switching between processes increases computing system utilization
+    \item \textbf{goal-based}: scheduler decides what appropriate means based on goals \\*
+      $ - $ \emph{long-term scheduler}: degree of multiprogramming \\*
+      $ - $ \emph{short-term scheduler}: which process to run next
+    \item \textbf{dispatching}: only happens when OS is invoked \\*
+      $ - $ \emph{cooperative scheduling}: currently running thread yields (syscall) \\*
+      $ - $ \emph{preemptive scheduling}: OS is called periodically to switch threads
+  \end{items}
+\end{summary}

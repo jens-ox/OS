@@ -229,3 +229,17 @@ void leave_critical_section (volatile bool *lock) {
     \phantom{-} \( \cdot \) CS busy \( \to \) use syscall to put thread to sleep \\*
     \phantom{-} \( \cdot \) otherwise \( \to \) enter CS with now locked spinlock completely in userspace
 \end{items}
+
+\begin{summary}
+  \begin{items}
+    \item \textbf{communication} between processes/threads often needed \\*
+      $ - $ \emph{message passing}: provide explicit send/receive functions to exchange messages \\*
+      $ - $ \emph{implicitly/explicitly shared memory} between threads/processes: allows information exchange
+    \item \textbf{data races}: need to be taken into account when communicating
+    \item \textbf{synchronization techniques}: \\*
+      $ - $ interlocked atomic operations \\*
+      $ - $ spinlocks \\*
+      $ - $ semaphores \\*
+      $ - $ futexes
+  \end{items}
+\end{summary}

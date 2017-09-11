@@ -84,7 +84,7 @@
   \item \textbf{Advantages}: \\*
     - data/code sharing between processes possible without compromising confidentiality \\*
     - process does not need large contiguous physical memory area \( \to \) easy placement \\*
-    - process does not need to be entirely in memory \( \to \) memory overcommittement ok
+    - process does not need to be entirely in memory \( \to \) memory overcommitment ok
   \item \textbf{Disadvantages}: \\*
     - segments need to be kept contiguous in physical memory \\*
     - \emph{fragmentation} of physical memory
@@ -136,7 +136,7 @@
 \begin{items}
   \item \textbf{Problem}: need to keep complete page table in memory for every address space
   \item \textbf{Idea}: not needing complete table, most virtual addresses unused by process \\*
-    \( \to \) subdivide virutal address further into multiple page indices \( p_n \) forming \emph{hierarchical page table}
+    \( \to \) subdivide virtual address further into multiple page indexes \( p_n \) forming \emph{hierarchical page table}
 \end{items}
 
 \paragraph{Hierarchical Page Table --- x86-64}
@@ -179,7 +179,7 @@
     \( \leadsto \) unused rest of last allocated page is lost!
 \end{items}
 
-\paragraph{MMU --- page size tradeoffs}
+\paragraph{MMU --- page size trade-offs}
 \begin{items}
   \item \textbf{fragmentation}: \\*
     - \emph{larger pages} \( \to \) more memory wasted (internal fragmentation) per allocation \\*
@@ -191,3 +191,14 @@
     - \emph{larger pages} $ \to $ more data needs to be loaded from dist to make page valid \\*
     - \emph{smaller pages} $ \to $ need to trap OS more often when loading large program
 \end{items}
+
+\begin{summary}
+  \begin{items}
+    \item need to place processes in memory to run
+    \item want to place multiple processes in memory at same time to run concurrently/parallel
+    \item \textbf{virtual memory}: enables protection, transparency, overcommitment \\*
+      $ - $ \emph{trade-off} extra hardware (MMU) to translate addresses at every load/store
+    \item \textbf{MMU types}: base + limit, segmentation, paging
+    \item \textbf{paging}: supported by all contemporary MMUs, favorite of most OS
+  \end{items}
+\end{summary}

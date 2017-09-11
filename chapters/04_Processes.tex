@@ -11,7 +11,7 @@
 		- \textbf{context switch}: dispatcher saves current registers/memory \\* \phantom{-} mappings, restores those of next process
 \end{items}
 
-\paragraph{Process-Cooking Analogon}
+\paragraph{Process-Cooking Analogy}
 \begin{items}
 	\item Program/Process like Recipe/Cooking
 	\item \textbf{Recipe}: lists ingredients, gives algorithm what to do when \\*
@@ -31,13 +31,13 @@
 	\item OS uses currency + parallelism to implement multiprogramming
 	\begin{enumeration}
 		\item \textbf{Concurrency}: multiple processes, one CPU \\* \( \leadsto \) not at the same time
-		\item \textbf{Paralellism}: multiple processes, multiple CPU \\* \( \leadsto \) at the same time
+		\item \textbf{Parallelism}: multiple processes, multiple CPU \\* \( \leadsto \) at the same time
 	\end{enumeration}
 \end{items}
 
 \paragraph{Virtual Memory Abstraction --- Address Spaces}
 \begin{items}
-	\item every process has own \emph{virtual addresess} (vaddr)
+	\item every process has own \emph{virtual addresses} (vaddr)
 	\item MMU relocates each load/store to \emph{physical memory} (pmem)
 	\item processes never see physical memory, can't access it directly
 	\item \textcolor{black!60!green}{\code{+}} MMU can enforce protection (mappings in kernel mode)
@@ -54,8 +54,8 @@
 	\item Data types:
 	\begin{enumeration}
 		\item \emph{fixed size} data items
-		\item data naturally \emph{free'd in reverse allocation order}
-		\item data \emph{allocated/free'd "`randomly"'}
+		\item data naturally \emph{freed in reverse allocation order}
+		\item data \emph{allocated/freed "`randomly"'}
 	\end{enumeration}
 	\item compiler/architecture determine how large int is and what instructions are used in text section (\code{code})
 	\item \textbf{Loader} determines based on exe file how executed program is placed in memory
@@ -70,16 +70,16 @@
 		- executable file typically contains starting address + size of BSS \\*
 		- entire segment initially 0
 	\item \textbf{Data segment}: \\*
-		- fixed-size, initlized data elements (e.g. global variables)
+		- fixed-size, initialized data elements (e.g. global variables)
 	\item \textbf{read-only data segment}: \\*
 		- constant numbers, strings
-	\item All three sometinmes summarized as one segment
+	\item All three sometimes summarized as one segment
 	\item compiler and OS decide ultimately where to place which data/how many segments exist
 \end{items}
 
 \paragraph{Segments --- Stack}
 \begin{items}
-	\item some data naturally free'd in reverse allocation order \\*
+	\item some data naturally freed in reverse allocation order \\*
 		\( \leadsto \) very easy memory management (stack grows upwards)
 	\item fixed segment starting point
 	\item store top of latest allocation in \textbf{stack pointer} (SP) \\*
@@ -90,7 +90,7 @@
 
 \paragraph{Segments --- Heap (Dynamic Memory Allocation)}
 \begin{items}
-	\item some data "`randomly"' allocated/free'd
+	\item some data "`randomly"' allocated/freed
 	\item two-tier memory allocation:
 	\begin{enumeration}
 		\item allocate large memory chunk (\textbf{heap segment}) from OS \\*
@@ -105,8 +105,10 @@
 \begin{figure}[H]\centering\label{AddressSpaceLayoutComplex}\includegraphics[width=0.2\textwidth]{AddressSpaceLayoutComplex}\end{figure}
 
 \begin{summary}
-	\item recipe vs. cooking is like program vs. process
-	\item processes = ressource container for OS
-	\item process feels alone: has own CPU + memory
-	\item OS implements multiprogramming through rapid process switching
+	\begin{items}
+		\item recipe vs. cooking is like program vs. process
+		\item processes = resource container for OS
+		\item process feels alone: has own CPU + memory
+		\item OS implements multiprogramming through rapid process switching
+	\end{items}
 \end{summary}

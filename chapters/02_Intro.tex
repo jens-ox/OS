@@ -5,7 +5,7 @@
 	\item \textbf{abstraction}: provides abstraction for applications \\*
 		manages and hides hardware details \\*
 		uses low-level interfaces (not available to applications) \\*
-		multiplexes hardware to multiple programs (\emph{virtualisation}) \\*
+		multiplexes hardware to multiple programs (\emph{visualization}) \\*
 		makes hardware use efficient for applications
 	\item \textbf{protection}: \\*
 		from processes using up all resources (\emph{accounting}, \emph{allocation}) \\*
@@ -17,7 +17,7 @@
 	\item \textbf{control}: \\*
 		controls program execution \\*
 		prevents errors and improper computer use
-	\item \( \leadsto \) \textbf{no universially accepted definition}
+	\item \( \leadsto \) \textbf{no universally accepted definition}
 \end{items}
 
 \paragraph{Hardware Overview}
@@ -26,7 +26,7 @@
 	\item CPU(s)/devices competing for memory cycles/bus
 	\item all entities run concurrently
 	\begin{figure}[H]\centering\label{BusSystem}\includegraphics[width=0.33\textwidth]{BusSystem}\end{figure}
-	\item today: multiple busses
+	\item today: multiple buses
 	\begin{figure}[H]\centering\label{BusSystemToday}\includegraphics[width=0.33\textwidth]{BusSystemToday}\end{figure}
 \end{items}
 
@@ -57,7 +57,7 @@
 \paragraph{Caching}
 \begin{items}
 	\item RAM delivers instructions/data slower than CPU can execute
-	\item memory references typicalle follow \emph{locality principle}: \\*
+	\item memory references typically follow \emph{locality principle}: \\*
 		\textbf{spatial locality}: future refs often near previous accesses \\*
 			\phantom{x} (e.g. next byte in array) \\*
 		\textbf{temporal locality}: future refs often at previously accessed ref \\*
@@ -78,7 +78,7 @@
 \begin{items}
 	\item caches managed in hardware
 	\item divided into \emph{cache lines} (usually 64 bytes each, unit at which data is exchanged between hierarchy levels)
-	\item often separation of data/instructions in faster caches (e.g. L1, see \emph{harward architecture})
+	\item often separation of data/instructions in faster caches (e.g. L1, see \emph{Harvard architecture})
 	\item \textbf{cache hit}: accessed data already in cache (e.g. L2 cache hit)
 	\item \textbf{cache miss}: accessed data has to be fetched from lower level
 	\item cache miss types: \\*
@@ -123,7 +123,7 @@
 	\item some devices use hybrid approaches using both
 \end{items}
 
-\paragraph{Device control --- Nvidia general purpose GPU}
+\paragraph{Device control --- nVidia general purpose GPU}
 \begin{items}
 	\item memory-mapped ring-buffer and \code{put}/\code{get}-device
 	\item mapping can be exposed to application \( \leadsto \) application can submit commands in user-mode
