@@ -141,3 +141,14 @@
     $ - $ \emph{rollback}: perform periodic snapshots, abort process to preempt resources $ \to $ restart from last \\* \phantom{$ - $} \phantom{$ \cdot $} safe state \\*
     $ - $ \emph{starvation}: same process may always be picked as victim $ \leadsto $ include rollback count in cost factor
 \end{items}
+
+\begin{summary}
+  \begin{items}
+    \item \textbf{classical synchronization problems}: model synchronization problems occurring in reality \\*
+      $ - $ \emph{producer-consumer}: shared use of buffers/queues \\*
+      $ - $ \emph{reader-writer}: shared access to data structures \\*
+      $ - $ \emph{dining philosophers}: competition for limited resources
+    \item such synchronization problems occur very often when programming operating systems
+    \item \textbf{parallelism}: introduced by multiple processors + multiprogramming, needs to be considered carefully when writing OS
+  \end{items}
+\end{summary}

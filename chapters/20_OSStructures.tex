@@ -1,0 +1,69 @@
+\section{OS Structures}
+
+\paragraph{Monolithic Systems}
+\begin{items}
+  \item \textbf{advantages}: \\*
+    $ - $ well understood \\*
+    $ - $ easy access to all system data (all shared) \\*
+    $ - $ low module interaction cost (procedure call) \\*
+    $ - $ extensible via interface definitions
+  \item \textbf{disadvantages}: \\*
+    $ - $ no protection between system and application \\*
+    $ - $ not stable/robust
+\end{items}
+
+\paragraph{Layered Systems}
+\begin{items}
+  \item \textbf{principle}: system is divided into many \emph{layers}: \\*
+    $ - $ \emph{each layer} uses functions and services of lower levels \\*
+    $ - $ \emph{bottom layer} = hardware \\*
+    $ - $ \emph{top layer} = user interface \\*
+    $ - $ \emph{lower layers}: implement mechanisms \\*
+    $ - $ \emph{higher layers}: implement policies (mostly)
+  \item \textbf{advantages}: \\*
+    $ - $ \emph{modular}: each layer can be tested/verifies independently \\*
+    $ - $ \emph{correctness} of layer $ n $ only depends on layer $ n-1 $ $ \to $ simple debugging/maintenance
+  \item \textbf{disadvantages}: \\*
+    $ - $ just unidirectional protection \\*
+    $ - $ mutual dependencies prevent strict layering
+\end{items}
+
+\paragraph{Monolithic Kernels}
+\begin{items}
+  \item \textbf{advantages}: \\*
+    $ - $ well understood \\*
+    $ - $ performance OK \\*
+    $ - $ sufficient protection between applications \\*
+    $ - $ extensible via definitions + static/loadable modules
+  \item \textbf{disadvantages}: \\*
+    $ - $ no protection between kernel components \\*
+    $ - $ side-effects by undocumented interfaces \\*
+    $ - $ complexity due to high degree of interdependency
+\end{items}
+
+\paragraph{Micro-Kernels}
+\begin{items}
+  \item \textbf{advantages}: \\*
+    $ - $ easier to test/prove/modify \\*
+    $ - $ improved robustness/security \\*
+    $ - $ improved maintainability \\*
+    $ - $ coexistence of several APIs \\*
+    $ - $ natural extensibility
+  \item \textbf{disadvantages}: \\*
+    $ - $ additional decomposing \\*
+    $ - $ low performance due to communication overhead
+\end{items}
+
+\paragraph{Virtual Machines}
+\begin{items}
+  \item \textbf{principle}: takes layered approach to logical conclusion --- treats hardware + OS kernel as like they were hardware
+  \item VM provides \emph{identical} interface to underlying bare hardware
+  \item OS host creates illusion that process has own processor, memory,\dots
+  \item each guest gets (virtual) copy of underlying computer
+  \item \textbf{benefits}: \\*
+    $ - $ multiple execution environments can share same hardware \\*
+    $ - $ protection \\*
+    $ - $ controllable file sharing \\*
+    $ - $ use networking to communicate with each other \\*
+    $ - $ useful for development/testing
+\end{items}

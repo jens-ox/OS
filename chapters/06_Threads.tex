@@ -82,7 +82,7 @@
     + faster thread management operations (up to 100 times) \\*
     + flexible scheduling policy \\*
     + few system resources \\*
-    + useable even if OS doesn't support threads
+    + usable even if OS doesn't support threads
   \item \textbf{Con}: \\*
     - no parallel execution \\*
     - whole process blocks if one user thread blocks \\*
@@ -121,7 +121,7 @@
 
 \paragraph{Thread models --- M:N}
 \begin{items}
-  \item \textbf{Principle}: \( M \) ULTs are mapps to (at most) \( N \) KLT \\*
+  \item \textbf{Principle}: \( M \) ULTs are maps to (at most) \( N \) KLT \\*
     - \emph{Goal}: pros of ULT and KLT --- non-blocking with quick management \\*
     - create sufficient number of KLTs and flexibly allocate ULTs to them \\*
     - \emph{Idea}: if ULT blocks ULTs can be switched in userspace
@@ -131,9 +131,24 @@
   \item \textbf{Cons}: \\*
     - hard to debug \\*
     - hard to implement (e.g. blocking, number of KLTs,\dots)
-  \item \textbf{Implementation --- Upcalls}: \\*
+  \item \textbf{Implementation --- Up-calls}: \\*
     - kernel notices that thread will block \( \to \) sends signal to process \\*
-    - upcall notifies process of thread id and event that happened \\*
+    - up-call notifies process of thread id and event that happened \\*
     - exception handler of process schedules a different process thread \\*
-    - kernel later informs process that blocking event finished via other upcall
+    - kernel later informs process that blocking event finished via other up-call
 \end{items}
+
+\begin{summary}
+  \begin{items}
+    \item programs often do closely related things at once \\*
+      $ - $  mapped to thread abstraction: multiple threads of execution operate in same process
+    \item differentiation between process information (PCB) and thread information (TCB)
+    \item \textbf{thread models}: \\*
+      $ - $ $ N:1 $: threads fully managed in user-space \\*
+      $ - $ $ 1:1 $: threads fully managed by kernel \\*
+      $ - $ $ M:N $: threads are flexibly managed either in user-space or kernel
+    \item multi-threaded programs operate on same data concurrently or even in parallel: \\*
+      $ - $ \emph{synchronization}: accessing such data must be synchronized \\*
+      $ \to $ makes writing such programs challenging
+  \end{items}
+\end{summary}

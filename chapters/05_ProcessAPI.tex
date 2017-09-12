@@ -78,7 +78,7 @@
 
 \paragraph{System call handler}
 \begin{items}
-  \item implements the actual serivce called through a syscall:
+  \item implements the actual service called through a syscall:
   \begin{enumeration}
     \item saves tainted registers
     \item reads passed parameters
@@ -151,7 +151,7 @@
       - \code{abort()}
     \item fatal error (involuntary) \\*
       - OS kills process after exception \\*
-      - process exceeds allowed ressources
+      - process exceeds allowed resources
     \item killed by another process (involuntary) \\*
       - another process sends kill signal (only as parent process or administrator)
   \end{enumeration}
@@ -160,7 +160,7 @@
 \paragraph{Exit Status}
 \begin{items}
   \item voluntary exit: process returns exit status (integer)
-  \item ressources not completely free'd after process terminates \\*
+  \item resources not completely freed after process terminates \\*
     \( \leadsto \) \textbf{Zombie} or \textbf{process stub} (contains exit status until collected via \code{waitpid})
   \item \textbf{Orphans}: Processes without parents \\*
     - usually adopted by \code{init} \\*
