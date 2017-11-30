@@ -1,7 +1,7 @@
 \section{OS Structures}
 
 \paragraph{Monolithic Systems}
-\begin{items}
+\begin{itemize}
   \item \textbf{advantages}: \\*
     $ - $ well understood \\*
     $ - $ easy access to all system data (all shared) \\*
@@ -10,10 +10,10 @@
   \item \textbf{disadvantages}: \\*
     $ - $ no protection between system and application \\*
     $ - $ not stable/robust
-\end{items}
+\end{itemize}
 
 \paragraph{Layered Systems}
-\begin{items}
+\begin{itemize}
   \item \textbf{principle}: system is divided into many \emph{layers}: \\*
     $ - $ \emph{each layer} uses functions and services of lower levels \\*
     $ - $ \emph{bottom layer} = hardware \\*
@@ -26,10 +26,10 @@
   \item \textbf{disadvantages}: \\*
     $ - $ just unidirectional protection \\*
     $ - $ mutual dependencies prevent strict layering
-\end{items}
+\end{itemize}
 
 \paragraph{Monolithic Kernels}
-\begin{items}
+\begin{itemize}
   \item \textbf{advantages}: \\*
     $ - $ well understood \\*
     $ - $ performance OK \\*
@@ -39,10 +39,10 @@
     $ - $ no protection between kernel components \\*
     $ - $ side-effects by undocumented interfaces \\*
     $ - $ complexity due to high degree of interdependency
-\end{items}
+\end{itemize}
 
 \paragraph{Micro-Kernels}
-\begin{items}
+\begin{itemize}
   \item \textbf{advantages}: \\*
     $ - $ easier to test/prove/modify \\*
     $ - $ improved robustness/security \\*
@@ -52,10 +52,10 @@
   \item \textbf{disadvantages}: \\*
     $ - $ additional decomposing \\*
     $ - $ low performance due to communication overhead
-\end{items}
+\end{itemize}
 
 \paragraph{Virtual Machines}
-\begin{items}
+\begin{itemize}
   \item \textbf{principle}: takes layered approach to logical conclusion --- treats hardware + OS kernel as like they were hardware
   \item VM provides \emph{identical} interface to underlying bare hardware
   \item OS host creates illusion that process has own processor, memory,\dots
@@ -66,4 +66,4 @@
     $ - $ controllable file sharing \\*
     $ - $ use networking to communicate with each other \\*
     $ - $ useful for development/testing
-\end{items}
+\end{itemize}

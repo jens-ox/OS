@@ -1,14 +1,14 @@
 \section{Caching}
 
 \paragraph{Caching --- motivation}
-\begin{items}
+\begin{itemize}
   \item memory (RAM) needs to be managed carefully
   \item \textbf{Ideal} properties: large, fast, nonvolatile, cheap
   \item \textbf{Real} memory: trade-offs
-\end{items}
+\end{itemize}
 
 \paragraph{Caching --- cache misses}
-\begin{items}
+\begin{itemize}
   \item \textbf{compulsory miss}: \\*
     $ - $ cold start, first reference \\*
     $ - $ data block was not cached before
@@ -19,41 +19,41 @@
     $ - $ collision, interference \\*
     $ - $ depending on cache organization, data items interfere with each other \\*
     $ - $ fully associative caches are not prone to conflict misses
-\end{items}
+\end{itemize}
 
 \paragraph{Caching --- Harvard architecture}
-\begin{items}
+\begin{itemize}
   \item \textbf{principle}: separate buffer memory for data and instructions
-\end{items}
-\begin{figure}[H]\centering\label{CachingHarvard}\includegraphics[width=0.33\textwidth]{CachingHarvard}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{CachingHarvard}\includegraphics[width=0.33\textwidth]{CachingHarvard}\end{figure}
 
 \paragraph{Caching --- write/replacement policies}
-\begin{items}
+\begin{itemize}
   \item \textbf{cache hit}: \\*
     $ - $ \emph{write-through}: main memory always up-to-date, writes might be slow \\*
     $ - $ \emph{write-back}: data written only to cache, main memory temporarily inconsistent
   \item \textbf{cache miss}: \\*
     $ - $ \emph{write-allocate}: data read from main memory to cache, write performed afterwards \\*
     $ - $ \emph{write-to-memory}: modification is performed only in main memory
-\end{items}
+\end{itemize}
 
 \paragraph{Cache Design Parameters}
-\begin{items}
+\begin{itemize}
   \item \textbf{size + set size}: small cache $ \to $ set-associative implementation with large sets
   \item \textbf{line length}: spatial locality $ \to $ long cache lines
   \item \textbf{write policy}: temporal locality $ \to $ write-back
   \item \textbf{replacement policy}
   \item \textbf{tagging/indexing}: virtual or physical addresses
-\end{items}
+\end{itemize}
 
 \paragraph{Caching --- problems}
-\begin{items}
+\begin{itemize}
   \item \textbf{ambiguity problem}: same virtual addresses point to different physical addresses at different times
   \item \textbf{alias problem}: different virtual addresses point to same physical memory location
-\end{items}
+\end{itemize}
 
 \paragraph{Caching --- virtually indexed, virtually tagged}
-\begin{items}
+\begin{itemize}
   \item \textbf{operations}: \\*
     $ - $ \emph{context switch}: cache must be invalidated (and written back if write-back is used) \\*
     $ - $ \emph{fork}: child needs complete copy of parent's address space \\*
@@ -69,11 +69,11 @@
     $ - $ \emph{unbuffered I/O}: \\*
       \phantom{$ - $} $ \cdot $ write: information may still be in cache $ \to $ write back before I/O starts \\*
       \phantom{$ - $} $ \cdot $ read: cache must be invalidated
-\end{items}
-\begin{figure}[H]\centering\label{VIVT}\includegraphics[width=0.33\textwidth]{VIVT}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{VIVT}\includegraphics[width=0.33\textwidth]{VIVT}\end{figure}
 
 \paragraph{Caching --- virtually indexed, physically tagged}
-\begin{items}
+\begin{itemize}
   \item \textbf{usage}: often used as first-level cache
   \item \textbf{management}: \\*
     $ - $ no ambiguities \\*
@@ -90,11 +90,11 @@
     $ - $ \emph{multiprocessor systems}: problematic with shared memory --- which line should be invalidated? \\*
       \phantom{$ - $} $ \cdot $ cache size is small multiple of page size (1-4) \\*
       \phantom{$ - $} $ \cdot $ requires to only invalidate/flush 1-4 cache lines by cache coherency HW
-\end{items}
-\begin{figure}[H]\centering\label{VIPT}\includegraphics[width=0.33\textwidth]{VIPT}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{VIPT}\includegraphics[width=0.33\textwidth]{VIPT}\end{figure}
 
 \paragraph{Caching --- physically indexed, physically tagged}
-\begin{items}
+\begin{itemize}
   \item \textbf{Advantages}: \\*
     $ - $ completely transparent to processor \\*
     $ - $ no performance-critical system support required (including I/O) \\*
@@ -109,5 +109,5 @@
   \item \textbf{conflict mitigation}: \\*
     $ - $ sequential page colors for individual memory segments \\*
     $ - $ \emph{cache partitioning}: divide physical memory in disjoint subsets, all pages of subset are mapped \\* \phantom{$ - $} \phantom{$ \cdot $} to same cache partition
-\end{items}
-\begin{figure}[H]\centering\label{PIPT}\includegraphics[width=0.33\textwidth]{PIPT}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{PIPT}\includegraphics[width=0.33\textwidth]{PIPT}\end{figure}

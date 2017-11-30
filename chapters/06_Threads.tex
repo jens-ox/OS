@@ -1,7 +1,7 @@
 \section{Threads}
 
 \paragraph{Processes vs. Threads}
-\begin{items}
+\begin{itemize}
   \item \textbf{Traditional OS}: each process has \\*
     - own address space \\*
     - own set of allocated resources \\*
@@ -12,19 +12,19 @@
   \item \textbf{Exceptions}: \\*
     - sometimes different threads have different address spaces \\*
     - \emph{Linux}: threads = regular processes with shared resources and AS regions
-\end{items}
+\end{itemize}
 
 \paragraph{Threads --- why?}
-\begin{items}
+\begin{itemize}
   \item many programs do multiple things at once (e.g. web server) \\*
     \( \leadsto \) writing program as many sequential threads may be easier than with blocking operations
   \item \textbf{Processes}: rarely share data (if, then explicitly)
   \item \textbf{Threads}: closely related, share data
-\end{items}
-\begin{figure}[H]\centering\label{ProcessesThreads}\includegraphics[width=0.33\textwidth]{ProcessesThreads}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{ProcessesThreads}\includegraphics[width=0.33\textwidth]{ProcessesThreads}\end{figure}
 
 \paragraph{Threads --- POSIX}
-\begin{items}
+\begin{itemize}
   \item \code{PThread}: base object with \\*
     - \emph{identifier} (thread ID, TID) \\*
     - \emph{register set} (including IP and SP) \\*
@@ -41,10 +41,10 @@
     - Pass: pointer to pointer for exit code \\*
     - Returns: \code{0} on success, error value else
   \item \code{Pthread_yield}: release CPU to let another thread run
-\end{items}
+\end{itemize}
 
 \paragraph{Threads --- Problems}
-\begin{items}
+\begin{itemize}
   \item \textbf{Processes vs. Threads}: \\*
     - \emph{Processes}: only share resources explicitly \\*
     - \emph{Threads}: more shared state \( \to \) more can go wrong \\*
@@ -52,19 +52,19 @@
     - \emph{activities}: dividing, ordering, balancing \\*
     - \emph{data}: dividing \\*
     - \emph{shared data}: access synchronizing
-\end{items}
+\end{itemize}
 
 \paragraph{PCB vs. TCP}
-\begin{items}
+\begin{itemize}
   \item \textbf{PCB} (\emph{process control block}): information needed to implement processes \\*
     - always known to OS
   \item \textbf{TCB} (\emph{thread control block}): per thread data \\*
     - OS knowledge depends on \emph{thread model}
-\end{items}
-\begin{figure}[H]\centering\label{PCBTCB}\includegraphics[width=0.2\textwidth]{PCBTCB}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{PCBTCB}\includegraphics[width=0.2\textwidth]{PCBTCB}\end{figure}
 
 \paragraph{Thread models}
-\begin{items}
+\begin{itemize}
   \item \textbf{Kernel Thread}: known to OS kernel
   \item \textbf{User Thread}: known to process
   \item \textbf{N:1-Model}: kernel only knows one of possibly multiple threads \\*
@@ -72,10 +72,10 @@
   \item \textbf{1:1-Model}: each user thread maps to one kernel thread \\*
     - 1:1 user threads = \emph{kernel level threads} (KLT)
   \item \textbf{M:N-Model} (hybrid model): flexible mapping of user threads to less kernel threads 
-\end{items}
+\end{itemize}
 
 \paragraph{Thread models --- N:1}
-\begin{items}
+\begin{itemize}
   \item Kernel only manages process \( \to \) multiple threads unknown to kernel 
   \item Threads managed in user-space library (e.g. GNU Portable Threads)
   \item \textbf{Pro}: \\*
@@ -95,11 +95,11 @@
     - concurrent heap use possible \\*
     - \emph{Attention}: not all heaps are reentrant
   \item \textbf{Data}: divided into BSS, data and read-only data here as well
-\end{items}
-\begin{figure}[H]\centering\label{ULTAddressSpace}\includegraphics[width=0.15\textwidth]{ULTAddressSpace}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{ULTAddressSpace}\includegraphics[width=0.15\textwidth]{ULTAddressSpace}\end{figure}
 
 \paragraph{Thread models --- 1:1}
-\begin{items}
+\begin{itemize}
   \item kernel knows + manages every thread
   \item \textbf{Pros}: \\*
     + real parallelism possible \\*
@@ -116,11 +116,11 @@
     - \emph{Attention}: not all heaps are thread-safe \\*
     - if thread-safe: not all heap implementations perform well with many threads
   \item \textbf{Data}: divided into BSS, data and read-only data here as well
-\end{items}
-\begin{figure}[H]\centering\label{KLTAddressSpace}\includegraphics[width=0.15\textwidth]{KLTAddressSpace}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{KLTAddressSpace}\includegraphics[width=0.15\textwidth]{KLTAddressSpace}\end{figure}
 
 \paragraph{Thread models --- M:N}
-\begin{items}
+\begin{itemize}
   \item \textbf{Principle}: \( M \) ULTs are maps to (at most) \( N \) KLT \\*
     - \emph{Goal}: pros of ULT and KLT --- non-blocking with quick management \\*
     - create sufficient number of KLTs and flexibly allocate ULTs to them \\*
@@ -136,10 +136,10 @@
     - up-call notifies process of thread id and event that happened \\*
     - exception handler of process schedules a different process thread \\*
     - kernel later informs process that blocking event finished via other up-call
-\end{items}
+\end{itemize}
 
 \begin{summary}
-  \begin{items}
+  \begin{itemize}
     \item programs often do closely related things at once \\*
       $ - $  mapped to thread abstraction: multiple threads of execution operate in same process
     \item differentiation between process information (PCB) and thread information (TCB)
@@ -150,5 +150,5 @@
     \item multi-threaded programs operate on same data concurrently or even in parallel: \\*
       $ - $ \emph{synchronization}: accessing such data must be synchronized \\*
       $ \to $ makes writing such programs challenging
-  \end{items}
+  \end{itemize}
 \end{summary}

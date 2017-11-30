@@ -1,7 +1,7 @@
 \section{Page Replacement Policies}
 
 \paragraph{Page Replacement --- naive}
-\begin{items}
+\begin{itemize}
   \item \textbf{step 1: save/clear victim page}: \\*
     $ - $ drop page if fetched from disk and clean \\*
     $ - $ \emph{dirty}: write back modifications if from disk and dirty (unless \code{MAP_COPY}) \\*
@@ -9,10 +9,10 @@
   \item \textbf{step 2: unmap page from old AS}: invalidate PTE, flush cache
   \item \textbf{step 3: prepare new page}: null page or load new contents
   \item \textbf{step 4: map page frame into new AS}: invalidate PTE, flush cache
-\end{items}
+\end{itemize}
 
 \paragraph{Page Replacement --- buffering}
-\begin{items}
+\begin{itemize}
   \item \textbf{problem}: naive page replacement encompasses two I/O transfers \\*
     $ \to $ both operations block page fault from completing
   \item \textbf{goal}: reduce I/O from critical page fault path to speed up page faults
@@ -23,24 +23,24 @@
   \item \textbf{remaining problem}: which pages to select as victims? \\*
     $ - $ \emph{goal}: identify page that has left working set of its processes, add to free pool \\*
     $ - $ \emph{success metric}: low overall page fault rate
-\end{items}
+\end{itemize}
 
 \paragraph{Page Replacement --- FIFO}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: evict oldest fetched page in system
   \item \textbf{Belady's Anomaly}: using FIFO, for every number $ n $ of page frames you can construct a reference string that performs worse with $ n+1 $ frames \\*
   $ \to $ with FIFO it is possible to get more page faults with more page frames!
-\end{items}
+\end{itemize}
 
 \paragraph{Page Replacement --- oracle}
-\begin{items}
+\begin{itemize}
   \item = optimal replacement strategy: replace page whose next reference is furthest in future
   \item \textbf{problem}: future unpredictable
   \item \textbf{however}: good metric to check how well other algorithms perform
-\end{items}
+\end{itemize}
 
 \paragraph{Page Replacement --- LRU}
-\begin{items}
+\begin{itemize}
   \item \textbf{goal}: approximate oracle page replacement
   \item \textbf{idea}: past often predicts future well
   \item \textbf{assumption}: page used furthest in past is used furthest in future
@@ -57,10 +57,10 @@
   \item $ \leadsto $ \textbf{no silver bullet}: \\*
     $ - $ \emph{observation}: predicting future based on past is not precise \\*
     $ - $ \emph{conclusion}: relax requirements --- maybe perfect LRU isn't needed? $ \Rightarrow $ approximate LRU
-\end{items}
+\end{itemize}
 
 \paragraph{LRU Approximation --- clock page replacement}
-\begin{items}
+\begin{itemize}
   \item aka \emph{second chance page replacement}
   \item \textbf{precondition}: MMU sets reference bit in PTE \\*
     $ - $ supported natively by most hardware \\*
@@ -71,10 +71,10 @@
     $ - $ if reference bit = 1 $ \to $ set to 0, continue scanning
   \item \textbf{problem}: large memory $ \to $ most pages referenced before scanned \\*
     $ - $ \emph{solution}: use 2 arms, leading arm clears reference bit, trailing arm selects victim
-\end{items}
+\end{itemize}
 
 \paragraph{Replacement Strategies --- other}
-\begin{items}
+\begin{itemize}
   \item \textbf{random eviction}: pick random victim \\*
     $ - $ dirt simple \\*
     $ - $ not overly horrible in reality
@@ -82,10 +82,10 @@
     $ - $ \emph{least frequently used}: rarely used page not in a working set $ \to $ replace page with smallest count \\*
     $ - $ \emph{most frequently used}: page with smallest count probably just brought in $ \to $ replace page with \\* \phantom{$ - $} \phantom{$ \cdot $} largest count \\*
     $ - $ neither LFU nor MDU are common (no such hardware, not that great)
-\end{items}
+\end{itemize}
 
 \begin{summary}
-  \begin{items}
+  \begin{itemize}
     \item victim page frame needs to be selected by OS when handling page faults \\*
       $ - $ evicting page frame after page fault happens = not a good idea \\*
       $ - $ page buffering keeps eviction out of critical path
@@ -94,5 +94,5 @@
       $ - $ Oracle $ \to $ cannot predict the future \\*
       $ - $ Random $ \to $ unpredictable, never great but rarely very bad \\*
       $ - $ LRU $ \to $ hard to implement efficiently
-  \end{items}
+  \end{itemize}
 \end{summary}

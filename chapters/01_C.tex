@@ -2,7 +2,7 @@
 
 \paragraph{Hello World}
 \lstinputlisting[style=customc]{hello.c}
-\begin{items}
+\begin{itemize}
   \item \code{#include}: preprocessor inserts \code{stdio.h} contents
   \item \code{stdio.h}: contains \code{printf} declaration
   \item \code{main}: program starts here
@@ -11,7 +11,7 @@
   \item \code{printf}: prints to the terminal
   \item \code{\\n}: newline character
   \item \code{return}: leave function, return value
-\end{items}
+\end{itemize}
 
 \paragraph{Compiling}
 \begin{lstlisting}[style=custombash]
@@ -21,7 +21,7 @@
 \end{lstlisting}
 
 \paragraph{Basic Data Types}
-\begin{items}
+\begin{itemize}
   \item \code{char c = 5; char c = 'a';} \\*
     one byte, usually for characters (1970: ASCII is fine)
   \item \code{int i = 5; int i = 0xf; int i = 'a';} \\*
@@ -30,47 +30,47 @@
     4 bytes floating point number
   \item \code{double d = 5.19562} \\*
     8 bytes double precision floating point number
-\end{items}
+\end{itemize}
 
 \paragraph{Basic Data Types --- logic}
-\begin{items}
+\begin{itemize}
   \item \code{int i = 5 / 2; // i = 2} \\*
     integer logic, no rounding
   \item \code{float f = 5.0f / 2; // f = 2.5f} \\*
     decimal logic for float and double
   \item \code{char a = 'a' / 2 // a = 97 / 2 = 48} \\*
     \code{char} interpreted as character by console
-\end{items}
+\end{itemize}
 
 \paragraph{Basic Data Types --- signed/unsigned}
-\begin{items}
+\begin{itemize}
   \item \code{signed int i = -5 // i = -5} (two's complement)
   \item \code{unsigned int i = -5 // i = 4294967291}
-\end{items}
+\end{itemize}
 
 \paragraph{Basic Data Types --- short/long}
-\begin{items}
+\begin{itemize}
   \item \code{short int i = 1024 // -32768...32767}
   \item \code{long int i = 1024 // -2147483648...2147483647}
-\end{items}
+\end{itemize}
 
 \paragraph{Basic Data Types --- more size stuff}
-\begin{items}
+\begin{itemize}
   \item \code{sizeof int; sizeof long int; // 4; 4;} (x86 32-Bit)
   \item use data types from \code{inttypes.h} to be sure about sizes:
   \begin{lstlisting}[style=customc]
 #include <inttypes.h>
 int8_t i; uint32_t j;
   \end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Basic Data Types --- const/volatile}
-\begin{items}
+\begin{itemize}
   \item \code{const int c = 5;} \\*
     \code{i} is constant, changing it will raise compiler error
   \item \code{volatile int i = 5;} \\*
     \code{i} is volatile, may be modified elsewhere (by different program in shared memory, important for CPU caches, register, assumptions thereof)
-\end{items}
+\end{itemize}
 
 \paragraph{Variables --- local vs. global}
 \begin{lstlisting}[style=customc]
@@ -82,14 +82,14 @@ int myroutine(int j) {
   return i;
 }
 \end{lstlisting}
-\begin{items}
+\begin{itemize}
   \item \emph{global variables} (\code{int m}): \\*
     lifetime: while program runs \\*
     placed on pre-defined place in memory
   \item basic block/function-local variables (\code{int i}): \\*
     lifetime: during invocation of routine \\*
     placed on stack or in registers
-\end{items}
+\end{itemize}
 
 \paragraph{Variables --- local vs. static}
 \begin{lstlisting}[style=customc]
@@ -102,19 +102,19 @@ int myroutine(int j) {
 k = myroutine(1); // k = 6
 k = myroutine(1); // k = 7
 \end{lstlisting}
-\begin{items}
+\begin{itemize}
   \item static function-local variables: \\*
     saved like global variables \\*
     variable persistent across invocations \\*
     lifetime: like global variables
-\end{items}
+\end{itemize}
 
 \paragraph{Printing}
 \begin{lstlisting}[style=customc]
 int i = 5; float f = 2.5;
 printf("The numbers are i=%d, f=%f", i, f);
 \end{lstlisting}
-\begin{items}
+\begin{itemize}
   \item comprised of format string and arguments
   \item may contain format identifiers (\code{\%d})
   \item see also \code{man printf}
@@ -124,14 +124,14 @@ printf("The numbers are i=%d, f=%f", i, f);
     \code{\\'} single quote \\*
     \code{\\"} double quote \\*
     \code{\\0} \code{null}, end of string
-\end{items}
+\end{itemize}
 
 \paragraph{Compound data types}
-\begin{items}
+\begin{itemize}
   \item \code{struct}ure: collection of named variables (different types)
   \item \code{union}: \emph{single} variable that can have multiple types
   \item members accessed via \code{.} operator
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 struct coordinate {
   int x;
@@ -153,13 +153,13 @@ lf.f = 6.192;
 \end{lstlisting}
 
 \paragraph{Functions}
-\begin{items}
+\begin{itemize}
   \item encapsulate functionality (\emph{reuse})
   \item code structuring (\emph{reduce complexity})
   \item must be \textbf{declared} and \textbf{defined}
   \item \underline{Declaration}: states signature
   \item \underline{Definition}: states implementation (implicitly declares function)
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 int sum(int a, int b); // declaration
 
@@ -169,7 +169,7 @@ int sum(int a, int b) { // definition
 \end{lstlisting}
 
 \paragraph{Header files}
-\begin{items}
+\begin{itemize}
   \item header file for frequently used declarations
   \item use \code{extern} to declare global variables defined elsewhere
   \item use \code{static} to limit scope to current file (e.g. \code{static float pi} in \code{sum.c}: no \code{pi} in \code{main.c})
@@ -195,21 +195,21 @@ void main() {
   printf("%f\n", pi);
 }
   \end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Data Segments and Variables}
-\begin{items}
+\begin{itemize}
   \item \underline{Stack}: local variables
   \item \underline{Heap}: variables crated at runtime via \code{malloc()}/\code{free()}
   \item \underline{Data Segment}: static/global variables
   \item \underline{Code}: functions
-\end{items}
+\end{itemize}
 
 \paragraph{Function overloading}
-\begin{items}
+\begin{itemize}
   \item \emph{no function overloading in C!}
   \item use arrays ore pointers
-\end{items}
+\end{itemize}
 
 \paragraph{Pointers}
 \begin{lstlisting}[style=customc]
@@ -224,9 +224,9 @@ int e = *(p+2) // dereference (p+2) = d = 7
 \end{lstlisting}
 
 \paragraph{Pointers --- linked list}
-\begin{items}
+\begin{itemize}
   \item linked-list implementation via next-pointer
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 struct ll {
   int item;
@@ -242,9 +242,9 @@ first.next = &second;
 \end{lstlisting}
 
 \paragraph{Arrays}
-\begin{items}
+\begin{itemize}
   \item = fixed number of variables \emph{continuously laid out in memory}
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 int A[5]; // declare array (reserve memory space)
 A[4] = 25; A[0] = 24; // assign 25 to last, 24 to first elem
@@ -257,7 +257,7 @@ char *p = c;
 \end{lstlisting}
 
 \paragraph{Strings}
-\begin{items}
+\begin{itemize}
   \item = array of \code{char}s terminated by \code{NULL}:
   \begin{lstlisting}[style=customc]
 char A[] = { 'T', 'e', 's', 't', '\0' };
@@ -270,10 +270,10 @@ char A[] = "Test";
     compare: \\* \phantom{x} \code{int strncmp(const char *s1, const char *s2, size_t n);} \\*
     copy: \code{int strncpy(char *dest, const char *src size_t n);} \\*
     tokenize: \code{char *strtok(char *str, const char *delim);} \\* \phantom{x} (e.g. split line into words)
-\end{items}
+\end{itemize}
 
 \paragraph{Arithmetic/bitwise operators}
-\begin{items}
+\begin{itemize}
   \item \underline{arithmetic operators}: \\*
     \code{a+b}, \code{a++}, \code{++a}, \code{a+=b}, \code{a-b}, \code{a--}, \code{--a}, \code{a-=b}, \code{a*b}, \code{a*=b}, \code{a/b}, \code{a/=b}, \code{a\%b}, \code{a\%=b}
   \item \underline{logical operators}: \\*
@@ -301,15 +301,15 @@ if(++a == 5) printf("Yes"); // nothing
     \code{?, :} \\*
     \code{=, +=, -=, *=, /=, \%=, &=, ~=, |=, <<=, >>=} \\*
     \code{,}
-\end{items}
+\end{itemize}
 
 \paragraph{Structures}
-\begin{items}
+\begin{itemize}
   \item brackets only needed for multiple statements
   \item \code{if/else}, \code{for}, \code{while}, \code{do-while}, \code{switch}
   \item may use \code{break}/\code{continue}
   \item switch: need break statement, otherwise will fall through
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 if(a==b) printf("Equal") else printf("Different");
 for(i=10; i>=10; i--) printf("%d", i+1);
@@ -328,7 +328,7 @@ switch(a) {
 \end{lstlisting}
 
 \paragraph{Type casting}
-\begin{items}
+\begin{itemize}
   \item \underline{explicit casting}: precision loss possible \\*
     \code{int i = 5; float f = (float) i;}
   \item \underline{implicit casting}: if no precision is lost \\*
@@ -339,20 +339,20 @@ switch(a) {
     \code{unsigned int} wider than \code{signed int} \\*
     operators cast parameters to widest type \\*
     Attention: assignment cast after operator cast
-\end{items}
+\end{itemize}
 
 \paragraph{C Preprocessor}
-\begin{items}
+\begin{itemize}
   \item modifies \emph{source code} before compilation
   \item based on preprocessor \emph{directives} (usually starting with \code{#})
   \item \code{#include <stdio.h>}, \code{#include "mystdio.h"}: \\*
     copies contents of file to current file
   \item only works with strings in source file
   \item completely ignores C semantics
-\end{items}
+\end{itemize}
 
 \paragraph{Preprocessor --- search paths}
-\begin{items}
+\begin{itemize}
   \item \code{#include <file>}: system include, searches in: \\*
     \code{/usr/local/include} \\*
     \code{libdir/gcc/[target]/[version]/include} \\*
@@ -364,13 +364,13 @@ switch(a) {
     directory containing current file \\*
     then paths specified by \code{-i <dir>} \\*
     then in system include paths
-\end{items}
+\end{itemize}
 
 \paragraph{Preprocessor --- definitions}
-\begin{items}
+\begin{itemize}
   \item defines introduce replacement strings (can have arguments, based on string replacement)
   \item can help code structuring, often leading to source code cluttering
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 #define PI 3.14159265
 #define TRUE (1)
@@ -385,19 +385,19 @@ switch(a) {
 \end{lstlisting}
 
 \paragraph{Preprocessor --- predefined macros}
-\begin{items}
+\begin{itemize}
   \item \underline{system-specific}: \\*
     \code{__unix__}, \code{_WIN32}, \code{__STDC_VERSION__}
   \item \underline{useful}: \\*
     \code{__LINE__}, \code{__FILE__}, \code{__DATE__}
-\end{items}
+\end{itemize}
 
 \paragraph{Libraries}
-\begin{items}
+\begin{itemize}
   \item = collection of functions contained in object files, glued together in dynamic/static library
   \item ex.: Math header contains declarations, but not all definitions \\*
     \( \leadsto \) need to link math library: \code{gcc math.c -o math -lm}
-\end{items}
+\end{itemize}
 \begin{lstlisting}[style=customc]
 #include <math.h>
 #include <stdio.h>

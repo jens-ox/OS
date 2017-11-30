@@ -1,18 +1,18 @@
 \section{OS Concepts}
 
 \paragraph{OS Invocation}
-\begin{items}
+\begin{itemize}
 	\item OS Kernel does \textbf{not} always run in background!
 	\item Occasions invoking kernel, switching to kernel mode:
-	\begin{enumeration}
+	\begin{enumerate}
 		\item \textbf{System calls}: User-Mode processes require higher privileges
 		\item \textbf{Interrupts}: CPU-external device sends signal
 		\item \textbf{Exceptions}: CPU signals unexpected condition
-	\end{enumeration}
-\end{items}
+	\end{enumerate}
+\end{itemize}
 
 \paragraph{System Calls --- Motivation}
-\begin{items}
+\begin{itemize}
 	\item \textbf{Problem}: protect processes from one another
 	\item \textbf{Idea}: Restrict processes by running them in user-mode
 	\item \textbf{\( \leadsto \) Problem}: now processes cannot manage hardware,... \\*
@@ -22,25 +22,25 @@
 		app calls system if service is needed (\textbf{syscall}) \\*
 		OS checks if app is allowed to perform action \\*
 		if app may perform action and hasn't exceeded quota, \\* \phantom{x} OS performs action in behalf of app in kernel mode
-\end{items}
+\end{itemize}
 
 \paragraph{System Calls --- Examples}
-\begin{items}
+\begin{itemize}
 	\item \code{fd = open(file, how,...)} -- open file for read/write/both
 	\item documented e.g. in \code{man 2 write}
 	\item overview in \code{man 2 syscalls}
-\end{items}
+\end{itemize}
 
 \paragraph{System Calls vs. APIs}
-\begin{items}
+\begin{itemize}
 	\item \textbf{syscalls}: interface between apps and OS services, limited number of well-defined entry points to kernel
 	\item \textbf{APIs}: often used by programmers to make syscalls \\*
 		e.g. \code{printf} library call uses \code{write} syscall
 	\item common APIs: Win32, POSIX, C API
-\end{items}
+\end{itemize}
 
 \paragraph{System Calls --- Implementation}
-\begin{items}
+\begin{itemize}
 	\item \emph{trap instruction}: single syscall interface (entry point) to kernel \\*
 		switches CPU to kernel mode, enters kernel in same, predefined \\* \phantom{x} way for all syscalls \\*
 		system call dispatches then acts as syscall multiplexer
@@ -49,10 +49,10 @@
 		dispatcher decides where to jump based on number and table \\*
 		programs (e.g. \code{stdlib}) have syscall number compiled in! \\*
 		\( \leadsto \) never reuse old numbers in future kernel versions
-\end{items}
+\end{itemize}
 
 \paragraph{Interrupts}
-\begin{items}
+\begin{itemize}
 	\item devices use interrupts to signal predefined conditions to OS \\*
 		reminder: device has "`interrupt line"' to CPU \\*
 		e.g. device controller informs CPU that operation is finished
@@ -61,33 +61,33 @@
 		masked interrupts: queued, delivered when interrupt unmasked \\*
 		queue has finite length \( \leadsto \) interrupts can get lost
 	\item notable interrupt examples:
-	\begin{enumeration}
+	\begin{enumerate}
 		\item \emph{timer-interrupt}: periodically interrupts processes, switches to kernel \( \leadsto \) can then switch to different processes for fairness
 		\item \emph{network interface card} interrupts CPU when packet was received \( \leadsto \) can deliver packet to process and free NIC buffer
-	\end{enumeration}
+	\end{enumerate}
 	\item when interrupted, CPU
-	\begin{enumeration}
+	\begin{enumerate}
 		\item looks up \textbf{interrupt vector} (= table pinned in memory, contains addresses of all service routines)
 		\item transfers control to respective \textbf{interrupt service routine} in OS that handles interrupt
-	\end{enumeration}
+	\end{enumerate}
 	\item interrupt service routine must first save interrupted process's state (instruction pointer, stack pointer, status word)
-\end{items}
+\end{itemize}
 
 \paragraph{Exceptions}
-\begin{items}
+\begin{itemize}
 	\item sometimes unusual condition makes it impossible for CPU to continue processing
 	\item \( \leadsto \) \textbf{Exception} generated within CPU:
-	\begin{enumeration}
+	\begin{enumerate}
 		\item CPU interrupts program, gives kernel control
 		\item kernel determines reason for exception
 		\item if kernel can resolve problem \( \leadsto \) does so, continues \textbf{faulting instruction}
 		\item kills process if not
-	\end{enumeration}
+	\end{enumerate}
 	\item Difference to Interrupts: interrupts can happen in any context, exceptions always occur asynchronous and in process context
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Physical Memory}
-\begin{items}
+\begin{itemize}
 	\item up to early 60s: \\* 
 		- programs loaded and run directly in \emph{physical memory}
 		\\*
@@ -96,20 +96,20 @@
 		- OS then swaps overlays between disk and memory
 		\\*
 		- different jobs could observe/modify each other
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Address Spaces}
-\begin{items}
+\begin{itemize}
 	\item bad programs/people need to be isolated
 	\item \textbf{Idea}: give every job the illusion of having all memory to itself
 		\\*
 		every job has own \emph{address space}, can't name addresses of others
 		\\*
 		jobs always and only use virtual addresses
-\end{items}
+\end{itemize}
 
 \paragraph{Virtual Memory --- indirect addressing}
-\begin{items}
+\begin{itemize}
 	\item Today: every CPU has built-in \textbf{memory management unit} (\emph{MMU})
 	\item MMU translates virtual addresses to physical addresses at every store/load operation
 	\item \( \leadsto \) address translation protects one program from another
@@ -118,10 +118,10 @@
 		\textbf{Virtual address}: address in process' address space
 		\\*
 		\textbf{Physical address}: address of real memory
-\end{items}
+\end{itemize}
 
 \paragraph{Virtual Memory --- memory protection}
-\begin{items}
+\begin{itemize}
 	\item MMU allows kernel-only virtual addresses
 		\\*
 		- kernel typically part of all address spaces
@@ -133,10 +133,10 @@
 	\item MMU can enforce execute disable
 		\\*
 		- makes code injection attacks harder
-\end{items}
+\end{itemize}
 
 \paragraph{Virtual Memory --- page faults}
-\begin{items}
+\begin{itemize}
 	\item not all addresses need to be mapped at all times
 		\\*
 		- MMU issues \emph{page fault} exception when accessed virtual \\* \phantom{-} address isn't mapped
@@ -145,10 +145,10 @@
 		\\*
 		- \( \leadsto \) memory can be \textbf{over-committed}: more memory than \\* \phantom{-} physically available can be allocated to application
 	\item page faults also issued by MMU on illegal memory accesses
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Processes}
-\begin{items}
+\begin{itemize}
 	\item = program in execution ("`instance"' of program)
 	\item each process is associated with a \textbf{process control block} (\emph{PCB})
 		\\*
@@ -164,10 +164,10 @@
 		- indirect addressing \( \leadsto \) different ASes to different programs
 		\\*
 		- \( \leadsto \) protection between processes
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- address space layout}
-\begin{items}
+\begin{itemize}
 	\item address spaces typically laid-out in different \textbf{sections}
 		\\*
 		- memory addresses between sections \textbf{illegal}
@@ -180,29 +180,29 @@
 	\item \textbf{Stack}: function history, local variables
 	\item \textbf{Data}: Constants, static/global variables, strings
 	\item \textbf{Text}: Program code
-	\begin{figure}[H]\centering\label{AddressSpaceLayout}\includegraphics[width=0.2\textwidth]{AddressSpaceLayout}\end{figure}
-\end{items}
+	\begin{figure}[h]\centering\label{AddressSpaceLayout}\includegraphics[width=0.2\textwidth]{AddressSpaceLayout}\end{figure}
+\end{itemize}
 
 \paragraph{OS Concepts --- Threads}
-\begin{items}
+\begin{itemize}
 	\item each progress: \( \geq 1 \) threads (representing execution states)
 	\item IP stores currently executed instruction (address in \code{text} section)
 	\item SP register stores address of stack top \\* (\( > 1 \) threads \( \to \) multiple stacks!)
 	\item PSW contains flags about execution history \\* (e.g. last calculation was 0 \( \to \) used in following jump instruction)
 	\item more general purpose registers, floating point registers,...
-\end{items}
-\begin{figure}[H]\centering\label{Threads}\includegraphics[width=0.2\textwidth]{Threads}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{Threads}\includegraphics[width=0.2\textwidth]{Threads}\end{figure}
 
 \paragraph{OS Concepts --- Policies vs. Mechanisms}
-\begin{items}
+\begin{itemize}
 	\item separation useful when designing OS
 	\item \textbf{Mechanism}: implementation of what is done \\* (e.g. commands to put a HDD into standby mode)
 	\item \textbf{Policy}: rules which decide when what is done and how much \\* (e.g. how often, how many resources are used,...)
 	\item \( \to \) \emph{mechanisms can be reused even when policy changes}
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Scheduling}
-\begin{items}
+\begin{itemize}
 	\item multiple processes/threads available \( \leadsto \) OS needs to switch between them (for multitasking)
 	\item \emph{scheduler} decides which job to run next (policy)
 	\item \emph{dispatcher} performs task-switching (mechanism)
@@ -210,11 +210,11 @@
 		- provide fairness \\*
 		- while meeting goals \\*
 		- and adhering to priorities
-\end{items}
-\begin{figure}[H]\centering\label{Scheduling}\includegraphics[width=0.33\textwidth]{Scheduling}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{Scheduling}\includegraphics[width=0.33\textwidth]{Scheduling}\end{figure}
 
 \paragraph{OS Concepts --- Files}
-\begin{items}
+\begin{itemize}
 	\item OS hides peculiarities of disks,...
 	\item programmer uses device-independent \emph{files}/\emph{directories} for persistent storage
 	\item \textbf{Files}: associate \emph{file name} and \emph{offset} with bytes
@@ -223,27 +223,27 @@
 		- main task: translate (dir name + file name + offset) to block \\*
 		- programmer uses file system operations to operate on files \\* \phantom{-} (\code{open}, \code{read}, \code{seek})
 	\item processes can communicate directly through special \emph{named pipe} file (used with same operations as any other file)
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Directory Tree}
-\begin{items}
+\begin{itemize}
 	\item directories form \emph{directory tree}/\emph{file hierarchy} \\*
 		\( \to \) structure data
 	\item \emph{root directory}: topmost directory in tree
 	\item files specified by providing \emph{path name} to file
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Mounting}
-\begin{items}
+\begin{itemize}
 	\item Unix: common to orchestrate multiple file systems in single file hierarchy
 	\item file systems can be \emph{mounted} on directory
 	\item Win: manage multiple directory hierarchies with drive letters
 		\\*
 		(e.g. \code{C:\\Users})
-\end{items}
+\end{itemize}
 
 \paragraph{OS Concepts --- Storage Management}
-\begin{items}
+\begin{itemize}
 	\item OS provides uniform view of information storage to file systems \\*
 		- \emph{drivers} hide specific hardware devices \\* \phantom{-} \( \to \) hides device peculiarities \\*
 		- general interface abstracts physical properties to logical units \\* \phantom{-} \( \to \) block
@@ -251,10 +251,10 @@
 		- \textbf{Buffering}: Store data temporarily while transferred \\*
 		- \textbf{Caching}: Store data parts in faster storage \\*
 		- \textbf{Spooling}: Overlap one job's output with other job's input
-\end{items}
+\end{itemize}
 
 \begin{summary}
-	\begin{items}
+	\begin{itemize}
 		\item OS provides abstractions for and protection between applications
 		\item kernel does not always run --- certain events invoke kernel \\*
 			$ - $ \emph{syscall}: process asks kernel for service \\*
@@ -266,5 +266,5 @@
 			$ - $ \emph{resources}: allocated resources, e.g., open files
 		\item scheduler decides which process to run next when multi-tasking
 		\item virtual memory implements address spaces, provides protection between processes
-	\end{items}
+	\end{itemize}
 \end{summary}

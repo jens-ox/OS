@@ -1,7 +1,7 @@
 \section{Page Faults}
 
 \paragraph{Page Faults --- handling}
-\begin{items}
+\begin{itemize}
   \item \textbf{Cause}: access to page currently not present in main memory \\*
     $ \to $ exception, invoking OS
   \item \textbf{Process}: \\*
@@ -11,26 +11,26 @@
     $ - $ adapt page table \\*
     $ - $ set present bit of respective entry \\*
     $ - $ restart instruction causing page fault
-\end{items}
+\end{itemize}
 
 \paragraph{Page Faults --- latency}
-\begin{items}
+\begin{itemize}
   \item \textbf{fault rate} $ 0 \leq p \leq 1 $ \\*
     $ - $ $ p = 0 $: no page faults \\*
     $ - $ $ p = 1 $: every reference leads to page fault
   \item \textbf{effective access time} (EAT): \\*
     $ \text{EAT} = (1-p)*\text{memory access} + p*(\text{PF overhead} + \text{PF service time} + \text{restart overhead}) $
-\end{items}
+\end{itemize}
 
 \paragraph{Page Faults --- performance impact}
-\begin{items}
+\begin{itemize}
   \item \textbf{memory access time}: 200ns
   \item \textbf{average page fault service time}: 8ms
   \item $ \leadsto $ 1:1000 access-page-fault-rate $ \to $ $ \text{EAT} = 8.2\mu s $ $ \Rightarrow $ \emph{slowdown by factor 40}!
-\end{items}
+\end{itemize}
 
 \paragraph{Page Faults --- challenges}
-\begin{items}
+\begin{itemize}
   \item \textbf{what to eject?} \\*
     $ - $ how to allocate frames among processes? \\*
     $ - $ which particular process's pages to keep in memory? \\*
@@ -41,10 +41,10 @@
   \item \textbf{process resumption?} \\*
     $ - $ need to save state + resume \\*
     $ - $ process might have been in middle of instruction
-\end{items}
+\end{itemize}
 
 \paragraph{Page Faults --- what to fetch?}
-\begin{items}
+\begin{itemize}
   \item bring in page causing fault
   \item \textbf{pre-fetch} sourrounding pages? \\*
     $ - $ reading two disk blocks is approximately as fast as reading one \\*
@@ -55,10 +55,10 @@
     $ - $ need 0-filled pages for stack, heap, .bss, \dots \\*
     $ - $ \emph{zero on demand}? \\*
     $ - $ keep pool of 0-pages filled in background when CPU is idle?
-\end{items}
+\end{itemize}
 
 \paragraph{Page Faults --- process resumption?}
-\begin{items}
+\begin{itemize}
   \item hardware provides info about page fault \\*
     (intel: \code{\%cr2} contains faulting virtual address)
   \item \textbf{context}: OS needs to figure out fault context: \\*
@@ -74,29 +74,29 @@
       \phantom{$ - $} $ \cdot $ touch relevant pages before operation starts \\*
       \phantom{$ - $} $ \cdot $ keep modified data in registers $ \to $ page faults can't take place \\*
       \phantom{$ - $} $ \cdot $ design ISA such that complex operations can execute partially $ \to $ consistent page fault state
-\end{items}
+\end{itemize}
 
 \paragraph{Memory-Mapped Files --- other issues}
-\begin{items}
+\begin{itemize}
   \item \textbf{I/O mapping}: mapping disk block to page in memory allows file I/O to be treated as routing memory  \\*
     $ - $ \emph{initial}: read page-sized portion of file from file system to physical page \\*
     $ - $ \emph{subsequent read/write}: treated as ordinary memory access \\*
     $ \to $ \emph{simplifies} file access, file I/O through memory instead of syscalls \\*
     $ \to $ \emph{memory-file sharing}: several processes can map to same file
-\end{items}
+\end{itemize}
 
 \paragraph{Shared Data Segments}
-\begin{items}
+\begin{itemize}
   \item \textbf{implementation}: \\*
     $ - $ temporary, asynchronous memory-mapped files \\*
     $ - $ shared pages (with allocated space on backing store)
   \item \textbf{copy on write} (COW): \\*
     $ - $ allows both parent and child process to initially share same memory pages \\*
     $ - $ only modified pages are copied $ \to $ more efficient process creation
-\end{items}
+\end{itemize}
 
 \paragraph{Page Frame Allocation --- local vs. global}
-\begin{items}
+\begin{itemize}
   \item \textbf{global}: all frames considered for replacement \\*
     $ - $ does not consider page ownership \\*
     $ - $ one process cannot get another process's frame \\*
@@ -104,26 +104,26 @@
   \item \textbf{local}: only frames of faulting process are considered for replacement \\*
     $ - $ isolates processes/users \\*
     $ - $ separately determine how many frames each process gets
-\end{items}
+\end{itemize}
 
 \paragraph{Fixed Allocation --- equal vs. proportional}
-\begin{items}
+\begin{itemize}
   \item \textbf{equal}: all processes get same amount of frames
   \item \textbf{proportional}: allocate according to process size \\*
     $ s_i \coloneqq \text{size of process } p_i $, $ S \coloneqq \sum s_i $, $ m \coloneqq \text{total number of frames } $ \\*
     $ \Rightarrow a_i \coloneqq \frac{s_i}{S}m $ allocation for $ p_i $
-\end{items}
+\end{itemize}
 
 \paragraph{Fixed Allocation --- priority allocation}
-\begin{items}
+\begin{itemize}
   \item = proportional allocation scheme using priorities rather than size
   \item \textbf{on page fault} of $ P_i $: \\*
     $ - $ select one of its frames for replacement or \\*
     $ - $ select frame from process with lower priority
-\end{items}
+\end{itemize}
 
 \paragraph{Memory Locality}
-\begin{items}
+\begin{itemize}
   \item \textbf{problem}: background storage much slower than memory \\*
     $ - $ paging extends memory size using background storage \\*
     $ - $ \emph{goal}: run near memory speed, not near background storage speed
@@ -131,10 +131,10 @@
     $ - $ 10\% of memory gets 90\% of references \\*
     $ - $ \emph{goal}: keep those 10\% in memory, rest on disk \\*
     $ - $ \emph{problem}: how to identify those 10\%?
-\end{items}
+\end{itemize}
 
 \paragraph{Thrashing}
-\begin{items}
+\begin{itemize}
   \item \textbf{problem}: system is busy swapping pages in and out \\*
     $ - $ each time one page is brought in, another page, whose contents will soon matter, is thrown out \\*
     $ - $ \emph{effect}: low CPU utilization, processes wait for pages to be fetched from disk \\*
@@ -144,10 +144,10 @@
     $ - $ \emph{too much multiprogramming}: each process fits individually, but too many for system \\*
     $ - $ \emph{memory too small} to hold hot memory of a single process (the 10\%) \\*
     $ - $ \emph{bad page replacement policy}
-\end{items}
+\end{itemize}
 
 \paragraph{Working-Set Model}
-\begin{items}
+\begin{itemize}
   \item $ \Delta \coloneqq $ working-set window (fixed number of page references; e.g., 10000 instructions)
   \item $ \text{WSS}_i \coloneqq $ working set of process $ P_i $ \\*
     $ - $ total number of pages referenced in most recent $ \Delta $ (varies in time) \\*
@@ -159,10 +159,10 @@
   \item $ D \coloneqq \sum \text{WSS}_i = $ total demand for frames \\*
     $ - $ $ D > m \leadsto $ \textbf{thrashing} \\*
     $ \to $ $ D > m \Rightarrow $ suspend a process
-\end{items}
+\end{itemize}
 
 \paragraph{Working Set --- keeping track}
-\begin{items}
+\begin{itemize}
   \item \textbf{perfect}: replace page that is referenced furthest in the future (\emph{oracle})
   \item \textbf{idea}: predict future from past \\*
     $ - $ record page references from past and extrapolate into future \\*
@@ -170,17 +170,17 @@
   \item \textbf{idea}: sacrifice precision for speed \\*
     $ - $ MMU sets \emph{reference bit} in respective page table entry every time a page is referenced \\*
     $ - $ set timer to scan all page table entries for reference bits
-\end{items}
+\end{itemize}
 
 \paragraph{Page Fault Frequency --- allocation scheme}
-\begin{items}
+\begin{itemize}
   \item \textbf{goal}: establish acceptable page fault rate \\*
     $ - $ \emph{actual rate too low} $ \to $ give frames to other process \\*
     $ - $ \emph{actual rate too high} $ \to $ allocate more frames to process
-\end{items}
+\end{itemize}
 
 \paragraph{Page Fetch Policy --- demand paging}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: only transfer pages raising page faults
   \item \textbf{advantages}: \\*
     $ - $ only transfer what is needed \\*
@@ -188,10 +188,10 @@
   \item \textbf{disadvantages}: \\*
     $ - $ many initial page faults when task starts \\*
     $ - $ more I/O operations $ \to $ more I/O overhead
-\end{items}
+\end{itemize}
 
 \paragraph{Page Fetch Policy --- pre-paging}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: speculatively transfer pages to RAM \\*
     $ - $ at every page fault: speculate what else should be loaded \\*
     $ - $ e.g., load entire text section when process starts
@@ -199,10 +199,10 @@
   \item \textbf{disadvantages}: \\*
     $ - $ wastes I/O bandwidth if page is never used \\*
     $ - $ can destroy working set of other processes in case of page stealing
-\end{items}
+\end{itemize}
 
 \begin{summary}
-  \begin{items}
+  \begin{itemize}
     \item paging simulates a memory size of the size of the virtual memory
     \item when pages are filled via page faults, OS needs to answer some questions: \\*
       $ - $ what to eject? \\*
@@ -212,5 +212,5 @@
       $ - $ local vs. global allocation \\*
       $ - $ fixed vs. proportional vs. priority allocation
     \item \emph{thrashing} must be prevented by taking working sets of active processes into account
-  \end{items}
+  \end{itemize}
 \end{summary}

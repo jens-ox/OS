@@ -1,7 +1,7 @@
 \section{Memory Allocation}
 
 \paragraph{Memory Allocation --- dynamic}
-\begin{items}
+\begin{itemize}
   \item = allocate + free memory chunks of arbitrary size at arbitrary points in time \\*
     $ - $ almost every program uses it (heap) \\*
     $ - $ don't have to statically specify complex data structures \\*
@@ -10,10 +10,10 @@
   \item \textbf{implementation}: has huge impact on performance, both in user and kernel space
   \item \textbf{fact}: it is impossible to construct memory allocator that always performs well \\*
     $ \to $ need to understand trade-offs to pick good allocation strategy
-\end{items}
+\end{itemize}
 
 \paragraph{Dynamic Memory Allocation --- principle}
-\begin{items}
+\begin{itemize}
   \item \textbf{initial}: pool of free memory
   \item \textbf{tasks}: \\*
     $ - $ satisfy arbitrary \code{allocate} + \code{free} requests from pool \\*
@@ -21,18 +21,18 @@
   \item \textbf{restrictions}: \\*
     $ - $ cannot control order/number of requests \\*
     $ - $ cannot move allocated regions $ \to $ fragmentation = core problem!
-\end{items}
+\end{itemize}
 
 \paragraph{Dynamic Memory Allocation --- bitmap}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: \\*
     $ - $ divide memory in allocation units of fixed size \\*
     $ - $ use bitmap to keep track if allocated (1) or free (0)
   \item \textbf{problem}: needs additional data structure to store allocation length (otherwise cannot infer whether two adjacent allocations belong together or not from bitmap)
-\end{items}
+\end{itemize}
 
 \paragraph{Dynamic Memory Allocation --- list}
-\begin{items}
+\begin{itemize}
   \item \textbf{method 1}: use one list-node for each allocated data \\*
     $ - $ \emph{extra space} needed for list \\*
     $ - $ allocation lengths already stored
@@ -41,20 +41,20 @@
     $ - $ \emph{additional data structure} needed to store allocation lengths \\*
     $ - $ can search for free space with low overhead
   \item \textbf{method 3}: both
-\end{items}
+\end{itemize}
 
 \paragraph{Dynamic Memory Allocation --- problems}
-\begin{items}
+\begin{itemize}
   \item \textbf{fragmentation} is hard to handle
   \item \textbf{factors} needed for fragmentation to occur: \\*
     $ - $ \emph{different lifetimes} \\*
     $ - $ \emph{different sizes} \\*
     $ - $ \emph{inability to relocate previous allocations}
   \item all fragmentation factors present in dynamic memory allocators!
-\end{items}
+\end{itemize}
 
 \paragraph{Allocation --- best fit vs. worst fit}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: keep large free memory chunks together for larger allocation requests that may arrive later
   \item \textbf{best-fit}: allocate smallest free block large enough to store allocation request \\*
     $ - $ must search entire list \\*
@@ -63,26 +63,26 @@
   \item \textbf{worst-fit}: allocate largest free block \\*
     $ - $ must search entire list \\*
     $ - $ \emph{reality}: worse fragmentation than best-fit
-\end{items}
+\end{itemize}
 
 \paragraph{Allocation --- first fit}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: if fragmentation occurs with best and worst fit, optimize for allocation speed
   \item \textbf{principle}: allocate first hole big enough \\*
     $ - $ fastest allocation policy \\*
     $ - $ produced leftover holes of variable size \\*
     $ - $ \emph{reality}: almost as good as best-fit
-\end{items}
+\end{itemize}
 
 \paragraph{First Fit --- variants}
-\begin{items}
+\begin{itemize}
   \item \textbf{first-fit sorted by address order}
   \item \textbf{LIFO first-fit}
   \item \textbf{next fit}
-\end{items}
+\end{itemize}
 
 \paragraph{Allocation --- buddy allocator}
-\begin{items}
+\begin{itemize}
   \item \textbf{idea}: allocate memory in powers of 2 \\*
     $ - $ all chunks have fixed $ 2^n $-size $ \to $ allocation request rounded up to next-higher power of 2 \\*
     $ - $ all chunks naturally aligned
@@ -90,26 +90,26 @@
     $ - $ select larger available chunk, split into two same-sized buddies \\*
     $ - $ continue until appropriately sized chunk is available
   \item \textbf{two buddies both free} ($ 2^n $): merge to $ 2^{n+1} $-chunk
-\end{items}
+\end{itemize}
 
 \paragraph{Real Program Patterns}
-\begin{items}
+\begin{itemize}
   \item \textbf{ramps}: accumulate data monotonically over time
   \item \textbf{peaks}: allocate many objects, use briefly, then free all
   \item \textbf{plateaus}: allocate many objects, use for long time
-\end{items}
+\end{itemize}
 
 \paragraph{Allocation --- slabs}
-\begin{items}
+\begin{itemize}
   \item kernel often allocates/frees memory for few, specific data objects of fixed size
   \item \textbf{slab}: multiple pages of contiguous physical memory \\*
     $ - $ linux: uses buddy allocator as underlying allocator for slabs
   \item \textbf{cache}: one or multiple slabs \\*
     $ - $ stores only one kind of object (fixed size)
-\end{items}
+\end{itemize}
 
 \begin{summary}
-  \begin{items}
+  \begin{itemize}
     \item dynamic memory means allocating and freeing memory chunks of different sizes at any time
     \item impossible to construct memory allocator that always performs well
     \item typical dynamic memory data structures: \\*
@@ -121,5 +121,5 @@
     \item advanced strategies: \\*
       $ - $ buddy-allocator \\*
       $ - $ slab-allocator
-  \end{items}
+  \end{itemize}
 \end{summary}

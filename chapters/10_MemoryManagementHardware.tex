@@ -1,7 +1,7 @@
 \section{Memory Management Hardware}
 
 \paragraph{Main Memory}
-\begin{items}
+\begin{itemize}
   \item main memory + registers = only storage that CPU can access directly
   \item before run: program must be \\*
     - brought into memory from background storage \\*
@@ -9,10 +9,10 @@
   \item \textbf{Earlier}: computers had no memory abstraction \\*
     \( \to \) programs accessed physical memory directly
   \item multiple processes can be run concurrently even without memory abstraction (using swapping, relocation)
-\end{items}
+\end{itemize}
 
 \paragraph{Swapping}
-\begin{items}
+\begin{itemize}
   \item \textbf{Principle}: \\*
     - \emph{roll-out}: save program's state on background storage \\*
     - \emph{roll-in}: replace program state with another program's state
@@ -21,23 +21,23 @@
   \item \textbf{Disadvantages}: \\*
     - \emph{very slow}: major part of swap time is transfer time \\*
     - \emph{no parallelism}: only one process runs at a time, owns entire physical address space
-\end{items}
+\end{itemize}
 
 \paragraph{Overlays}
-\begin{items}
+\begin{itemize}
   \item \textbf{Problem}: what if process needs more memory than available? \\*
     \( \to \) need to partition program manually
-\end{items}
+\end{itemize}
 
 \paragraph{Static Relocation}
-\begin{items}
+\begin{itemize}
   \item = OS adds fixed offset to every address in a program when loading + creating process
   \item same address space for every process \\*
     \( \to \) \emph{no protection}: every program sees + can access every address!
-\end{items}
+\end{itemize}
 
 \paragraph{Shared Physical Memory --- Goals}
-\begin{items}
+\begin{itemize}
   \item \textbf{Protection}: \\*
     - bug in one process must not corrupt memory in another \\*
     - do not allow processes to observe other processes' memory
@@ -46,18 +46,18 @@
     - processes should not be able to use large amounts of contiguous memory
   \item \textbf{Resource Exhaustion}: \\*
     - allow that sum of sizes of all processes is greater than physical memory
-\end{items}
+\end{itemize}
 
 \paragraph{Memory Management Unit}
-\begin{items}
+\begin{itemize}
   \item need hardware support to achieve safe + secure protection
   \item \textbf{Goal}: hardware maps virtual to physical address
   \item \textbf{Usage}: user program deals with virtual addresses, never sees real addresses
-\end{items}
-\begin{figure}[H]\centering\label{MMU}\includegraphics[width=0.33\textwidth]{MMU}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{MMU}\includegraphics[width=0.33\textwidth]{MMU}\end{figure}
 
 \paragraph{MMU --- base and limit registers}
-\begin{items}
+\begin{itemize}
   \item \textbf{Idea}: provide protection + dynamic relocation in MMU \\*
     \( \to \) introduce special \emph{base} and \emph{limit} registers (e.g., Cray-1)
   \item \textbf{Usage}: on every load/store the MMU \\*
@@ -74,11 +74,11 @@
   \item \textbf{Disadvantages}: \\*
     - how to grow process' address space? \\*
     - how to share code/data?
-\end{items}
-\begin{figure}[H]\centering\label{MMUBaseLimit}\includegraphics[width=0.33\textwidth]{MMUBaseLimit}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{MMUBaseLimit}\includegraphics[width=0.33\textwidth]{MMUBaseLimit}\end{figure}
 
 \paragraph{MMU --- segmentation}
-\begin{items}
+\begin{itemize}
   \item \textbf{Solution} to base + limit: use multiple base + limit register pairs \emph{per process} \\*
   \( \to \) private + public segments
   \item \textbf{Advantages}: \\*
@@ -88,10 +88,10 @@
   \item \textbf{Disadvantages}: \\*
     - segments need to be kept contiguous in physical memory \\*
     - \emph{fragmentation} of physical memory
-\end{items}
+\end{itemize}
 
 \paragraph{Segmentation --- architecture}
-\begin{items}
+\begin{itemize}
   \item virtual address = [segment \#, offset]
   \item each process has \emph{segment table}, maps virtual address to physical address in memory \\*
     - \emph{base}: starting physical address where segment resides in memory \\*
@@ -100,11 +100,11 @@
   \item MMU has two registers that identify current address space \\*
     - \emph{segment-table base register} (STBR): points to segment table location of current process \\*
     - \emph{segment-table length register} (STLR): indicates number of segments used by process
-\end{items}
-\begin{figure}[H]\centering\label{Segmentation}\includegraphics[width=0.33\textwidth]{Segmentation}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{Segmentation}\includegraphics[width=0.33\textwidth]{Segmentation}\end{figure}
 
 \paragraph{External Fragmentation}
-\begin{items}
+\begin{itemize}
   \item \textbf{Fragmentation} = inability to use free memory
   \item \textbf{External Fragmentation} = sum of free memory satisfies requested amount of memory, but is not contiguous
   \item \textbf{Compaction}: reduce external fragmentation \\*
@@ -112,10 +112,10 @@
     - only possible if relocation is dynamic, can be done at execution time \\*
     - \emph{problem}: expensive! Need to halt process while moving data and updating tables \\*
       \phantom{-} \( \to \) caches need to be reloaded, which should be avoided
-\end{items}
+\end{itemize}
 
 \paragraph{MMU --- paging}
-\begin{items}
+\begin{itemize}
   \item \textbf{Principle}: divide physical memory into fixed-size blocks (\emph{page frames}) \\*
     - size = \( 2^n \) Bytes (typically 4KiB, 2MiB, 4MiB) \\*
   \item \textbf{Virtual Memory}: divided into same-sized blocks (\emph{pages})
@@ -123,24 +123,24 @@
   \item OS tracks all free frames, modifies page tables as needed
   \item \textbf{Present Bit} (in page table): indicates that virtual page is currently mapped to physical memory
   \item if process issues instruction to access unmapped virtual address, MMU calls OS to bring in the data (\emph{page fault})
-\end{items}
+\end{itemize}
 
 \paragraph{MMU --- address translation scheme}
-\begin{items}
+\begin{itemize}
   \item \textbf{Virtual address}: divided into \\*
     - \emph{virtual page number}: page table index containing base address of each page in physical memory \\*
     - \emph{page offset}: concatenated with base address results in physical address
-\end{items}
+\end{itemize}
 
 \paragraph{MMU --- hierarchical page table}
-\begin{items}
+\begin{itemize}
   \item \textbf{Problem}: need to keep complete page table in memory for every address space
   \item \textbf{Idea}: not needing complete table, most virtual addresses unused by process \\*
     \( \to \) subdivide virtual address further into multiple page indexes \( p_n \) forming \emph{hierarchical page table}
-\end{items}
+\end{itemize}
 
 \paragraph{Hierarchical Page Table --- x86-64}
-\begin{items}
+\begin{itemize}
   \item \textbf{long mode}: 4-level hierarchical page table
   \item \textbf{page directory base register} (control register 3, \code{\%CR3}) stores starting physical address of \emph{first level page table}
   \item \textbf{address-space hierarchy}: following page-table hierarchy for every address space: \\*
@@ -149,38 +149,38 @@
     - page directory (PD) \\*
     - page table entry (PTE)
   \item \textbf{per level}: table can either point to \emph{directory} in next hierarchy level or to \emph{entry} containing actual mapping data
-\end{items}
-\begin{figure}[H]\centering\label{PageTable}\includegraphics[width=0.33\textwidth]{PageTable}\end{figure}
+\end{itemize}
+\begin{figure}[h]\centering\label{PageTable}\includegraphics[width=0.33\textwidth]{PageTable}\end{figure}
 
 \paragraph{Page Table Entry --- content}
-\begin{items}
+\begin{itemize}
   \item \textbf{valid bit} (\emph{present bit}): whether page is currently available in memory or needs to be brought in by OS via \emph{page fault}
   \item \textbf{page frame number}: if page is present: physical address where page is currently located
   \item \textbf{write bit}: whether or not page may be written to (may cause \emph{page fault})
   \item \textbf{caching}: whether or not page should be cached at all (and with which policy)
   \item \textbf{accessed bit}: set by MMU if page was touched since bit was last cleared by OS
   \item \textbf{dirty bit}: set by MMU if page was modified since bit was last cleared by OS
-\end{items}
+\end{itemize}
 
 \paragraph{Paging --- OS involvement}
-\begin{items}
+\begin{itemize}
   \item OS performs all operations that require semantic knowledge
   \item \textbf{page allocation} (bringing data into memory): OS needs to find free frame for new pages and set up mapping in page table of affected address space
   \item \textbf{page replacement}: when all page frames are used, OS needs to evict pages from memory
   \item \textbf{context switching}: OS sets MMU's base register (\code{\%CR3} on x86) to point to page hierarchy of next process's address space
-\end{items}
+\end{itemize}
 
 \paragraph{MMU --- internal fragmentation}
-\begin{items}
+\begin{itemize}
   \item \textbf{paging}: eliminates external fragmentation
   \item \textbf{problem}: internal fragmentation \\*
     - memory can only be allocated in page frame sizes \\*
     - allocated virtual memory area will generally not end at page boundary \\*
     \( \leadsto \) unused rest of last allocated page is lost!
-\end{items}
+\end{itemize}
 
 \paragraph{MMU --- page size trade-offs}
-\begin{items}
+\begin{itemize}
   \item \textbf{fragmentation}: \\*
     - \emph{larger pages} \( \to \) more memory wasted (internal fragmentation) per allocation \\*
     - \emph{smaller pages} \( \to \) only half a page wasted per allocation on average
@@ -190,15 +190,15 @@
   \item \textbf{I/O}: \\*
     - \emph{larger pages} $ \to $ more data needs to be loaded from dist to make page valid \\*
     - \emph{smaller pages} $ \to $ need to trap OS more often when loading large program
-\end{items}
+\end{itemize}
 
 \begin{summary}
-  \begin{items}
+  \begin{itemize}
     \item need to place processes in memory to run
     \item want to place multiple processes in memory at same time to run concurrently/parallel
     \item \textbf{virtual memory}: enables protection, transparency, overcommitment \\*
       $ - $ \emph{trade-off} extra hardware (MMU) to translate addresses at every load/store
     \item \textbf{MMU types}: base + limit, segmentation, paging
     \item \textbf{paging}: supported by all contemporary MMUs, favorite of most OS
-  \end{items}
+  \end{itemize}
 \end{summary}
