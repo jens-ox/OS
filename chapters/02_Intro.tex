@@ -26,8 +26,8 @@ The OS is a layer between applications and hardware to ease development.
 			\item controls program execution
 			\item prevents errors and improper computer use
 		\end{itemize}
-	\item $ \leadsto $ \textbf{no universally accepted definition}
 \end{itemize}
+$ \leadsto $ \textbf{no universally accepted definition}
 
 \paragraph{Hardware Overview}
 \begin{itemize}
@@ -141,10 +141,10 @@ The OS is a layer between applications and hardware to ease development.
 
 \begin{summary}
 	\begin{itemize}
-		\item The OS is an abstraction layer between applications and hardware (multiplexes hardware, hides hardware details, provides protection between processes/users)
-		\item The CPU provides a separation of User and Kernel mode (which are required for an OS to provide protection between applications)
-		\item CPU can execute commands faster than memory can deliver instructions/data --- memory hierarchy mitigates this memory wall, needs to be carefully managed by OS to minimize slowdowns
-		\item device drivers control hardware devices through PMIO/MMIO
-		\item Devices can signal the CPU (and through the CPU notify the OS) through interrupts
+		\item The OS is an \textbf{abstraction} layer between applications and hardware (multiplexes hardware, hides hardware details, provides protection between processes/users)
+		\item The CPU provides a \textbf{separation} of User and Kernel mode (which are required for an OS to provide protection between applications)
+		\item CPU can execute commands faster than memory can deliver instructions/data --- memory \textbf{hierarchy} mitigates this memory wall, needs to be carefully managed by OS to minimize slowdowns
+		\item device drivers \textbf{control} hardware devices through PMIO/MMIO
+		\item Devices can \textbf{signal} the CPU (and through the CPU notify the OS) through interrupts
 	\end{itemize}
 \end{summary}
