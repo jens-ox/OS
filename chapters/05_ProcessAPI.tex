@@ -2,17 +2,21 @@
 
 \paragraph{Execution Model --- Assembler (simplified)}
 \begin{itemize}
-  \item OS interacts directly with compiled programs \\*
-    - switch between processes/threads \( \leadsto \) \textbf{save}/\textbf{restore} state \\*
-    - deal with/pass on \textbf{signals}/\textbf{exceptions} \\*
-    - receive \textbf{requests} from applications
-  \item \textbf{Instructions}: \\*
-    - \code{mov}: Copy referenced data from second operand to first operand \\*
-    - \code{add}/\code{sub}/\code{mul}/\code{div}: Add,\dots from second operand to first operand \\*
-    - \code{inc}/\code{dec}: increment/decrement register/memory location \\*
-    - \code{shl}/\code{shr}: shift first operand left/right by amount given by second operand \\*
-    - \code{and}/\code{or}/\code{xor}: calculate bitwise and,\dots of two operands storing result in first \\*
-    - \code{not}: bitwise negate operand
+  \item \textbf{Principle}: OS interacts directly with compiled programs
+  \begin{itemize}
+    \item switch between processes/threads \( \leadsto \) \emph{save}/\emph{restore} state
+    \item deal with/pass on \emph{signals}/\emph{exceptions}
+    \item receive \emph{requests} from applications
+  \end{itemize}
+  \item \textbf{Instructions}:
+  \begin{itemize}
+    \item \code{mov}: Copy referenced data from second operand to first operand
+    \item \code{add}/\code{sub}/\code{mul}/\code{div}: Add,\dots from second operand to first operand
+    \item \code{inc}/\code{dec}: increment/decrement register/memory location
+    \item \code{shl}/\code{shr}: shift first operand left/right by amount given by second operand
+    \item \code{and}/\code{or}/\code{xor}: calculate bitwise and,\dots of two operands storing result in first
+    \item \code{not}: bitwise negate operand
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Execution Model --- Stack (x86)}
@@ -27,33 +31,39 @@
 \paragraph{Execution Model --- jump/branch/call commands (x86)}
 \begin{itemize}
   \item \code{jmp}: continue execution at operand address
-  \item \code{j\$condition}: jump depending on PSW content \\*
-    true \( \leadsto \) jump \\*
-    false \( \leadsto \) continue \\*
-    examples: \code{je} (jump equal), \code{jz} (jump zero)
+  \item \code{j\$condition}: jump depending on PSW content
+  \begin{itemize}
+    \item \emph{true} \( \leadsto \) jump
+    \item \emph{false} \( \leadsto \) continue
+    \item examples: \code{je} (jump equal), \code{jz} (jump zero)
+  \end{itemize}
   \item \code{call}: push function to stack and jump to it
   \item \code{return}: return from function (jump to return address)
 \end{itemize}
 
 \paragraph{Execution Model --- Application Binary Interface (ABI)}
 \begin{itemize}
-  \item standardizes binary interface between programs, modules, OS: \\*
-    - executable/object file layout \\*
-    - calling conventions \\*
-    - alignment rules
-  \item \textbf{calling conventions}: standardize exact way function calls are implemented \\*
-    \( \leadsto \) interoperability between compilers
+  \item \textbf{Idea}: standardizes binary interface between programs, modules, OS:
+  \begin{itemize}
+    \item executable/object file layout
+    \item calling conventions
+    \item alignment rules
+  \end{itemize}
+  \item \textbf{calling conventions}: standardize exact way function calls are implemented
+  \begin{itemize}
+    \item[$ \leadsto $] interoperability between compilers
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Execution Model --- calling conventions (x86)}
 \begin{itemize}
-  \item function call (caller):
+  \item function call --- \textbf{caller}:
   \begin{enumerate}
     \item save local scope state 
     \item set up parameters where function can find them
     \item transfer control flow
   \end{enumerate}
-  \item function call (called function):
+  \item function call --- \textbf{called function}:
   \begin{enumerate}
     \item set up new local scope (local variables)
     \item perform duty
@@ -66,14 +76,18 @@
 \begin{itemize}
   \item parameters are passed through \textbf{system calls}
   \item call number + specific parameters must be passed
-  \item parameters can be transferred through \\*
-    - \textbf{CPU registers} (\textasciitilde 6) \\*
-    - \textbf{Main Memory} (heap/stack -- more parameters, data types)
+  \item parameters can be transferred through
+  \begin{itemize}
+    \item \textbf{CPU registers} (\textasciitilde 6)
+    \item \textbf{Main Memory} (heap/stack -- more parameters, data types)
+  \end{itemize}
   \item ABI specifies how to pass parameters
-  \item \textbf{return code} needs to be returned to application \\*
-    - \textbf{negative}: error code \\*
-    - \textbf{positive + 0}: success \\*
-    - usually returned via A+D registers
+  \item \textbf{return code} needs to be returned to application
+  \begin{itemize}
+    \item \emph{negative}: error code
+    \item \emph{positive + 0}: success
+    \item usually returned via A+D registers
+  \end{itemize}
 \end{itemize}
 
 \paragraph{System call handler}
@@ -108,25 +122,33 @@
 \paragraph{Process API --- creation (POSIX)}
 \begin{itemize}
   \item \code{PID}: identifies process
-  \item \code{pid = fork()}: duplicates current process: \\*
-    returns \code{0} to new child \\*
-    returns new \code{PID} to parent \\*
-    \( \leadsto \) child and parent independent after \code{fork}
-  \item \code{exec(name)}: replaces own memory based on executable file \\*
-    \code{name} specifies binary executable file
+  \item \code{pid = fork()}: duplicates current process:
+  \begin{itemize}
+    \item returns \code{0} to new child
+    \item returns new \code{PID} to parent
+    \item[$ \leadsto $] child and parent independent after \code{fork}
+  \end{itemize}
+  \item \code{exec(name)}: replaces own memory based on executable file
+  \begin{itemize}
+    \item \code{name} specifies binary executable file
+  \end{itemize}
   \item \code{exit(status)}: terminates process, returns \code{status}
-  \item \code{pid = waitpid(pid, \&status)}: wait for child termination \\*
-    - \code{pid}: process to wait for \\*
-    - \code{status}: points to data structure that returns information about the process \\* \phantom{- \code{status}:} (e.g., exit status) \\*
-    - passed \code{pid} is returned on success, \code{-1} otherwise
-  \item \textbf{process tree}: processes create child processes, which create child processes, \dots \\*
-    - parent and child execute concurrently \\*
-    - parent waits for child to terminate (collecting the exit state)
+  \item \code{pid = waitpid(pid, \&status)}: wait for child termination
+  \begin{itemize}
+    \item \code{pid}: process to wait for
+    \item \code{status}: points to data structure that returns information about the process (e.g., exit status)
+    \item passed \code{pid} is returned on success, \code{-1} otherwise
+  \end{itemize}
+  \item \textbf{process tree}: processes create child processes, which create child processes, \dots
+  \begin{itemize}
+    \item parent and child execute concurrently
+    \item parent waits for child to terminate (collecting the exit state)
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Daemons}
 \begin{itemize}
-  \item = program designed to run in the background
+  \item[=] program designed to run in the background
   \item detached from parent process after creation, reattached to process tree root (\code{init})
 \end{itemize}
 
@@ -160,13 +182,17 @@
 \paragraph{Exit Status}
 \begin{itemize}
   \item voluntary exit: process returns exit status (integer)
-  \item resources not completely freed after process terminates \\*
+  \item resources not completely freed after process terminates
     \( \leadsto \) \textbf{Zombie} or \textbf{process stub} (contains exit status until collected via \code{waitpid})
-  \item \textbf{Orphans}: Processes without parents \\*
-    - usually adopted by \code{init} \\*
-    - some systems kill all children when parent is killed
-  \item exit status on involuntary exit: \\*
-    - Bits \code{0-6}: signal number that killed process (\code{0} on normal exit) \\*
-    - Bit \code{7}: set if process was killed by signal \\*
-    - Bits \code{8-15}: \code{0} if killed by signal (exit status on normal exit)
+  \item \textbf{Orphans}: Processes without parents
+  \begin{itemize}
+    \item usually adopted by \code{init}
+    \item some systems kill all children when parent is killed
+  \end{itemize}
+  \item exit status on involuntary exit:
+  \begin{itemize}
+    \item Bits \code{0-6}: signal number that killed process (\code{0} on normal exit)
+    \item Bit \code{7}: set if process was killed by signal
+    \item Bits \code{8-15}: \code{0} if killed by signal (exit status on normal exit)
+  \end{itemize}
 \end{itemize}
