@@ -3,17 +3,21 @@
 \paragraph{Motivation}
 \begin{itemize}
   \item \( K \) jobs ready to run, \( K > N \geq 1 \) CPUs available
-  \item \textbf{Scheduling Problem}: \\*
-    - Which jobs should kernel assign to which CPUs? \\*
-    - When should it make decision?
+  \item \textbf{Scheduling Problem}:
+  \begin{itemize}
+    \item Which jobs should kernel assign to which CPUs?
+    \item When should it make decision?
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Dispatcher}
 \begin{itemize}
-  \item \textbf{Dispatcher}: performs actual process switch \\*
-    - mechanism \\*
-    - save/restore process context \\*
-    - switch to user mode
+  \item \textbf{Dispatcher}: performs actual process switch
+  \begin{itemize}
+    \item mechanism
+    \item save/restore process context
+    \item switch to user mode
+  \end{itemize}
   \item \textbf{Scheduler}: selects next process to run based on \emph{policy}
 \end{itemize}
 
@@ -21,12 +25,17 @@
 \begin{itemize}
   \item kernel responsible for CPU switch
   \item kernel doesn't always run \( \to \) can only dispatch different process when invoked
-  \item \textbf{cooperative multitasking}: running process performs \emph{yield} syscall \( \to \) kernel switches process
-  \item \textbf{preemptive scheduling}: \\*
-    - kernel invoked in certain time intervals \\*
-    - kernel makes scheduling decisions after every time-slice
+  \item \textbf{cooperative multitasking}: running process performs \emph{yield} syscall
+  \begin{itemize}
+    \item[$ \to $] kernel switches process 
+  \end{itemize}
+  \item \textbf{preemptive scheduling}:
+  \begin{itemize}
+    \item kernel invoked in certain time intervals
+    \item kernel makes scheduling decisions after every time-slice
+  \end{itemize}
 \end{itemize}
-\begin{figure}[h]\centering\label{ProcessSwitching}\includegraphics[width=0.33\textwidth]{ProcessSwitching}\end{figure}
+\begin{figure}[H]\centering\label{ProcessSwitching}\includegraphics[width=0.33\textwidth]{ProcessSwitching}\end{figure}
 
 \paragraph{Scheduling --- Process States}
 \begin{itemize}
@@ -39,13 +48,17 @@
 
 \paragraph{Scheduling --- long-term vs. short-term}
 \begin{itemize}
-  \item \textbf{Short-term scheduler} (CPU Scheduler, focused on in this lecture): \\*
-    - selects process to run next, allocates CPU \\*
-    - invoked frequently (ms) \( \leadsto \) must be fast
-  \item \textbf{Long-term scheduler} (job scheduler): \\*
-    - selects process to be brought into ready queue \\*
-    - invoked very infrequently (s, m) \( \leadsto \) can be slow \\*
-    - controls degree of \emph{multiprogramming}
+  \item \textbf{Short-term scheduler} (CPU Scheduler, focused on in this lecture):
+  \begin{itemize}
+    \item selects process to run next, allocates CPU
+    \item invoked frequently (ms) \( \leadsto \) must be fast
+  \end{itemize}
+  \item \textbf{Long-term scheduler} (job scheduler):
+  \begin{itemize}
+    \item selects process to be brought into ready queue
+    \item invoked very infrequently (s, m) \( \leadsto \) can be slow
+    \item controls degree of \emph{multiprogramming}
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling queues}
@@ -57,34 +70,48 @@
 
 \paragraph{Scheduling Policies --- Categories}
 \begin{itemize}
-  \item \textbf{batch scheduling}: \\*
-    - still widespread in business (payroll, inventory,\dots) \\*
-    - no users waiting for quick response \\*
-    - non-preemptive algorithms acceptable \( \to \) less switches \( \to \) less overhead
-  \item \textbf{interactive scheduling}: \\*
-    - need to optimize for response time \\*
-    - preemption essential to keep processes from hogging CPU
-  \item \textbf{real-time scheduling}: \\*
-    - guarantee job completion within time constraints \\*
-    - need to be able to plan when which process runs + how long \\*
-    - preemption not always needed
+  \item \textbf{batch scheduling}:
+  \begin{itemize}
+    \item still widespread in business (payroll, inventory,\dots)
+    \item no users waiting for quick response
+    \item non-preemptive algorithms acceptable \( \to \) less switches \( \to \) less overhead
+  \end{itemize}
+  \item \textbf{interactive scheduling}:
+  \begin{itemize}
+    \item need to optimize for response time
+    \item preemption essential to keep processes from hogging CPU
+  \end{itemize}
+  \item \textbf{real-time scheduling}:
+  \begin{itemize}
+    \item guarantee job completion within time constraints
+    \item need to be able to plan when which process runs + how long
+    \item preemption not always needed
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- Goals}
 \begin{itemize}
-  \item \textbf{General}: \\*
-    - \emph{fairness}: give each process fair share of CPU \\*
-    - \emph{balance}: keep all parts of system busy
-  \item \textbf{batch scheduling}: \\*
-    - \emph{throughput}: number of processes that complete per time unit \\*
-    - \emph{turnaround time}: time from job submission to job completion \\*
-    - \emph{CPU utilization}: keep CPU as busy as possible
-  \item \textbf{interactive scheduling}: \\*
-    - \emph{waiting time}: reduce time a process waits in waiting queue \\*
-    - \emph{response time}: time from request to first response
-  \item \textbf{real-time scheduling}: \\*
-    - \emph{meeting deadlines}: finishing jobs in time \\*
-    - \emph{predictability}: minimize jitter
+  \item \textbf{General}:
+  \begin{itemize}
+    \item \emph{fairness}: give each process fair share of CPU
+    \item \emph{balance}: keep all parts of system busy
+  \end{itemize}
+  \item \textbf{batch scheduling}:
+  \begin{itemize}
+    \item \emph{throughput}: number of processes that complete per time unit
+    \item \emph{turnaround time}: time from job submission to job completion
+    \item \emph{CPU utilization}: keep CPU as busy as possible
+  \end{itemize}
+  \item \textbf{interactive scheduling}:
+  \begin{itemize}
+    \item \emph{waiting time}: reduce time a process waits in waiting queue
+    \item \emph{response time}: time from request to first response
+  \end{itemize}
+  \item \textbf{real-time scheduling}:
+  \begin{itemize}
+    \item \emph{meeting deadlines}: finishing jobs in time
+    \item \emph{predictability}: minimize jitter
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- first come first served}
@@ -129,61 +156,77 @@
   \item SJF optimizes waiting/response time \\*
     \( \leadsto \) what about throughput?
   \item \textbf{Problem}: CPU-bound jobs hold CPU until exit or I/O \( \to \) \emph{poor I/O utilization}
-  \item \textbf{Idea}: SJF, but preempt periodically to make new scheduling decision \\*
-    - each time slice: schedule job with shortest remaining time next \\*
-    - alternatively: schedule job with shortest next CPU burst
+  \item \textbf{Idea}: SJF, but preempt periodically to make new scheduling decision
+  \begin{itemize}
+    \item each time slice: schedule job with shortest remaining time next
+    \item alternatively: schedule job with shortest next CPU burst
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- round robin}
 \begin{itemize}
   \item \textbf{Problem}: batch schedulers suffer from starvation and don't provide fairness
-  \item \textbf{Idea}: each process runs for small CPU time unit \\*
-    - \emph{time quantum}/\emph{time slice} length: usually 10-100ms \\*
-    - preempt processes that have not blocked by end of time slice \\*
-    - append current thread to end of run queue, run next thread
-  \item \textbf{Caution}: time slice length needs to balance interactivity and overhead! \\*
-    \( \to \) if time slice length in the area of dispatch time, 50\% of CPU time wasted for process switching
+  \item \textbf{Idea}: each process runs for small CPU time unit
+  \begin{itemize}
+    \item \emph{time quantum}/\emph{time slice} length: usually 10-100ms
+    \item preempt processes that have not blocked by end of time slice
+    \item append current thread to end of run queue, run next thread
+  \end{itemize}
+  \item \textbf{Caution}: time slice length needs to balance interactivity and overhead!
+  \begin{itemize}
+    \item[$ \to $] if time slice length in the area of dispatch time, 50\% of CPU time wasted for process switching
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- virtual round robin}
 \begin{itemize}
   \item \textbf{Problem}: RR is unfair for I/O-bound jobs: they block before using up time quantum
-  \item \textbf{Idea}: put jobs that didn't use up their quantum in additional queue \\*
-    - store share of unused time-slice \\*
-    - give those jobs additional queue priority \\*
-    - put them back into normal queue afterwards
+  \item \textbf{Idea}: put jobs that didn't use up their quantum in additional queue
+  \begin{itemize}
+    \item store share of unused time-slice
+    \item give those jobs additional queue priority
+    \item put them back into normal queue afterwards
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- (strict) priority scheduling}
 \begin{itemize}
   \item \textbf{Problem}: not all jobs are equally important \\*
     \( \leadsto \) different priorities (e.g., 4)
-  \item \textbf{Solution}: associate priority number with each process \\*
-    - RR for each priority \\*
-    - \emph{aging}: old low priority processes get executed before new higher priority processes
+  \item \textbf{Solution}: associate priority number with each process
+  \begin{itemize}
+    \item RR for each priority
+    \item \emph{aging}: old low priority processes get executed before new higher priority processes
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- multi-level feedback queue}
 \begin{itemize}
   \item \textbf{Problem}: context switching expensive \\*
     \( \leadsto \) trade-off between interactivity and overhead?
-  \item \textbf{Goals}: \\*
-    - higher priority for I/O jobs (usually don't use up quantum) \\*
-    - low priority for CPU jobs (rather run them longer)
-  \item \textbf{Idea}: different queues with different priorities and time slice lengths \\*
-    - schedule queues with (static) priority scheduling \\*
-    - double time slice length in each next-lower priority \\*
-    - process to higher priority when they don't use up quantum repetitively \\*
-    - process to lower priority when they use up quantum repetitively
+  \item \textbf{Goals}:
+  \begin{itemize}
+    \item higher priority for I/O jobs (usually don't use up quantum)
+    \item low priority for CPU jobs (rather run them longer)
+  \end{itemize}
+  \item \textbf{Idea}: different queues with different priorities and time slice lengths
+  \begin{itemize}
+    \item schedule queues with (static) priority scheduling
+    \item double time slice length in each next-lower priority
+    \item process to higher priority when they don't use up quantum repetitively
+    \item process to lower priority when they use up quantum repetitively
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Principles --- priority donation}
 \begin{itemize}
   \item \textbf{Problem}: Process B (higher priority) waits for process A (lower priority) \\*
     \( \leadsto \) B has now effectively lower priority
-  \item \textbf{Solution}: \emph{priority donation} \\*
-    - give A priority of B as long as B waits for A \\*
-    - if C, D, E wait for B \( \to \) A gets highest priority of B, C, D, E
+  \item \textbf{Solution}: \emph{priority donation}
+  \begin{itemize}
+    \item give A priority of B as long as B waits for A
+    \item if C, D, E wait for B \( \to \) A gets highest priority of B, C, D, E
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Scheduling Policies --- lottery scheduling}
@@ -196,13 +239,19 @@
 
 \begin{summary}
   \begin{itemize}
-    \item \textbf{phases}: processes have phases of communication and waiting for I/O \\*
-      $ \to $ appropriate switching between processes increases computing system utilization
-    \item \textbf{goal-based}: scheduler decides what appropriate means based on goals \\*
-      $ - $ \emph{long-term scheduler}: degree of multiprogramming \\*
-      $ - $ \emph{short-term scheduler}: which process to run next
-    \item \textbf{dispatching}: only happens when OS is invoked \\*
-      $ - $ \emph{cooperative scheduling}: currently running thread yields (syscall) \\*
-      $ - $ \emph{preemptive scheduling}: OS is called periodically to switch threads
+    \item \textbf{phases}: processes have phases of communication and waiting for I/O
+    \begin{itemize}
+      \item[$ \to $] appropriate switching between processes increases computing system utilization
+    \end{itemize}
+    \item \textbf{goal-based}: scheduler decides what appropriate means based on goals
+    \begin{itemize}
+      \item \emph{long-term scheduler}: degree of multiprogramming
+      \item \emph{short-term scheduler}: which process to run next
+    \end{itemize}
+    \item \textbf{dispatching}: only happens when OS is invoked
+    \begin{itemize}
+      \item \emph{cooperative scheduling}: currently running thread yields (syscall)
+      \item \emph{preemptive scheduling}: OS is called periodically to switch threads
+    \end{itemize}
   \end{itemize}
 \end{summary}
