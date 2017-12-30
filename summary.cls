@@ -19,6 +19,7 @@
 \RequirePackage{titlesec}
 \RequirePackage{environ}
 \RequirePackage[compatibility=true]{caption}
+\RequirePackage{float}
 
 
 % Packages --- Math
