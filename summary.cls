@@ -17,6 +17,7 @@
 \RequirePackage{crimson}
 \RequirePackage{scrextend}
 \RequirePackage{titlesec}
+\RequirePackage{environ}
 \RequirePackage[compatibility=true]{caption}
 
 
@@ -32,9 +33,9 @@
 \RequirePackage{listings}
 
 % Packages --- Graphics
-\usepackage{graphicx}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{tcolorbox}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{tcolorbox}
 
 
 % Glyph-to-Unicode Translation for searching in PDFs (needs PdfTex >=1.4)
@@ -188,6 +189,15 @@
   {
     \end{tcolorbox}
   }
+
+\NewEnviron{rotanswer}{%
+  \begin{tikzpicture}
+  \node[rotate=180,inner sep=0pt] {\parbox{\linewidth}{%
+  \footnotesize
+  \BODY
+  }};
+\end{tikzpicture}%
+}
 
 \newenvironment{assignment}
   {
