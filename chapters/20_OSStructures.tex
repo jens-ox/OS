@@ -2,68 +2,88 @@
 
 \paragraph{Monolithic Systems}
 \begin{itemize}
-  \item \textbf{advantages}: \\*
-    $ - $ well understood \\*
-    $ - $ easy access to all system data (all shared) \\*
-    $ - $ low module interaction cost (procedure call) \\*
-    $ - $ extensible via interface definitions
-  \item \textbf{disadvantages}: \\*
-    $ - $ no protection between system and application \\*
-    $ - $ not stable/robust
+  \item \textbf{Advantages}:
+  \begin{itemize}
+    \item[+] well understood 
+    \item[+] easy access to all system data (all shared) 
+    \item[+] low module interaction cost (procedure call) 
+    \item[+] extensible via interface definitions
+   \end{itemize} 
+  \item \textbf{Disadvantages}:
+  \begin{itemize}
+    \item[-] no protection between system and application 
+    \item[-] not stable/robust
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Layered Systems}
 \begin{itemize}
-  \item \textbf{principle}: system is divided into many \emph{layers}: \\*
-    $ - $ \emph{each layer} uses functions and services of lower levels \\*
-    $ - $ \emph{bottom layer} = hardware \\*
-    $ - $ \emph{top layer} = user interface \\*
-    $ - $ \emph{lower layers}: implement mechanisms \\*
-    $ - $ \emph{higher layers}: implement policies (mostly)
-  \item \textbf{advantages}: \\*
-    $ - $ \emph{modular}: each layer can be tested/verifies independently \\*
-    $ - $ \emph{correctness} of layer $ n $ only depends on layer $ n-1 $ $ \to $ simple debugging/maintenance
-  \item \textbf{disadvantages}: \\*
-    $ - $ just unidirectional protection \\*
-    $ - $ mutual dependencies prevent strict layering
+  \item \textbf{Principle}: system is divided into many \emph{layers}:
+  \begin{itemize}
+    \item \emph{each layer} uses functions and services of lower levels 
+    \item \emph{bottom layer}: hardware 
+    \item \emph{top layer}: user interface 
+    \item \emph{lower layers}: implement mechanisms 
+    \item \emph{higher layers}: implement policies (mostly)
+  \end{itemize}
+  \item \textbf{Advantages}: 
+  \begin{itemize}
+    \item[+] \emph{modular}: each layer can be tested/verifies independently 
+    \item[+] \emph{correctness} of layer $ n $ only depends on layer $ n-1 $ $ \to $ simple debugging/maintenance
+  \end{itemize}
+  \item \textbf{Disadvantages}:
+  \begin{itemize}
+    \item[-] just unidirectional protection 
+    \item[-] mutual dependencies prevent strict layering
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Monolithic Kernels}
 \begin{itemize}
-  \item \textbf{advantages}: \\*
-    $ - $ well understood \\*
-    $ - $ performance OK \\*
-    $ - $ sufficient protection between applications \\*
-    $ - $ extensible via definitions + static/loadable modules
-  \item \textbf{disadvantages}: \\*
-    $ - $ no protection between kernel components \\*
-    $ - $ side-effects by undocumented interfaces \\*
-    $ - $ complexity due to high degree of interdependency
+  \item \textbf{Advantages}:
+  \begin{itemize}
+    \item[+] well understood 
+    \item[+] performance OK 
+    \item[+] sufficient protection between applications 
+    \item[+] extensible via definitions + static/loadable modules
+  \end{itemize}
+  \item \textbf{Disadvantages}:
+  \begin{itemize}
+    \item[-] no protection between kernel components 
+    \item[-] side-effects by undocumented interfaces 
+    \item[-] complexity due to high degree of interdependency
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Micro-Kernels}
 \begin{itemize}
-  \item \textbf{advantages}: \\*
-    $ - $ easier to test/prove/modify \\*
-    $ - $ improved robustness/security \\*
-    $ - $ improved maintainability \\*
-    $ - $ coexistence of several APIs \\*
-    $ - $ natural extensibility
-  \item \textbf{disadvantages}: \\*
-    $ - $ additional decomposing \\*
-    $ - $ low performance due to communication overhead
+  \item \textbf{Advantages}:
+  \begin{itemize}
+    \item[+] easier to test/prove/modify 
+    \item[+] improved robustness/security 
+    \item[+] improved maintainability 
+    \item[+] coexistence of several APIs 
+    \item[+] natural extensibility   
+  \end{itemize} 
+  \item \textbf{Disadvantages}:
+  \begin{itemize}
+    \item[-] additional decomposing 
+    \item[-] low performance due to communication overhead
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Virtual Machines}
 \begin{itemize}
-  \item \textbf{principle}: takes layered approach to logical conclusion --- treats hardware + OS kernel as like they were hardware
+  \item \textbf{Principle}: takes layered approach to logical conclusion --- treats hardware + OS kernel as like they were hardware
   \item VM provides \emph{identical} interface to underlying bare hardware
   \item OS host creates illusion that process has own processor, memory,\dots
   \item each guest gets (virtual) copy of underlying computer
-  \item \textbf{benefits}: \\*
-    $ - $ multiple execution environments can share same hardware \\*
-    $ - $ protection \\*
-    $ - $ controllable file sharing \\*
-    $ - $ use networking to communicate with each other \\*
-    $ - $ useful for development/testing
+  \item \textbf{Benefits}:
+  \begin{itemize}
+    \item multiple execution environments can share same hardware 
+    \item protection 
+    \item controllable file sharing 
+    \item use networking to communicate with each other 
+    \item useful for development/testing
+  \end{itemize}
 \end{itemize}
