@@ -1,125 +1,161 @@
 \section{Memory Allocation}
 
-\paragraph{Memory Allocation --- dynamic}
+\paragraph{Memory Allocation --- Dynamic}
 \begin{itemize}
-  \item = allocate + free memory chunks of arbitrary size at arbitrary points in time \\*
-    $ - $ almost every program uses it (heap) \\*
-    $ - $ don't have to statically specify complex data structures \\*
-    $ - $ can have data grow as function of input size \\*
-    $ - $ kernel itself uses dynamic memory allocation for its data structures
-  \item \textbf{implementation}: has huge impact on performance, both in user and kernel space
-  \item \textbf{fact}: it is impossible to construct memory allocator that always performs well \\*
-    $ \to $ need to understand trade-offs to pick good allocation strategy
+  \item[=] allocate + free memory chunks of arbitrary size at arbitrary points in time
+  \begin{itemize}
+    \item almost every program uses it (heap)
+    \item don't have to statically specify complex data structures
+    \item can have data grow as function of input size
+    \item kernel itself uses dynamic memory allocation for its data structures
+  \end{itemize}
+  \item \textbf{Implementation}: has huge impact on performance, both in user and kernel space
+  \item \textbf{Fact}: it is impossible to construct memory allocator that always performs well
+  \begin{itemize}
+    \item[$ \to $] need to understand trade-offs to pick good allocation strategy
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Dynamic Memory Allocation --- principle}
+\paragraph{Dynamic Memory Allocation --- Principle}
 \begin{itemize}
-  \item \textbf{initial}: pool of free memory
-  \item \textbf{tasks}: \\*
-    $ - $ satisfy arbitrary \code{allocate} + \code{free} requests from pool \\*
-    $ - $ track which parts are in use/are free
-  \item \textbf{restrictions}: \\*
-    $ - $ cannot control order/number of requests \\*
-    $ - $ cannot move allocated regions $ \to $ fragmentation = core problem!
+  \item \textbf{Initial}: pool of free memory
+  \item \textbf{Tasks}:
+  \begin{itemize}
+    \item satisfy arbitrary \code{allocate} + \code{free} requests from pool
+    \item track which parts are in use/are free
+  \end{itemize}
+  \item \textbf{Restrictions}:
+  \begin{itemize}
+    \item cannot control order/number of requests
+    \item cannot move allocated regions $ \to $ fragmentation = core problem!
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Dynamic Memory Allocation --- bitmap}
+\paragraph{Dynamic Memory Allocation --- Bitmap}
 \begin{itemize}
-  \item \textbf{idea}: \\*
-    $ - $ divide memory in allocation units of fixed size \\*
-    $ - $ use bitmap to keep track if allocated (1) or free (0)
-  \item \textbf{problem}: needs additional data structure to store allocation length (otherwise cannot infer whether two adjacent allocations belong together or not from bitmap)
+  \item \textbf{Idea}:
+  \begin{itemize}
+    \item divide memory in allocation units of fixed size
+    \item use bitmap to keep track if allocated (1) or free (0)
+  \end{itemize}
+  \item \textbf{Problem}: needs additional data structure to store allocation length (otherwise cannot infer whether two adjacent allocations belong together or not from bitmap)
 \end{itemize}
 
-\paragraph{Dynamic Memory Allocation --- list}
+\paragraph{Dynamic Memory Allocation --- List}
 \begin{itemize}
-  \item \textbf{method 1}: use one list-node for each allocated data \\*
-    $ - $ \emph{extra space} needed for list \\*
-    $ - $ allocation lengths already stored
-  \item \textbf{method 2}: use one list-node for each unallocated data \\*
-    $ - $ can keep list in unallocated area (store size of free area + pointer to next free area in free area) \\*
-    $ - $ \emph{additional data structure} needed to store allocation lengths \\*
-    $ - $ can search for free space with low overhead
-  \item \textbf{method 3}: both
+  \item \textbf{Method 1}: use one list-node for each allocated data
+  \begin{itemize}
+    \item \emph{extra space} needed for list
+    \item allocation lengths already stored
+  \end{itemize}
+  \item \textbf{Method 2}: use one list-node for each unallocated data
+  \begin{itemize}
+    \item can keep list in unallocated area (store size of free area + pointer to next free area in free area)
+    \item \emph{additional data structure} needed to store allocation lengths
+    \item can search for free space with low overhead
+  \end{itemize}
+  \item \textbf{Method 3}: both
 \end{itemize}
 
-\paragraph{Dynamic Memory Allocation --- problems}
+\paragraph{Dynamic Memory Allocation --- Problems}
 \begin{itemize}
-  \item \textbf{fragmentation} is hard to handle
-  \item \textbf{factors} needed for fragmentation to occur: \\*
-    $ - $ \emph{different lifetimes} \\*
-    $ - $ \emph{different sizes} \\*
-    $ - $ \emph{inability to relocate previous allocations}
+  \item \textbf{Fragmentation} is hard to handle
+  \item \textbf{Factors} needed for fragmentation to occur:
+  \begin{itemize}
+    \item \emph{different lifetimes}
+    \item \emph{different sizes}
+    \item \emph{inability to relocate previous allocations}
+  \end{itemize}
   \item all fragmentation factors present in dynamic memory allocators!
 \end{itemize}
 
-\paragraph{Allocation --- best fit vs. worst fit}
+\paragraph{Allocation --- Best fit vs. Worst fit}
 \begin{itemize}
-  \item \textbf{idea}: keep large free memory chunks together for larger allocation requests that may arrive later
-  \item \textbf{best-fit}: allocate smallest free block large enough to store allocation request \\*
-    $ - $ must search entire list \\*
-    $ - $ \emph{problem}: sawdust --- remainder so small that over time left with unusable sawdust everywhere \\*
-    $ - $ \emph{idea}: minimize sawdust by turning strategy around
-  \item \textbf{worst-fit}: allocate largest free block \\*
-    $ - $ must search entire list \\*
-    $ - $ \emph{reality}: worse fragmentation than best-fit
+  \item \textbf{Idea}: keep large free memory chunks together for larger allocation requests that may arrive later
+  \item \textbf{Best-fit}: allocate smallest free block large enough to store allocation request
+  \begin{itemize}
+    \item must search entire list
+    \item \emph{problem}: sawdust --- remainder so small that over time left with unusable sawdust everywhere
+    \item \emph{idea}: minimize sawdust by turning strategy around
+  \end{itemize}
+  \item \textbf{Worst-fit}: allocate largest free block
+  \begin{itemize}
+    \item must search entire list
+    \item \emph{reality}: worse fragmentation than best-fit
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Allocation --- first fit}
+\paragraph{Allocation --- First fit}
 \begin{itemize}
-  \item \textbf{idea}: if fragmentation occurs with best and worst fit, optimize for allocation speed
-  \item \textbf{principle}: allocate first hole big enough \\*
-    $ - $ fastest allocation policy \\*
-    $ - $ produced leftover holes of variable size \\*
-    $ - $ \emph{reality}: almost as good as best-fit
+  \item \textbf{Idea}: if fragmentation occurs with best and worst fit, optimize for allocation speed
+  \item \textbf{Principle}: allocate first hole big enough
+  \begin{itemize}
+    \item fastest allocation policy
+    \item produced leftover holes of variable size
+    \item \emph{reality}: almost as good as best-fit
+  \end{itemize}
 \end{itemize}
 
-\paragraph{First Fit --- variants}
+\paragraph{First Fit --- Variants}
 \begin{itemize}
   \item \textbf{first-fit sorted by address order}
   \item \textbf{LIFO first-fit}
   \item \textbf{next fit}
 \end{itemize}
 
-\paragraph{Allocation --- buddy allocator}
+\paragraph{Allocation --- Buddy allocator}
 \begin{itemize}
-  \item \textbf{idea}: allocate memory in powers of 2 \\*
-    $ - $ all chunks have fixed $ 2^n $-size $ \to $ allocation request rounded up to next-higher power of 2 \\*
-    $ - $ all chunks naturally aligned
-  \item \textbf{no sufficiently small block available}: \\*
-    $ - $ select larger available chunk, split into two same-sized buddies \\*
-    $ - $ continue until appropriately sized chunk is available
+  \item \textbf{Idea}: allocate memory in powers of 2
+  \begin{itemize}
+    \item all chunks have fixed $ 2^n $-size $ \to $ allocation request rounded up to next-higher power of 2
+    \item all chunks naturally aligned
+  \end{itemize}
+  \item \textbf{no sufficiently small block available}:
+  \begin{itemize}
+    \item select larger available chunk, split into two same-sized buddies
+    \item continue until appropriately sized chunk is available
+  \end{itemize}
   \item \textbf{two buddies both free} ($ 2^n $): merge to $ 2^{n+1} $-chunk
 \end{itemize}
 
 \paragraph{Real Program Patterns}
 \begin{itemize}
-  \item \textbf{ramps}: accumulate data monotonically over time
-  \item \textbf{peaks}: allocate many objects, use briefly, then free all
-  \item \textbf{plateaus}: allocate many objects, use for long time
+  \item \textbf{Ramps}: accumulate data monotonically over time
+  \item \textbf{Peaks}: allocate many objects, use briefly, then free all
+  \item \textbf{Plateaus}: allocate many objects, use for long time
 \end{itemize}
 
-\paragraph{Allocation --- slabs}
+\paragraph{Allocation --- Slabs}
 \begin{itemize}
   \item kernel often allocates/frees memory for few, specific data objects of fixed size
-  \item \textbf{slab}: multiple pages of contiguous physical memory \\*
-    $ - $ linux: uses buddy allocator as underlying allocator for slabs
-  \item \textbf{cache}: one or multiple slabs \\*
-    $ - $ stores only one kind of object (fixed size)
+  \item \textbf{Slab}: multiple pages of contiguous physical memory
+  \begin{itemize}
+    \item linux: uses buddy allocator as underlying allocator for slabs
+  \end{itemize}
+  \item \textbf{Cache}: one or multiple slabs
+  \begin{itemize}
+    \item stores only one kind of object (fixed size)
+  \end{itemize}
 \end{itemize}
 
 \begin{summary}
   \begin{itemize}
     \item dynamic memory means allocating and freeing memory chunks of different sizes at any time
     \item impossible to construct memory allocator that always performs well
-    \item typical dynamic memory data structures: \\*
-      $ - $ bitmaps \\*
-      $ - $ lists
-    \item simple, well-performing allocation strategies: \\*
-      $ - $ best-fit \\*
-      $ - $ first-fit
-    \item advanced strategies: \\*
-      $ - $ buddy-allocator \\*
-      $ - $ slab-allocator
+    \item typical dynamic memory data structures:
+    \begin{itemize}
+      \item bitmaps
+      \item lists
+    \end{itemize}
+    \item simple, well-performing allocation strategies:
+    \begin{itemize}
+      \item best-fit
+      \item first-fit 
+    \end{itemize}
+    \item advanced strategies:
+    \begin{itemize}
+      \item buddy-allocator
+      \item slab-allocator 
+    \end{itemize}
   \end{itemize}
 \end{summary}
