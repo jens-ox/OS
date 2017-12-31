@@ -1,33 +1,39 @@
 \section{File Systems}
 
-\paragraph{File Systems --- motivation}
+\paragraph{File Systems --- Motivation}
 \begin{itemize}
-  \item \textbf{goal}: enable storing of large data amounts \\*
-    $ - $ store data/program consistently + persistently \\*
-    $ - $ easily look up previously stored data/program
-  \item \textbf{file types}: \\*
-    $ - $ \emph{data} (numeric, character, binary) \\*
-    $ - $ \emph{program}
+  \item \textbf{Goal}: enable storing of large data amounts
+  \begin{itemize}
+    \item store data/program consistently + persistently
+    \item easily look up previously stored data/program
+  \end{itemize}
+  \item \textbf{File types}:
+  \begin{itemize}
+    \item \emph{data} (numeric, character, binary)
+    \item \emph{program}
+  \end{itemize}
 \end{itemize}
 
-\paragraph{File Systems --- overview}
+\paragraph{File Systems --- Overview}
 \begin{itemize}
   \item OS may support multiple file systems
-  \item \textbf{namespace}: all file systems typically bound into single namespace (often hierarchical, rooted tree)
+  \item \textbf{Namespace}: all file systems typically bound into single namespace (often hierarchical, rooted tree)
 \end{itemize}
 
-\paragraph{Files -- abstract operations}
+\paragraph{Files -- Abstract operations}
 \begin{itemize}
-  \item \textbf{file}: abstract data type/object, offering \\*
-    $ - $ \code{create}, \code{write}, \code{read}, \\*
-    $ - $ \code{reposition} (within file), \\*
-    $ - $ \code{delete}, \code{truncate}, \\*
-    $ - $ \code{open(}$ F_i $\code{)} (search directory structure on disk for entry $ F_i $, move meta data to memory),  \\*
-    $ - $ \code{close(}$ F_i $\code{)} (move cached meta data of entry $ F_i $ in memory to directory structure on disk)
+  \item \textbf{File}: abstract data type/object, offering
+  \begin{itemize}
+    \item \code{create}, \code{write}, \code{read},
+    \item \code{reposition} (within file),
+    \item \code{delete}, \code{truncate},
+    \item \code{open(}$ F_i $\code{)} (search directory structure on disk for entry $ F_i $, move meta data to memory),
+    \item \code{close(}$ F_i $\code{)} (move cached meta data of entry $ F_i $ in memory to directory structure on disk)
+  \end{itemize}
 \end{itemize}
 \begin{figure}[h]\centering\label{FileSystemInteraction}\includegraphics[width=0.4\textwidth]{FileSystemInteraction}\end{figure}
 
-\paragraph{File Management --- goals}
+\paragraph{File Management --- Goals}
 \begin{itemize}
   \item provide convenient file naming scheme
   \item provide uniform I/O support for variety of storage device types
@@ -38,53 +44,65 @@
   \item provide acceptable performance
 \end{itemize}
 
-\paragraph{File Management --- open files}
+\paragraph{File Management --- Open files}
 \begin{itemize}
   \item several meta data is needed to manage open files
-  \item \textbf{file pointer}: pointer to last read/write location, per process that has file opened
-  \item \textbf{access rights}: per-process access mode information
-  \item \textbf{file-open count}: counter of number of times a file is opened (to allow removal of data from open-file table when last process closes)
-  \item \textbf{disk location}: cache of data access information
+  \item \textbf{File pointer}: pointer to last read/write location, per process that has file opened
+  \item \textbf{Access rights}: per-process access mode information
+  \item \textbf{File-open count}: counter of number of times a file is opened (to allow removal of data from open-file table when last process closes)
+  \item \textbf{Disk location}: cache of data access information
 \end{itemize}
 
 \paragraph{File Access}
 \begin{itemize}
-  \item \textbf{strictly sequential} (early systems): \\*
-    $ - $ read all bytes/records from beginning \\*
-    $ - $ cannot jump round, could only rewind \\*
-    $ - $ sufficient as long as storage was a tape
-  \item \textbf{random access} (current systems): \\*
-    $ - $ bytes/records read in any order \\*
-    $ - $ essential for database systems
+  \item \textbf{Strictly sequential} (early systems):
+  \begin{itemize}
+    \item read all bytes/records from beginning
+    \item cannot jump round, could only rewind
+    \item sufficient as long as storage was a tape
+  \end{itemize}
+  \item \textbf{Random access} (current systems):
+  \begin{itemize}
+    \item bytes/records read in any order
+    \item essential for database systems
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Directories --- goals}
+\paragraph{Directories --- Goals}
 \begin{itemize}
-  \item \textbf{naming}: convenient to users \\*
-    $ - $ two users can have same name for different files \\*
-    $ - $ same file can have several different names
-  \item \textbf{grouping}: logical grouping of files by properties
-  \item \textbf{efficiency}: fast operations
+  \item \textbf{Naming}: convenient to users
+  \begin{itemize}
+    \item two users can have same name for different files
+    \item same file can have several different names
+  \end{itemize}
+  \item \textbf{Grouping}: logical grouping of files by properties
+  \item \textbf{Efficiency}: fast operations
 \end{itemize}
 
-\paragraph{Files --- sharing}
+\paragraph{Files --- Sharing}
 \begin{itemize}
-  \item \textbf{issues}: \\*
-    $ - $ efficiently access to same file? \\*
-    $ - $ how to determine access rights? \\*
-    $ - $ management of concurrent accesses?
-  \item \textbf{access rights}: \\*
-    $ - $ \emph{none}: existence unknown to user, user cannot read directory containing file \\*
-    $ - $ \emph{knowledge}: user can only determine existence and file ownership \\*
-    $ - $ \emph{execution}: user can load + execute program, but can not copy it \\*
-    $ - $ \emph{reading}: user can read file (includes copying + execution) \\*
-    $ - $ \emph{appending}: user can only add data to file, but cannot modify/delete data in file \\*
-    $ - $ \emph{updating}: user can modify + delete + add to file (includes creating + removing all data) \\*
-    $ - $ \emph{change protection}: user can change access rights granted to other users \\*
-    $ - $ \emph{deletion}: user can delete file \\*
-    $ - $ \emph{owner}: all previous rights + rights granting
-  \item \textbf{concurrent access}: \\*
-    $ - $ \emph{application locking}: application can lock entire file or individual records for updating \\*
-    $ - $ \emph{exclusive vs. shared}: writer lock vs. multiple readers allowed \\*
-    $ - $ \emph{mandatory vs. advisory}: access denied depending on locks vs. process can decide what to do
+  \item \textbf{Issues}:
+  \begin{itemize}
+    \item efficiently access to same file?
+    \item how to determine access rights?
+    \item management of concurrent accesses?
+  \end{itemize}
+  \item \textbf{Access rights}:
+  \begin{itemize}
+    \item \emph{none}: existence unknown to user, user cannot read directory containing file 
+    \item \emph{knowledge}: user can only determine existence and file ownership 
+    \item \emph{execution}: user can load + execute program, but can not copy it 
+    \item \emph{reading}: user can read file (includes copying + execution) 
+    \item \emph{appending}: user can only add data to file, but cannot modify/delete data in file 
+    \item \emph{updating}: user can modify + delete + add to file (includes creating + removing all data) 
+    \item \emph{change protection}: user can change access rights granted to other users 
+    \item \emph{deletion}: user can delete file 
+    \item \emph{owner}: all previous rights + rights granting
+  \end{itemize} 
+  \item \textbf{Concurrent access}:
+  \begin{itemize}
+    \item \emph{application locking}: application can lock entire file or individual records for updating 
+    \item \emph{exclusive vs. shared}: writer lock vs. multiple readers allowed 
+    \item \emph{mandatory vs. advisory}: access denied depending on locks vs. process can decide what to do
+  \end{itemize}
 \end{itemize}
