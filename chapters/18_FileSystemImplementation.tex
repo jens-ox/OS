@@ -2,139 +2,171 @@
 
 \paragraph{Disk Structure}
 \begin{itemize}
-  \item \textbf{partitions}: disk can be subdivided into partitions
-  \item \textbf{raw usage}: disks/partitions can be used raw (unformatted) or formatted with file system
-  \item \textbf{volume}: entry containing FS \\*
-    $ - $ tracks that file system's info is in device directory or volume table of contents
+  \item \textbf{Partitions}: disk can be subdivided into partitions
+  \item \textbf{Raw usage}: disks/partitions can be used raw (unformatted) or formatted with file system
+  \item \textbf{Volume}: entry containing FS
+  \begin{itemize}
+    \item tracks that file system's info is in device directory or volume table of contents
+  \end{itemize}
   \item \textbf{FS diversity}: there are general purpose and special purpose FS
 \end{itemize}
 
-\paragraph{File Systems --- logical vs. physical}
+\paragraph{File Systems --- Logical vs. Physical}
 \begin{itemize}
-  \item \textbf{logical}: can consist of different physical file systems
-  \item \textbf{placement}: file system can be mounted at any place within another file system
-  \item \textbf{mounted local root}: bit in i-node of local root in mounted file system identifies this directory as mount point
+  \item \textbf{Logical}: can consist of different physical file systems
+  \item \textbf{Placement}: file system can be mounted at any place within another file system
+  \item \textbf{Mounted local root}: bit in i-node of local root in mounted file system identifies this directory as mount point
 \end{itemize}
 
-\paragraph{File Systems --- layers}
+\paragraph{File Systems --- Layers}
 \begin{itemize}
-  \item \textbf{layer 5}: applications
-  \item \textbf{layer 4}: logical file system
-  \item \textbf{layer 3}: file-organization module
-  \item \textbf{layer 2}: basic file system
-  \item \textbf{layer 1}: I/O control
-  \item \textbf{layer 0}: devices
+  \item \textbf{Layer 5}: applications
+  \item \textbf{Layer 4}: logical file system
+  \item \textbf{Layer 3}: file-organization module
+  \item \textbf{Layer 2}: basic file system
+  \item \textbf{Layer 1}: I/O control
+  \item \textbf{Layer 0}: devices
 \end{itemize}
 
-\paragraph{File Systems --- virtual}
+\paragraph{File Systems --- Virtual}
 \begin{itemize}
-  \item \textbf{principle}: provide object-oriented way of implementing file systems \\*
-    $ - $ same API used for different file system types
+  \item \textbf{Principle}: provide object-oriented way of implementing file systems
+  \begin{itemize}
+    \item same API used for different file system types
+  \end{itemize}
 \end{itemize}
 \begin{figure}[h]\centering\label{VirtualFileSystem}\includegraphics[width=0.33\textwidth]{VirtualFileSystem}\end{figure}
 
-\paragraph{Files --- implementation}
+\paragraph{Files --- Implementation}
 \begin{itemize}
-  \item \textbf{meta data} must be tracked: \\*
-    $ - $ which logical block belongs to which file? \\*
-    $ - $ block order? \\*
-    $ - $ which blocks are free for next allocation?
-  \item \textbf{block identification}: blocks on disk must be identified by FS (given logical region of file) \\*
-    $ \to $ meta data needed in \emph{file allocation table}, \emph{directory} and \emph{inode}
-  \item \textbf{block management}: creating/updating files might imply allocating new/modifying old disk blocks
+  \item \textbf{Meta data} must be tracked:
+  \begin{itemize}
+    \item which logical block belongs to which file?
+    \item block order?
+    \item which blocks are free for next allocation?
+  \end{itemize}
+  \item \textbf{Block identification}: blocks on disk must be identified by FS (given logical region of file)
+  \begin{itemize}
+    \item[$ \to $] meta data needed in \emph{file allocation table}, \emph{directory} and \emph{inode}
+  \end{itemize}
+  \item \textbf{Block management}: creating/updating files might imply allocating new/modifying old disk blocks
 \end{itemize}
 
-\paragraph{Allocation --- policies}
+\paragraph{Allocation --- Policies}
 \begin{itemize}
-  \item \textbf{preallocation}: \\*
-    $ - $ \emph{problem}: need to know maximum file size at creation time \\*
-    $ - $ often difficult to reliably estimate maximum file size \\*
-    $ - $ users tend to overestimate file size to avoid running out of space
-  \item \textbf{dynamic allocation}: allocate in pieces as needed
+  \item \textbf{Preallocation}:
+  \begin{itemize}
+    \item \emph{problem}: need to know maximum file size at creation time
+    \item often difficult to reliably estimate maximum file size
+    \item users tend to overestimate file size to avoid running out of space
+  \end{itemize}
+  \item \textbf{Dynamic allocation}: allocate in pieces as needed
 \end{itemize}
 
-\paragraph{Allocation --- fragment size}
+\paragraph{Allocation --- Fragment size}
 \begin{itemize}
-  \item \textbf{extremes}: \\*
-    $ - $ fragment size = length of file \\*
-    $ - $ fragment size = smallest disk block size (= sector size)
-  \item \textbf{trade-offs}: \\*
-    $ - $ \emph{contiguity}: speedup for sequential accesses \\*
-    $ - $ \emph{small fragments}: larger tables needed to manage free storage and file access \\*
-    $ - $ \emph{large fragments}: improve data transfer \\*
-    $ - $ \emph{fixed-size fragments}: simplifies space reallocation \\*
-    $ - $ \emph{variable-size fragments}: minimizes internal fragmentation, can lead to external fragmentation
+  \item \textbf{Extremes}:
+  \begin{itemize}
+    \item fragment size = length of file
+    \item fragment size = smallest disk block size (= sector size)
+  \end{itemize}
+  \item \textbf{Trade-offs}:
+  \begin{itemize}
+    \item \emph{contiguity}: speedup for sequential accesses
+    \item \emph{small fragments}: larger tables needed to manage free storage and file access
+    \item \emph{large fragments}: improve data transfer
+    \item \emph{fixed-size fragments}: simplifies space reallocation
+    \item \emph{variable-size fragments}: minimizes internal fragmentation, can lead to external fragmentation
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Allocation --- file space}
+\paragraph{Allocation --- File space}
 \begin{itemize}
-  \item \textbf{contiguous}
-  \item \textbf{chained}
-  \item \textbf{indexed}: \\*
-    $ - $ fixed block fragments \\*
-    $ - $ variable block fragments
+  \item \textbf{Contiguous}
+  \item \textbf{Chained}
+  \item \textbf{Indexed}:
+  \begin{itemize}
+    \item fixed block fragments
+    \item variable block fragments
+  \end{itemize}
 \end{itemize}
 \begin{figure}[h]\centering\label{AllocationOverview}\includegraphics[width=0.33\textwidth]{AllocationOverview}\end{figure}
 
-\paragraph{Allocation --- contiguous}
+\paragraph{Allocation --- Contiguous}
 \begin{itemize}
-  \item \textbf{principle}: array of $ n $ contiguous logical blocks reserved per file (to be created)
-  \item \textbf{periodic compaction}: overcome external fragmentation
+  \item \textbf{Principle}: array of $ n $ contiguous logical blocks reserved per file (to be created)
+  \item \textbf{Periodic compaction}: overcome external fragmentation
 \end{itemize}
 \begin{figure}[h]\centering\label{AllocationContiguous}\includegraphics[width=0.33\textwidth]{AllocationContiguous}\end{figure}
 
-\paragraph{Allocation --- chained}
+\paragraph{Allocation --- Chained}
 \begin{itemize}
-  \item \textbf{principle}: linked list of logical blocks per file \\*
-    $ - $ FAT or directory contains address of first file block \\*
-    $ \to $ \emph{no external fragmentation}: any free block can be added to chain
+  \item \textbf{Principle}: linked list of logical blocks per file
+  \begin{itemize}
+    \item FAT or directory contains address of first file block
+    \item[$ \to $] \emph{no external fragmentation}: any free block can be added to chain
+  \end{itemize}
 \end{itemize}
 \begin{figure}[h]\centering\label{AllocationChained}\includegraphics[width=0.33\textwidth]{AllocationChained}\end{figure}
 
-\paragraph{Allocation --- indexed}
+\paragraph{Allocation --- Indexed}
 \begin{itemize}
-  \item \textbf{principle}: FAT contains one-level index table per file \\*
-    $ - $ \emph{generalization}: $ n $-level index table \\*
-    $ - $ index has one entry for allocated file block \\*
-    $ - $ FAT contains block number for index
+  \item \textbf{Principle}: FAT contains one-level index table per file
+  \begin{itemize}
+    \item \emph{generalization}: $ n $-level index table
+    \item index has one entry for allocated file block
+    \item FAT contains block number for index
+  \end{itemize}
 \end{itemize}
 \begin{figure}[h]\centering\label{AllocationIndexed}\includegraphics[width=0.33\textwidth]{AllocationIndexed}\end{figure}
 
-\paragraph{Directories --- implementation}
+\paragraph{Directories --- Implementation}
 \begin{itemize}
-  \item \textbf{simple directory} (MS-DOS): \\*
-    $ - $ fixed-size entries \\*
-    $ - $ disk addresses + attributes in directory entry
-  \item \textbf{i-node reference directory} (UNIX): \\*
-    $ - $ entry refers to i-node containing attributes
+  \item \textbf{Simple directory} (MS-DOS):
+  \begin{itemize}
+    \item fixed-size entries
+    \item disk addresses + attributes in directory entry
+  \end{itemize}
+  \item \textbf{i-node reference directory} (UNIX):
+  \begin{itemize}
+    \item entry refers to i-node containing attributes
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Disk Blocks --- buffering}
+\paragraph{Disk Blocks --- Buffering}
 \begin{itemize}
-  \item \textbf{buffering}: disk blocks buffered in main memory
-  \item \textbf{access}: buffer access done via hash table \\*
-    $ - $ blocks with same hash value are chained together
-  \item \textbf{replacement}: LRU
-  \item \textbf{management}: free buffer is managed via doubly-linked list
+  \item \textbf{Buffering}: disk blocks buffered in main memory
+  \item \textbf{Access}: buffer access done via hash table
+  \begin{itemize}
+    \item blocks with same hash value are chained together
+  \end{itemize}
+  \item \textbf{Replacement}: LRU
+  \item \textbf{Management}: free buffer is managed via doubly-linked list
 \end{itemize}
 
-\paragraph{File Systems --- journaling}
+\paragraph{File Systems --- Journaling}
 \begin{itemize}
-  \item \textbf{principle}: record each update to file system as \emph{transaction} \\*
-    $ - $ written to log
-  \item \textbf{committed} transaction = written to log \\*
-    $ \to $ \emph{problem}: file system may not yet be updated
-  \item \textbf{writing} transactions from log to FS is asynchronous
-  \item \textbf{modifying} FS $ \to $ transaction removed from log
-  \item \textbf{crash} of file system $ \to $ remaining transactions in log must still be performed
+  \item \textbf{Principle}: record each update to file system as \emph{transaction}
+  \begin{itemize}
+    \item written to log
+  \end{itemize}
+  \item \textbf{Committed} transaction = written to log
+  \begin{itemize}
+    \item[$ \to $] \emph{problem}: file system may not yet be updated
+  \end{itemize}
+  \item \textbf{Writing} transactions from log to FS is asynchronous
+  \item \textbf{Modifying} FS $ \to $ transaction removed from log
+  \item \textbf{Crash} of file system $ \to $ remaining transactions in log must still be performed
 \end{itemize}
 
-\paragraph{File Systems --- log-structured}
+\paragraph{File Systems --- Log-structured}
 \begin{itemize}
-  \item \textbf{principle}: use disk as circular buffer \\*
-    $ - $ write all updated (including i-nodes, meta data and data) to end of log
-  \item \textbf{buffering}: all writes initially buffered in memory
-  \item \textbf{writing}: periodically write within 1 segment (1 MB)
-  \item \textbf{opening}: locate i-node, find blocks
-  \item \textbf{clearing}: clear all data from other end, no longer used
+  \item \textbf{Principle}: use disk as circular buffer
+  \begin{itemize}
+    \item write all updated (including i-nodes, meta data and data) to end of log
+  \end{itemize}
+  \item \textbf{Buffering}: all writes initially buffered in memory
+  \item \textbf{Writing}: periodically write within 1 segment (1 MB)
+  \item \textbf{Opening}: locate i-node, find blocks
+  \item \textbf{Clearing}: clear all data from other end, no longer used
 \end{itemize}
