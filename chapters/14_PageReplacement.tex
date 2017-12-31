@@ -1,98 +1,128 @@
 \section{Page Replacement Policies}
 
-\paragraph{Page Replacement --- naive}
+\paragraph{Page Replacement --- Naive}
 \begin{itemize}
-  \item \textbf{step 1: save/clear victim page}: \\*
-    $ - $ drop page if fetched from disk and clean \\*
-    $ - $ \emph{dirty}: write back modifications if from disk and dirty (unless \code{MAP_COPY}) \\*
-    $ - $ \emph{non-dirty}: write page file/swap partition otherwise (e.g., stack, heap memory)
+  \item \textbf{step 1: save/clear victim page}:
+  \begin{itemize}
+    \item drop page if fetched from disk and clean
+    \item \emph{dirty}: write back modifications if from disk and dirty (unless \code{MAP_COPY})
+    \item \emph{non-dirty}: write page file/swap partition otherwise (e.g., stack, heap memory)
+  \end{itemize}
   \item \textbf{step 2: unmap page from old AS}: invalidate PTE, flush cache
   \item \textbf{step 3: prepare new page}: null page or load new contents
   \item \textbf{step 4: map page frame into new AS}: invalidate PTE, flush cache
 \end{itemize}
 
-\paragraph{Page Replacement --- buffering}
+\paragraph{Page Replacement --- Buffering}
 \begin{itemize}
-  \item \textbf{problem}: naive page replacement encompasses two I/O transfers \\*
-    $ \to $ both operations block page fault from completing
-  \item \textbf{goal}: reduce I/O from critical page fault path to speed up page faults
-  \item \textbf{idea}: keep pool of free page frames (\emph{pre-cleaning}): \\*
-    $ - $ \emph{on page fault}: use page frame from free pool \\*
-    $ - $ \emph{cleaning}: daemon cleans, reclaims and scrubs pages for free pool in background \\*
-    $ \to $ smooths out I/O, speeds up paging significantly
-  \item \textbf{remaining problem}: which pages to select as victims? \\*
-    $ - $ \emph{goal}: identify page that has left working set of its processes, add to free pool \\*
-    $ - $ \emph{success metric}: low overall page fault rate
+  \item \textbf{Problem}: naive page replacement encompasses two I/O transfers
+  \begin{itemize}
+    \item[$ \to $] both operations block page fault from completing
+  \end{itemize}
+  \item \textbf{Goal}: reduce I/O from critical page fault path to speed up page faults
+  \item \textbf{Idea}: keep pool of free page frames (\emph{pre-cleaning}):
+  \begin{itemize}
+    \item \emph{on page fault}: use page frame from free pool
+    \item \emph{cleaning}: daemon cleans, reclaims and scrubs pages for free pool in background
+    \item[$ \to $] smooths out I/O, speeds up paging significantly
+  \end{itemize}
+  \item \textbf{Remaining problem}: which pages to select as victims?
+  \begin{itemize}
+    \item \emph{goal}: identify page that has left working set of its processes, add to free pool
+    \item \emph{success metric}: low overall page fault rate
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Page Replacement --- FIFO}
 \begin{itemize}
-  \item \textbf{idea}: evict oldest fetched page in system
-  \item \textbf{Belady's Anomaly}: using FIFO, for every number $ n $ of page frames you can construct a reference string that performs worse with $ n+1 $ frames \\*
-  $ \to $ with FIFO it is possible to get more page faults with more page frames!
+  \item \textbf{Idea}: evict oldest fetched page in system
+  \item \textbf{Belady's Anomaly}: using FIFO, for every number $ n $ of page frames you can construct a reference string that performs worse with $ n+1 $ frames
+  \begin{itemize}
+    \item[$ \to $] with FIFO it is possible to get more page faults with more page frames!
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Page Replacement --- oracle}
 \begin{itemize}
-  \item = optimal replacement strategy: replace page whose next reference is furthest in future
-  \item \textbf{problem}: future unpredictable
-  \item \textbf{however}: good metric to check how well other algorithms perform
+  \item[=] optimal replacement strategy: replace page with next reference furthest in future
+  \item \textbf{Problem}: future unpredictable
+  \item \textbf{However}: good metric to check how well other algorithms perform
 \end{itemize}
 
 \paragraph{Page Replacement --- LRU}
 \begin{itemize}
-  \item \textbf{goal}: approximate oracle page replacement
-  \item \textbf{idea}: past often predicts future well
-  \item \textbf{assumption}: page used furthest in past is used furthest in future
-  \item \textbf{cycle counter implementation}: \\*
-    $ - $ have MMU write CPU's time stamp counter to PTE on every access \\*
-    $ - $ \emph{page fault}: scan all PTEs to find oldest counter value \\*
-    $ - $ \emph{advantage}: cheap at access if done in HW \\*
-    $ - $ \emph{disadvantage}: memory traffic for scanning
-  \item \textbf{stack implementation}: \\*
-    $ - $ keep doubly linked list of all page frames \\*
-    $ - $ move each referenced page to tail of list \\*
-    $ - $ \emph{advantage}: can find replacement victim in $ O(1) $ \\*
-    $ - $ \emph{disadvantage}: need to change 6 pointers at every access
-  \item $ \leadsto $ \textbf{no silver bullet}: \\*
-    $ - $ \emph{observation}: predicting future based on past is not precise \\*
-    $ - $ \emph{conclusion}: relax requirements --- maybe perfect LRU isn't needed? $ \Rightarrow $ approximate LRU
+  \item \textbf{Goal}: approximate oracle page replacement
+  \item \textbf{Idea}: past often predicts future well
+  \item \textbf{Assumption}: page used furthest in past is used furthest in future
+  \item \textbf{Cycle counter implementation}:
+  \begin{itemize}
+    \item have MMU write CPU's time stamp counter to PTE on every access
+    \item \emph{page fault}: scan all PTEs to find oldest counter value
+    \item \emph{advantage}: cheap at access if done in HW
+    \item \emph{disadvantage}: memory traffic for scanning
+  \end{itemize}
+  \item \textbf{Stack implementation}:
+  \begin{itemize} 
+    \item keep doubly linked list of all page frames
+    \item move each referenced page to tail of list
+    \item \emph{advantage}: can find replacement victim in $ O(1) $
+    \item \emph{disadvantage}: need to change 6 pointers at every access
+  \end{itemize}
+  \item $ \leadsto $ \textbf{No silver bullet}:
+  \begin{itemize}
+    \item \emph{observation}: predicting future based on past is not precise
+    \item \emph{conclusion}: relax requirements --- maybe perfect LRU isn't needed? $ \Rightarrow $ approximate LRU
+  \end{itemize}
 \end{itemize}
 
-\paragraph{LRU Approximation --- clock page replacement}
+\paragraph{LRU Approximation --- Clock page replacement}
 \begin{itemize}
   \item aka \emph{second chance page replacement}
-  \item \textbf{precondition}: MMU sets reference bit in PTE \\*
-    $ - $ supported natively by most hardware \\*
-    $ - $ can easily emulate in systems with software managed TLB (e.g., MIPS)
-  \item \textbf{store}: keep all pages in circular FIFO list
-  \item \textbf{searching} for victim: scan pages in FIFO's order \\*
-    $ - $ if reference bit = 0 $ \to $ use page as victim and advance \\*
-    $ - $ if reference bit = 1 $ \to $ set to 0, continue scanning
-  \item \textbf{problem}: large memory $ \to $ most pages referenced before scanned \\*
-    $ - $ \emph{solution}: use 2 arms, leading arm clears reference bit, trailing arm selects victim
+  \item \textbf{Precondition}: MMU sets reference bit in PTE
+  \begin{itemize}
+    \item supported natively by most hardware
+    \item can easily emulate in systems with software managed TLB (e.g., MIPS)
+  \end{itemize}
+  \item \textbf{Store}: keep all pages in circular FIFO list
+  \item \textbf{Searching} for victim: scan pages in FIFO's order
+  \begin{itemize}
+     \item if reference bit = 0 $ \to $ use page as victim and advance
+     \item if reference bit = 1 $ \to $ set to 0, continue scanning
+  \end{itemize}
+  \item \textbf{Problem}: large memory $ \to $ most pages referenced before scanned
+  \begin{itemize}
+    \item \emph{solution}: use 2 arms, leading arm clears reference bit, trailing arm selects victim
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Replacement Strategies --- other}
 \begin{itemize}
-  \item \textbf{random eviction}: pick random victim \\*
-    $ - $ dirt simple \\*
-    $ - $ not overly horrible in reality
-  \item \textbf{larger counter}: use $ n $-bit reference counter instead of reference bit \\*
-    $ - $ \emph{least frequently used}: rarely used page not in a working set $ \to $ replace page with smallest count \\*
-    $ - $ \emph{most frequently used}: page with smallest count probably just brought in $ \to $ replace page with \\* \phantom{$ - $} \phantom{$ \cdot $} largest count \\*
-    $ - $ neither LFU nor MDU are common (no such hardware, not that great)
+  \item \textbf{Random Eviction}: pick random victim
+  \begin{itemize}
+    \item dirt simple
+    \item not overly horrible in reality
+  \end{itemize}
+  \item \textbf{Larger counter}: use $ n $-bit reference counter instead of reference bit
+  \begin{itemize}
+    \item \emph{least frequently used}: rarely used page not in a working set $ \to $ replace page with smallest count
+    \item \emph{most frequently used}: page with smallest count probably just brought in $ \to $ replace page with largest count
+    \item neither LFU nor MDU are common (no such hardware, not that great)
+  \end{itemize}
 \end{itemize}
 
 \begin{summary}
   \begin{itemize}
-    \item victim page frame needs to be selected by OS when handling page faults \\*
-      $ - $ evicting page frame after page fault happens = not a good idea \\*
-      $ - $ page buffering keeps eviction out of critical path
-    \item different victim selection policies exist \\*
-      $ - $ FIFO $ \to $ Belady's Anomaly \\*
-      $ - $ Oracle $ \to $ cannot predict the future \\*
-      $ - $ Random $ \to $ unpredictable, never great but rarely very bad \\*
-      $ - $ LRU $ \to $ hard to implement efficiently
+    \item victim page frame needs to be selected by OS when handling page faults
+    \begin{itemize}
+      \item evicting page frame after page fault happens = not a good idea
+      \item page buffering keeps eviction out of critical path
+    \end{itemize}
+    \item different victim selection policies exist
+    \begin{itemize}
+      \item FIFO $ \to $ Belady's Anomaly
+      \item Oracle $ \to $ cannot predict the future
+      \item Random $ \to $ unpredictable, never great but rarely very bad
+      \item LRU $ \to $ hard to implement efficiently
+    \end{itemize}
   \end{itemize}
 \end{summary}
