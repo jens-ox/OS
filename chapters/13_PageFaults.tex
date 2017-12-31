@@ -1,216 +1,290 @@
 \section{Page Faults}
 
-\paragraph{Page Faults --- handling}
+\paragraph{Page Faults --- Handling}
 \begin{itemize}
-  \item \textbf{Cause}: access to page currently not present in main memory \\*
-    $ \to $ exception, invoking OS
-  \item \textbf{Process}: \\*
-    $ - $ OS checks access validity (requiring additional info) \\*
-    $ - $ get empty frame \\*
-    $ - $ load contents of requested page from disk into frame \\*
-    $ - $ adapt page table \\*
-    $ - $ set present bit of respective entry \\*
-    $ - $ restart instruction causing page fault
+  \item \textbf{Cause}: access to page currently not present in main memory
+  \begin{itemize}
+    \item[$ \to $] exception, invoking OS
+  \end{itemize}
+  \item \textbf{Process}:
+  \begin{enumerate}
+    \item OS checks access validity (requiring additional info)
+    \item get empty frame
+    \item load contents of requested page from disk into frame
+    \item adapt page table
+    \item set present bit of respective entry
+    \item restart instruction causing page fault
+  \end{enumerate}
 \end{itemize}
 
-\paragraph{Page Faults --- latency}
+\paragraph{Page Faults --- Latency}
 \begin{itemize}
-  \item \textbf{fault rate} $ 0 \leq p \leq 1 $ \\*
-    $ - $ $ p = 0 $: no page faults \\*
-    $ - $ $ p = 1 $: every reference leads to page fault
-  \item \textbf{effective access time} (EAT): \\*
-    $ \text{EAT} = (1-p)*\text{memory access} + p*(\text{PF overhead} + \text{PF service time} + \text{restart overhead}) $
+  \item \textbf{fault rate} $ 0 \leq p \leq 1 $
+  \begin{itemize}
+    \item $ p = 0 $: no page faults
+    \item $ p = 1 $: every reference leads to page fault
+  \end{itemize}
+  \item \textbf{effective access time} (EAT):
+  \begin{equation*}
+    \text{EAT} = (1-p)*\text{memory access} + p*(\text{PF overhead} + \text{PF service time} + \text{restart overhead})
+  \end{equation*}
 \end{itemize}
 
-\paragraph{Page Faults --- performance impact}
+\paragraph{Page Faults --- Performance Impact}
 \begin{itemize}
   \item \textbf{memory access time}: 200ns
   \item \textbf{average page fault service time}: 8ms
-  \item $ \leadsto $ 1:1000 access-page-fault-rate $ \to $ $ \text{EAT} = 8.2\mu s $ $ \Rightarrow $ \emph{slowdown by factor 40}!
+  \item[$ \leadsto $] 1:1000 access-page-fault-rate $ \to $ $ \text{EAT} = 8.2\mu s $ $ \Rightarrow $ \emph{slowdown by factor 40}!
 \end{itemize}
 
-\paragraph{Page Faults --- challenges}
+\paragraph{Page Faults --- Challenges}
 \begin{itemize}
-  \item \textbf{what to eject?} \\*
-    $ - $ how to allocate frames among processes? \\*
-    $ - $ which particular process's pages to keep in memory? \\*
-    $ - $ see \emph{page frame allocation}
-  \item \textbf{what to fetch?} \\*
-    $ - $ what if block size $ \neq $ page size? \\*
-    $ - $ just one page needed? prefetch more?
-  \item \textbf{process resumption?} \\*
-    $ - $ need to save state + resume \\*
-    $ - $ process might have been in middle of instruction
+  \item \textbf{what to eject?}
+  \begin{itemize}
+    \item how to allocate frames among processes?
+    \item which particular process's pages to keep in memory?
+    \item see \emph{page frame allocation}
+  \end{itemize}
+  \item \textbf{what to fetch?}
+  \begin{itemize}
+    \item what if block size $ \neq $ page size?
+    \item just one page needed? prefetch more?
+  \end{itemize}
+  \item \textbf{process resumption?}
+  \begin{itemize}
+    \item need to save state + resume
+    \item process might have been in middle of instruction
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Page Faults --- what to fetch?}
+\paragraph{Page Faults --- What to fetch?}
 \begin{itemize}
   \item bring in page causing fault
-  \item \textbf{pre-fetch} sourrounding pages? \\*
-    $ - $ reading two disk blocks is approximately as fast as reading one \\*
-    $ - $ as long as there is no track/head switch, seek (disk) time dominates \\*
-    $ - $ application exhibits spatial locality = big win
-  \item \textbf{pre-zero} pages? \\*
-    $ - $ don't want to leak information between processes \\*
-    $ - $ need 0-filled pages for stack, heap, .bss, \dots \\*
-    $ - $ \emph{zero on demand}? \\*
-    $ - $ keep pool of 0-pages filled in background when CPU is idle?
+  \item \textbf{pre-fetch} sourrounding pages?
+  \begin{itemize}
+    \item reading two disk blocks is approximately as fast as reading one
+    \item as long as there is no track/head switch, seek (disk) time dominates
+    \item application exhibits spatial locality = big win
+  \end{itemize}
+  \item \textbf{pre-zero} pages?
+  \begin{itemize}
+    \item don't want to leak information between processes
+    \item need 0-filled pages for stack, heap, .bss, \dots
+    \item \emph{zero on demand}?
+    \item keep pool of 0-pages filled in background when CPU is idle?
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Page Faults --- process resumption?}
+\paragraph{Page Faults --- Process resumption?}
 \begin{itemize}
-  \item hardware provides info about page fault \\*
-    (intel: \code{\%cr2} contains faulting virtual address)
-  \item \textbf{context}: OS needs to figure out fault context: \\*
-    $ - $ read or write? \\*
-    $ - $ instruction fetch? \\*
-    $ - $ user access to kernel memory?
-  \item \textbf{idempotent instructions}: easy: \\*
-    $ - $ re-do load/store instructions \\*
-    $ - $ re-execute instructions accessing only one address
-  \item \textbf{complex instructions}: must be re-started \\*
-    $ - $ some CISC instructions are hard to restart (e.g., block move of overlapping areas) \\*
-    $ - $ \emph{solutions}: \\*
-      \phantom{$ - $} $ \cdot $ touch relevant pages before operation starts \\*
-      \phantom{$ - $} $ \cdot $ keep modified data in registers $ \to $ page faults can't take place \\*
-      \phantom{$ - $} $ \cdot $ design ISA such that complex operations can execute partially $ \to $ consistent page fault state
+  \item hardware provides info about page fault
+  \begin{itemize}
+    \item (intel: \code{\%cr2} contains faulting virtual address)
+  \end{itemize}
+  \item \textbf{Context}: OS needs to figure out fault context:
+  \begin{itemize}
+    \item read or write?
+    \item instruction fetch?
+    \item user access to kernel memory?
+  \end{itemize}
+  \item \textbf{idempotent instructions}: easy:
+  \begin{itemize}
+    \item re-do load/store instructions
+    \item re-execute instructions accessing only one address
+  \end{itemize}
+  \item \textbf{Complex instructions}: must be re-started
+  \begin{itemize}
+    \item some CISC instructions are hard to restart (e.g., block move of overlapping areas)
+    \item \emph{solutions}:
+    \begin{itemize}
+      \item touch relevant pages before operation starts
+      \item keep modified data in registers $ \to $ page faults can't take place
+      \item design ISA such that complex operations can execute partially $ \to $ consistent page fault state
+    \end{itemize}
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Memory-Mapped Files --- other issues}
 \begin{itemize}
-  \item \textbf{I/O mapping}: mapping disk block to page in memory allows file I/O to be treated as routing memory  \\*
-    $ - $ \emph{initial}: read page-sized portion of file from file system to physical page \\*
-    $ - $ \emph{subsequent read/write}: treated as ordinary memory access \\*
-    $ \to $ \emph{simplifies} file access, file I/O through memory instead of syscalls \\*
-    $ \to $ \emph{memory-file sharing}: several processes can map to same file
+  \item \textbf{I/O mapping}: mapping disk block to page in memory allows file I/O to be treated as routing memory
+  \begin{itemize}
+    \item \emph{initial}: read page-sized portion of file from file system to physical page
+    \item \emph{subsequent read/write}: treated as ordinary memory access
+    \item[$ \to $] \emph{simplifies} file access, file I/O through memory instead of syscalls
+    \item[$ \to $] \emph{memory-file sharing}: several processes can map to same file
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Shared Data Segments}
 \begin{itemize}
-  \item \textbf{implementation}: \\*
-    $ - $ temporary, asynchronous memory-mapped files \\*
-    $ - $ shared pages (with allocated space on backing store)
-  \item \textbf{copy on write} (COW): \\*
-    $ - $ allows both parent and child process to initially share same memory pages \\*
-    $ - $ only modified pages are copied $ \to $ more efficient process creation
+  \item \textbf{Implementation}:
+  \begin{itemize}
+    \item temporary, asynchronous memory-mapped files
+    \item shared pages (with allocated space on backing store)
+  \end{itemize}
+  \item \textbf{copy on write} (COW):
+  \begin{itemize}
+    \item allows both parent and child process to initially share same memory pages
+    \item only modified pages are copied $ \to $ more efficient process creation
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Page Frame Allocation --- local vs. global}
+\paragraph{Page Frame Allocation --- Local vs. Global}
 \begin{itemize}
-  \item \textbf{global}: all frames considered for replacement \\*
-    $ - $ does not consider page ownership \\*
-    $ - $ one process cannot get another process's frame \\*
-    $ - $ does not protect process from a process that hogs all memory
-  \item \textbf{local}: only frames of faulting process are considered for replacement \\*
-    $ - $ isolates processes/users \\*
-    $ - $ separately determine how many frames each process gets
+  \item \textbf{Global}: all frames considered for replacement
+  \begin{itemize}
+    \item does not consider page ownership
+    \item one process cannot get another process's frame
+    \item does not protect process from a process that hogs all memory
+  \end{itemize}
+  \item \textbf{Local}: only frames of faulting process are considered for replacement
+  \begin{itemize}
+    \item isolates processes/users
+    \item separately determine how many frames each process gets
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Fixed Allocation --- equal vs. proportional}
+\paragraph{Fixed Allocation --- Equal vs. Proportional}
 \begin{itemize}
-  \item \textbf{equal}: all processes get same amount of frames
-  \item \textbf{proportional}: allocate according to process size \\*
-    $ s_i \coloneqq \text{size of process } p_i $, $ S \coloneqq \sum s_i $, $ m \coloneqq \text{total number of frames } $ \\*
-    $ \Rightarrow a_i \coloneqq \frac{s_i}{S}m $ allocation for $ p_i $
+  \item \textbf{Equal}: all processes get same amount of frames
+  \item \textbf{Proportional}: allocate according to process size
+  \begin{align*}
+    s_i &\coloneqq \text{size of process } p_i \text{, } S \coloneqq \sum s_i \text{, } m \coloneqq \text{total number of frames } \\
+    \Rightarrow a_i &\coloneqq \frac{s_i}{S}m \text{ allocation for } p_i
+  \end{align*}
 \end{itemize}
 
-\paragraph{Fixed Allocation --- priority allocation}
+\paragraph{Fixed Allocation --- Priority Allocation}
 \begin{itemize}
-  \item = proportional allocation scheme using priorities rather than size
-  \item \textbf{on page fault} of $ P_i $: \\*
-    $ - $ select one of its frames for replacement or \\*
-    $ - $ select frame from process with lower priority
+  \item[=] proportional allocation scheme using priorities rather than size
+  \item \textbf{on page fault} of $ P_i $:
+  \begin{itemize}
+    \item select one of its frames for replacement or
+    \item select frame from process with lower priority
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Memory Locality}
 \begin{itemize}
-  \item \textbf{problem}: background storage much slower than memory \\*
-    $ - $ paging extends memory size using background storage \\*
-    $ - $ \emph{goal}: run near memory speed, not near background storage speed
-  \item \textbf{Pareto principle}: applies to working sets of processes \\*
-    $ - $ 10\% of memory gets 90\% of references \\*
-    $ - $ \emph{goal}: keep those 10\% in memory, rest on disk \\*
-    $ - $ \emph{problem}: how to identify those 10\%?
+  \item \textbf{Problem}: background storage much slower than memory
+  \begin{itemize}
+    \item paging extends memory size using background storage
+    \item \emph{goal}: run near memory speed, not near background storage speed
+  \end{itemize}
+  \item \textbf{Pareto principle}: applies to working sets of processes
+  \begin{itemize}
+    \item 10\% of memory gets 90\% of references
+    \item \emph{goal}: keep those 10\% in memory, rest on disk
+    \item \emph{problem}: how to identify those 10\%?
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Thrashing}
 \begin{itemize}
-  \item \textbf{problem}: system is busy swapping pages in and out \\*
-    $ - $ each time one page is brought in, another page, whose contents will soon matter, is thrown out \\*
-    $ - $ \emph{effect}: low CPU utilization, processes wait for pages to be fetched from disk \\*
-    $ - $ \emph{consequence}: OS thinks that it needs higher degree of multiprogramming
-  \item \textbf{reasons}: \\*
-    $ - $ \emph{no temporal locality} of access pattern --- process doesn't follow Pareto principle \\*
-    $ - $ \emph{too much multiprogramming}: each process fits individually, but too many for system \\*
-    $ - $ \emph{memory too small} to hold hot memory of a single process (the 10\%) \\*
-    $ - $ \emph{bad page replacement policy}
+  \item \textbf{Problem}: system is busy swapping pages in and out
+  \begin{itemize}
+    \item each time one page is brought in, another page, whose contents will soon matter, is thrown out
+    \item \emph{effect}: low CPU utilization, processes wait for pages to be fetched from disk
+    \item \emph{consequence}: OS thinks that it needs higher degree of multiprogramming
+  \end{itemize}
+  \item \textbf{Reasons}:
+  \begin{itemize}
+    \item \emph{no temporal locality} of access pattern --- process doesn't follow Pareto principle
+    \item \emph{too much multiprogramming}: each process fits individually, but too many for system
+    \item \emph{memory too small} to hold hot memory of a single process (the 10\%)
+    \item \emph{bad page replacement policy}
+  \end{itemize}
 \end{itemize}
 
 \paragraph{Working-Set Model}
 \begin{itemize}
   \item $ \Delta \coloneqq $ working-set window (fixed number of page references; e.g., 10000 instructions)
-  \item $ \text{WSS}_i \coloneqq $ working set of process $ P_i $ \\*
-    $ - $ total number of pages referenced in most recent $ \Delta $ (varies in time) \\*
-    $ - $ $ \Delta \begin{cases}
+  \item $ \text{WSS}_i \coloneqq $ working set of process $ P_i $
+  \begin{itemize}
+    \item total number of pages referenced in most recent $ \Delta $ (varies in time)
+    \begin{equation*}
+      \Delta \begin{cases}
       \text{too small} &\Rightarrow \text{ will not encompass entire locality} \\
       \text{too large} &\Rightarrow \text{ will encompass several localities} \\
       = \infty &\Rightarrow \text{ will encompass entire program}
-    \end{cases} $
-  \item $ D \coloneqq \sum \text{WSS}_i = $ total demand for frames \\*
-    $ - $ $ D > m \leadsto $ \textbf{thrashing} \\*
-    $ \to $ $ D > m \Rightarrow $ suspend a process
+    \end{cases}
+    \end{equation*}
+  \end{itemize}
+  \item $ D \coloneqq \sum \text{WSS}_i = $ total demand for frames
+  \begin{itemize}
+    \item $ D > m \leadsto $ \textbf{thrashing}
+    \item[$ \to $] $ D > m \Rightarrow $ suspend a process
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Working Set --- keeping track}
+\paragraph{Working Set --- Keeping track}
 \begin{itemize}
-  \item \textbf{perfect}: replace page that is referenced furthest in the future (\emph{oracle})
-  \item \textbf{idea}: predict future from past \\*
-    $ - $ record page references from past and extrapolate into future \\*
-    $ - $ \emph{problem}: too expensive to make ordered list of all page references at runtime
-  \item \textbf{idea}: sacrifice precision for speed \\*
-    $ - $ MMU sets \emph{reference bit} in respective page table entry every time a page is referenced \\*
-    $ - $ set timer to scan all page table entries for reference bits
+  \item \textbf{Perfect}: replace page that is referenced furthest in the future (\emph{oracle})
+  \item \textbf{Idea}: predict future from past
+  \begin{itemize}
+    \item record page references from past and extrapolate into future
+    \item \emph{problem}: too expensive to make ordered list of all page references at runtime
+  \end{itemize}
+  \item \textbf{Idea}: sacrifice precision for speed
+  \begin{itemize}
+    \item MMU sets \emph{reference bit} in respective page table entry every time a page is referenced
+    \item set timer to scan all page table entries for reference bits
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Page Fault Frequency --- allocation scheme}
+\paragraph{Page Fault Frequency --- Allocation scheme}
 \begin{itemize}
-  \item \textbf{goal}: establish acceptable page fault rate \\*
-    $ - $ \emph{actual rate too low} $ \to $ give frames to other process \\*
-    $ - $ \emph{actual rate too high} $ \to $ allocate more frames to process
+  \item \textbf{Goal}: establish acceptable page fault rate
+  \begin{itemize}
+    \item \emph{actual rate too low} $ \to $ give frames to other process
+    \item \emph{actual rate too high} $ \to $ allocate more frames to process
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Page Fetch Policy --- demand paging}
+\paragraph{Page Fetch Policy --- Demand Paging}
 \begin{itemize}
-  \item \textbf{idea}: only transfer pages raising page faults
-  \item \textbf{advantages}: \\*
-    $ - $ only transfer what is needed \\*
-    $ - $ less memory needed by process $ \to $ higher multiprogramming degree possible
-  \item \textbf{disadvantages}: \\*
-    $ - $ many initial page faults when task starts \\*
-    $ - $ more I/O operations $ \to $ more I/O overhead
+  \item \textbf{Idea}: only transfer pages raising page faults
+  \item \textbf{Advantages}:
+  \begin{itemize}
+    \item[+] only transfer what is needed
+    \item[+] less memory needed by process $ \to $ higher multiprogramming degree possible
+  \end{itemize}
+  \item \textbf{Disadvantages}:
+  \begin{itemize}
+    \item[-] many initial page faults when task starts
+    \item[-] more I/O operations $ \to $ more I/O overhead
+  \end{itemize}
 \end{itemize}
 
-\paragraph{Page Fetch Policy --- pre-paging}
+\paragraph{Page Fetch Policy --- Pre-paging}
 \begin{itemize}
-  \item \textbf{idea}: speculatively transfer pages to RAM \\*
-    $ - $ at every page fault: speculate what else should be loaded \\*
-    $ - $ e.g., load entire text section when process starts
-  \item \textbf{advantage}: improves disk I/O throughput
-  \item \textbf{disadvantages}: \\*
-    $ - $ wastes I/O bandwidth if page is never used \\*
-    $ - $ can destroy working set of other processes in case of page stealing
+  \item \textbf{Idea}: speculatively transfer pages to RAM
+  \begin{itemize}
+    \item at every page fault: speculate what else should be loaded
+    \item e.g., load entire text section when process starts
+  \end{itemize}
+  \item \textbf{Advantage}: improves disk I/O throughput
+  \item \textbf{Disadvantages}:
+  \begin{itemize}
+    \item[-] wastes I/O bandwidth if page is never used
+    \item[-] can destroy working set of other processes in case of page stealing
+  \end{itemize}
 \end{itemize}
 
 \begin{summary}
   \begin{itemize}
     \item paging simulates a memory size of the size of the virtual memory
-    \item when pages are filled via page faults, OS needs to answer some questions: \\*
-      $ - $ what to eject? \\*
-      $ - $ what to fetch? \\*
-      $ - $ how to resume process?
-    \item different strategies to allocate frames and replace pages: \\*
-      $ - $ local vs. global allocation \\*
-      $ - $ fixed vs. proportional vs. priority allocation
+    \item when pages are filled via page faults, OS needs to answer some questions:
+    \begin{itemize}
+      \item what to eject?
+      \item what to fetch?
+      \item how to resume process?
+    \end{itemize}
+    \item different strategies to allocate frames and replace pages:
+    \begin{itemize}
+      \item local vs. global allocation
+      \item fixed vs. proportional vs. priority allocation
+    \end{itemize}
     \item \emph{thrashing} must be prevented by taking working sets of active processes into account
   \end{itemize}
 \end{summary}
