@@ -75,11 +75,11 @@
   \end{itemize}
 \end{itemize}
 
-\paragraph{Page Faults --- Process resumption?}
+\paragraph{Page Faults --- Process resumption}
 \begin{itemize}
   \item hardware provides info about page fault
   \begin{itemize}
-    \item (intel: \code{\%cr2} contains faulting virtual address)
+    \item (Intel: \code{\%cr2} contains faulting virtual address)
   \end{itemize}
   \item \textbf{Context}: OS needs to figure out fault context:
   \begin{itemize}
@@ -106,7 +106,7 @@
 
 \paragraph{Memory-Mapped Files --- other issues}
 \begin{itemize}
-  \item \textbf{I/O mapping}: mapping disk block to page in memory allows file I/O to be treated as routing memory
+  \item \textbf{I/O mapping}: mapping disk block to page in memory allows file I/O to be treated as routine memory
   \begin{itemize}
     \item \emph{initial}: read page-sized portion of file from file system to physical page
     \item \emph{subsequent read/write}: treated as ordinary memory access
