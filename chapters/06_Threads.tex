@@ -33,30 +33,30 @@
 
 \paragraph{Threads --- POSIX}
 \begin{itemize}
-  \item \code{PThread}: base object with
+  \item \code{Pthread}: base object with
   \begin{itemize}
     \item \emph{identifier} (thread ID, TID)
     \item \emph{register set} (including IP and SP)
     \item \emph{stack area} to hold execution state
   \end{itemize}
-  \item \code{Pthread_create}: create new thread
+  \item \code{pthread_create}: create new thread
   \begin{itemize}
     \item Pass: \emph{pointer} to \code{pthread_t} (will hold TID after successful call)
     \item Pass: \emph{attributes}, \emph{start function}, \emph{arguments}
     \item Returns: \code{0} on success, error value else
   \end{itemize}
-  \item \code{Pthread_exit}: terminate calling thread
+  \item \code{pthread_exit}: terminate calling thread
   \begin{itemize}
     \item Pass: exit code (casted to void pointer)
     \item Free's resources (e.g. stack)
   \end{itemize}
-  \item \code{Pthread_join}: wait for specified thread to exit
+  \item \code{pthread_join}: wait for specified thread to exit
   \begin{itemize}
     \item Pass: \code{ptread_t} to wait for (or \code{-1} for any thread)
     \item Pass: pointer to pointer for exit code
     \item Returns: \code{0} on success, error value else
   \end{itemize}
-  \item \code{Pthread_yield}: release CPU to let another thread run
+  \item \code{pthread_yield}: release CPU to let another thread run
 \end{itemize}
 
 \paragraph{Threads --- Problems}
@@ -74,7 +74,7 @@
   \end{itemize}
 \end{itemize}
 
-\paragraph{PCB vs. TCP}
+\paragraph{PCB vs. TCB}
 \begin{itemize}
   \item \textbf{PCB} (\emph{process control block}): information needed to implement processes
   \begin{itemize}
@@ -99,7 +99,7 @@
   \begin{itemize}
     \item 1:1 user threads = \emph{kernel level threads} (KLT)
   \end{itemize}
-  \item \textbf{M:N-Model} (hybrid model): flexible mapping of user threads to less kernel threads 
+  \item \textbf{M:N-Model} (hybrid model): flexible mapping of user threads to fewer kernel threads 
 \end{itemize}
 
 \paragraph{Thread models --- N:1}
