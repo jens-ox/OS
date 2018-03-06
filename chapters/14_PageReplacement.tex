@@ -22,8 +22,8 @@
   \item \textbf{Goal}: reduce I/O from critical page fault path to speed up page faults
   \item \textbf{Idea}: keep pool of free page frames (\emph{pre-cleaning}):
   \begin{itemize}
-    \item \emph{on page fault}: use page frame from free pool
-    \item \emph{cleaning}: daemon cleans, reclaims and scrubs pages for free pool in background
+    \item use page frame from free pool on page fault
+    \item daemon cleans, reclaims and scrubs pages for free pool in background
     \item[$ \to $] smooths out I/O, speeds up paging significantly
   \end{itemize}
   \item \textbf{Remaining problem}: which pages to select as victims?
@@ -106,7 +106,7 @@
   \begin{itemize}
     \item \emph{least frequently used}: rarely used page not in a working set $ \to $ replace page with smallest count
     \item \emph{most frequently used}: page with smallest count probably just brought in $ \to $ replace page with largest count
-    \item neither LFU nor MDU are common (no such hardware, not that great)
+    \item neither LFU nor MFU are common (no such hardware, not that great)
   \end{itemize}
 \end{itemize}
 
