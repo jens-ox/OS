@@ -98,8 +98,8 @@
   \end{itemize}
   \item \textbf{Disadvantages}:
   \begin{itemize}
-    \item[+] how to grow process' address space?
-    \item[+] how to share code/data?
+    \item[-] how to grow process's address space?
+    \item[-] how to share code/data?
   \end{itemize}
 \end{itemize}
 \begin{figure}[h]\centering\label{MMUBaseLimit}\includegraphics[width=0.33\textwidth]{MMUBaseLimit}\end{figure}
@@ -255,9 +255,9 @@
     \item want to place multiple processes in memory at same time to run concurrently/parallel
     \item \textbf{Virtual Memory}: enables protection, transparency, overcommitment
     \begin{itemize}
-      \item emph{trade-off} extra hardware (MMU) to translate addresses at every load/store
+      \item \emph{trade-off} extra hardware (MMU) to translate addresses at every load/store
     \end{itemize}
     \item \textbf{MMU types}: base + limit, segmentation, paging
-    \item \textbf{Paging}: supported by all contemporary MMUs, favorite of most OS
+    \item \textbf{Paging}: supported by all contemporary MMUs, favored by most OS
   \end{itemize}
 \end{summary}

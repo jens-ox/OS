@@ -7,8 +7,7 @@
 	\begin{itemize}
 		\item container contains information about program execution
 		\item conceptually, every progress has own "`virtual CPU"'
-		\item execution context is changed on process switch
-		\item dispatcher switches context when switching processes
+		\item dispatcher switches execution context when switching processes
 		\item \textbf{context switch}: dispatcher saves current registers/memory mappings, restores those of next process
 	\end{itemize}
 \end{itemize}
@@ -40,7 +39,7 @@
 
 \paragraph{Concurrency vs. Parallelism}
 \begin{itemize}
-	\item OS uses currency + parallelism to implement multiprogramming
+	\item OS uses concurrency + parallelism to implement multiprogramming
 	\begin{enumerate}
 		\item \textbf{Concurrency}: multiple processes, one CPU \\* \( \leadsto \) not at the same time
 		\item \textbf{Parallelism}: multiple processes, multiple CPU \\* \( \leadsto \) at the same time
@@ -71,7 +70,7 @@
 	\begin{enumerate}
 		\item \emph{fixed size} data items
 		\item data naturally \emph{freed in reverse allocation order}
-		\item data \emph{allocated/freed "`randomly"'}
+		\item data \emph{allocated/freed "randomly"}
 	\end{enumerate}
 	\item compiler/architecture determine how large int is and what instructions are used in text section (\code{code})
 	\item \textbf{Loader} determines based on exe file how executed program is placed in memory
@@ -92,7 +91,7 @@
 	\item \textbf{Data segment}: fixed-size, initialized data elements (e.g. global variables)
 	\item \textbf{Read-only data segment}: constant numbers, strings
 	\item All three sometimes summarized as one segment
-	\item compiler and OS decide ultimately where to place which data/how many segments exist
+	\item compiler and OS ultimately decide where to place which data/how many segments exist
 \end{itemize}
 
 \paragraph{Segments --- Stack}
@@ -119,7 +118,7 @@
 		\end{itemize}
 		\item dynamically partition chunk into smaller allocations
 		\begin{itemize}
-			\item \code{malloc}/\code{free} can be used in random oder
+			\item \code{malloc}/\code{free} can be used in random order
 			\item purely user-space, no need to contact kernel
 		\end{itemize}
 	\end{enumerate}

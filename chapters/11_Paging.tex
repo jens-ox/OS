@@ -10,7 +10,7 @@
   \item \textbf{Table Paging}: table can be paged to save memory -- subdivide vpn:
   \begin{itemize}
     \item index in \emph{page directory} ($ p_1 $): 10 bits
-    \item index in \emph{page table entry} ($ p_2 $): 10 bits
+    \item index in \emph{page table} ($ p_2 $): 10 bits
   \end{itemize}
   \item for ranges of 1024 invalid pages, reset present bit in page directory
   \begin{itemize}
@@ -53,7 +53,7 @@
   \begin{itemize}
     \item \emph{translation lookaside buffer} (TLB) maps [vpn] to [pfn, protection]
     \item typically 4-way to fully associative hardware cache in MMU
-    \item typically 64-2000 entries
+    \item typically 64-2048 entries
     \item typically 95\%-99\% hit rate
   \end{itemize}
 \end{itemize}
